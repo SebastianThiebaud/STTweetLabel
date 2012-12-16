@@ -10,6 +10,7 @@
 
 #import "STTweetLabel.h"
 
+@class STTweetLabel;
 @interface STViewController : UIViewController <STLinkProtocol>
 
 @property (strong, nonatomic) STTweetLabel *tweetLabel;

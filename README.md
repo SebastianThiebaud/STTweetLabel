@@ -6,11 +6,10 @@ A custom UILabel view controller for iOS with certain words tappable like Twitte
 
 ## Documentation
 
-You need only 3 files:
+You need only 2 files:
 
 - `STTweetLabel.h`
 - `STTweetLabel.m`
-- `STLinkProtocol.h`
 
 Don't forget to implement `STLinkProtocol` and initialize the `STTweetLabel`'s delegate in the view controller which manages your `STTweetLabel` (see the example in the project).
 

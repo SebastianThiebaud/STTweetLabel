@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "2592723C167D896D003E6F65"
-               BuildableName = "STTweetLabel.app"
-               BlueprintName = "STTweetLabel"
-               ReferencedContainer = "container:STTweetLabel.xcodeproj">
+               BlueprintIdentifier = "254E4346167E7475004191B6"
+               BuildableName = "STTweetLabelExample.app"
+               BlueprintName = "STTweetLabelExample"
+               ReferencedContainer = "container:STTweetLabelExample.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -32,10 +32,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "2592723C167D896D003E6F65"
-            BuildableName = "STTweetLabel.app"
-            BlueprintName = "STTweetLabel"
-            ReferencedContainer = "container:STTweetLabel.xcodeproj">
+            BlueprintIdentifier = "254E4346167E7475004191B6"
+            BuildableName = "STTweetLabelExample.app"
+            BlueprintName = "STTweetLabelExample"
+            ReferencedContainer = "container:STTweetLabelExample.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -51,10 +51,10 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "2592723C167D896D003E6F65"
-            BuildableName = "STTweetLabel.app"
-            BlueprintName = "STTweetLabel"
-            ReferencedContainer = "container:STTweetLabel.xcodeproj">
+            BlueprintIdentifier = "254E4346167E7475004191B6"
+            BuildableName = "STTweetLabelExample.app"
+            BlueprintName = "STTweetLabelExample"
+            ReferencedContainer = "container:STTweetLabelExample.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -69,10 +69,10 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "2592723C167D896D003E6F65"
-            BuildableName = "STTweetLabel.app"
-            BlueprintName = "STTweetLabel"
-            ReferencedContainer = "container:STTweetLabel.xcodeproj">
+            BlueprintIdentifier = "254E4346167E7475004191B6"
+            BuildableName = "STTweetLabelExample.app"
+            BlueprintName = "STTweetLabelExample"
+            ReferencedContainer = "container:STTweetLabelExample.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

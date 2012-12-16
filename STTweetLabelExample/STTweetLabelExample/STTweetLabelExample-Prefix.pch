@@ -1,5 +1,5 @@
 //
-// Prefix header for all source files of the 'STTweetLabel' target in the 'STTweetLabel' project
+// Prefix header for all source files of the 'STTweetLabelExample' target in the 'STTweetLabelExample' project
 //
 
 #import <Availability.h>

@@ -1,8 +1,8 @@
 //
 //  STAppDelegate.m
-//  STTweetLabel
+//  STTweetLabelExample
 //
-//  Created by Sebastien Thiebaud on 12/15/12.
+//  Created by Sebastien Thiebaud on 12/16/12.
 //  Copyright (c) 2012 Sebastien Thiebaud. All rights reserved.
 //
 
@@ -20,7 +20,7 @@
     
     STViewController *controller = [[STViewController alloc] init];
     self.window.rootViewController = controller;
-    
+
     [self.window makeKeyAndVisible];
     return YES;
 }

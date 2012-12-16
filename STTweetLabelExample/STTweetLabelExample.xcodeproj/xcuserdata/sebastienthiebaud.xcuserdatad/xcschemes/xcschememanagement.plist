@@ -4,7 +4,7 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>STTweetLabel.xcscheme</key>
+		<key>STTweetLabelExample.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
@@ -12,7 +12,7 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>2592723C167D896D003E6F65</key>
+		<key>254E4346167E7475004191B6</key>
 		<dict>
 			<key>primary</key>
 			<true/>
