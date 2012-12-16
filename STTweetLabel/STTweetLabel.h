@@ -1,6 +1,6 @@
 //
-//  TXTweetLabel.h
-//  TweeXor
+//  STTweetLabel.h
+//  STTweetLabel
 //
 //  Created by Sebastien Thiebaud on 12/14/12.
 //  Copyright (c) 2012 Sebastien Thiebaud. All rights reserved.

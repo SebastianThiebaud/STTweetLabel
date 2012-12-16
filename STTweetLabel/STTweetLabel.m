@@ -1,6 +1,6 @@
 //
-//  TXTweetLabel.m
-//  TweeXor
+//  STTweetLabel.m
+//  STTweetLabel
 //
 //  Created by Sebastien Thiebaud on 12/14/12.
 //  Copyright (c) 2012 Sebastien Thiebaud. All rights reserved.
@@ -61,7 +61,7 @@
         
         // Regex to catch @mention #hashtag and link http(s)://
         NSError *error;
-        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"((@|#)([A-Z0-9a-z(é|è|à|á|ù)_]+))|(http(s)?://([A-Z0-9a-z._-]*(/)?)*)" options:NSRegularExpressionCaseInsensitive error:&error];
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"((@|#)([A-Z0-9a-z(é|ë|ê|è|à|â|ä|á|ù|ü|û|ú|ì|ï|î|í)_]+))|(http(s)?://([A-Z0-9a-z._-]*(/)?)*)" options:NSRegularExpressionCaseInsensitive error:&error];
         
         NSTextCheckingResult *match = [regex firstMatchInString:word options:0 range:NSMakeRange(0, [word length])];
         
@@ -102,7 +102,7 @@
             drawPoint = CGPointMake(drawPoint.x + sizeWordCharacters.width, drawPoint.y);
         }
         
-        // Draw the suffix of the word (if it has a suffix) else the word no-touchable
+        // Draw the suffix of the word (if it has a suffix) else the word is not touchable
         if (![postCharacters isEqualToString:@""])
         {
             [self.textColor set];
