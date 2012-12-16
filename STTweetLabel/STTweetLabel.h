@@ -8,7 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-#import "STLinkProtocol.h"
+@protocol STLinkProtocol <NSObject>
+
+@required
+- (void)tweetLinkClicked:(NSString *)link;
+
+@end
 
 @interface STTweetLabel : UILabel
 {
