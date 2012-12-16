@@ -16,6 +16,9 @@
 		25927254167D896D003E6F65 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 25927253167D896D003E6F65 /* Default.png */; };
 		25927256167D896D003E6F65 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 25927255167D896D003E6F65 /* Default@2x.png */; };
 		25927258167D896D003E6F65 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 25927257167D896D003E6F65 /* Default-568h@2x.png */; };
+		25927261167D8A45003E6F65 /* STTweetLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2592725F167D8A45003E6F65 /* STTweetLabel.m */; };
+		2592726D167D8CB5003E6F65 /* STViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2592726B167D8CB5003E6F65 /* STViewController.m */; };
+		2592726E167D8CB5003E6F65 /* STViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2592726C167D8CB5003E6F65 /* STViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +35,12 @@
 		25927253167D896D003E6F65 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		25927255167D896D003E6F65 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		25927257167D896D003E6F65 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		2592725E167D8A45003E6F65 /* STTweetLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STTweetLabel.h; sourceTree = "<group>"; };
+		2592725F167D8A45003E6F65 /* STTweetLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STTweetLabel.m; sourceTree = "<group>"; };
+		25927260167D8A45003E6F65 /* STLinkProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STLinkProtocol.h; sourceTree = "<group>"; };
+		2592726A167D8CB5003E6F65 /* STViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STViewController.h; sourceTree = "<group>"; };
+		2592726B167D8CB5003E6F65 /* STViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STViewController.m; sourceTree = "<group>"; };
+		2592726C167D8CB5003E6F65 /* STViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,8 +87,14 @@
 		25927247167D896D003E6F65 /* STTweetLabel */ = {
 			isa = PBXGroup;
 			children = (
+				2592725E167D8A45003E6F65 /* STTweetLabel.h */,
+				2592725F167D8A45003E6F65 /* STTweetLabel.m */,
+				25927260167D8A45003E6F65 /* STLinkProtocol.h */,
 				25927250167D896D003E6F65 /* STAppDelegate.h */,
 				25927251167D896D003E6F65 /* STAppDelegate.m */,
+				2592726A167D8CB5003E6F65 /* STViewController.h */,
+				2592726B167D8CB5003E6F65 /* STViewController.m */,
+				2592726C167D8CB5003E6F65 /* STViewController.xib */,
 				25927248167D896D003E6F65 /* Supporting Files */,
 			);
 			path = STTweetLabel;
@@ -155,6 +170,7 @@
 				25927254167D896D003E6F65 /* Default.png in Resources */,
 				25927256167D896D003E6F65 /* Default@2x.png in Resources */,
 				25927258167D896D003E6F65 /* Default-568h@2x.png in Resources */,
+				2592726E167D8CB5003E6F65 /* STViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -167,6 +183,8 @@
 			files = (
 				2592724E167D896D003E6F65 /* main.m in Sources */,
 				25927252167D896D003E6F65 /* STAppDelegate.m in Sources */,
+				25927261167D8A45003E6F65 /* STTweetLabel.m in Sources */,
+				2592726D167D8CB5003E6F65 /* STViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

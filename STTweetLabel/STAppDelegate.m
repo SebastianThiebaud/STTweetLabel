@@ -8,6 +8,8 @@
 
 #import "STAppDelegate.h"
 
+#import "STViewController.h"
+
 @implementation STAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -15,6 +17,10 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
+    
+    STViewController *controller = [[STViewController alloc] init];
+    self.window.rootViewController = controller;
+    
     [self.window makeKeyAndVisible];
     return YES;
 }
