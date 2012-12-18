@@ -120,13 +120,38 @@
     UITouch *touch = event.allTouches.anyObject;
     CGPoint touchPoint = [touch locationInView:self];
     
-    [touchLocations enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+    [touchLocations enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
+    {
         CGRect touchZone = [obj CGRectValue];
-
-        // If a touchable word is found
-        if (CGRectContainsPoint(touchZone, touchPoint) && [_delegate respondsToSelector:@selector(tweetLinkClicked:)])
+        
+        if (CGRectContainsPoint(touchZone, touchPoint))
         {
-            [_delegate tweetLinkClicked:[touchWords objectAtIndex:idx]];
+            //A touchable word is found
+            
+            NSString *url = [touchWords objectAtIndex:idx];
+            
+            if ([[touchWords objectAtIndex:idx] hasPrefix:@"@"])
+            {
+                //Twitter account clicked
+                if ([_delegate respondsToSelector:@selector(twitterAccountClicked:)]) {
+                    [_delegate twitterAccountClicked:url];
+                }
+            }
+            else if ([[touchWords objectAtIndex:idx] hasPrefix:@"#"])
+            {
+                //Twitter hashtag clicked
+                if ([_delegate respondsToSelector:@selector(twitterHashtagClicked:)]) {
+                    [_delegate twitterHashtagClicked:url];
+                }
+            }
+            else if ([[touchWords objectAtIndex:idx] hasPrefix:@"http"])
+            {
+                
+                //Twitter hashtag clicked
+                if ([_delegate respondsToSelector:@selector(websiteClicked:)]) {
+                    [_delegate websiteClicked:url];
+                }
+            }
         }
     }];
 }

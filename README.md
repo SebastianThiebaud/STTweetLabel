@@ -11,13 +11,13 @@ You need only 2 files:
 - `STTweetLabel.h`
 - `STTweetLabel.m`
 
-Don't forget to implement `STLinkProtocol` and initialize the `STTweetLabel`'s delegate in the view controller which manages your `STTweetLabel` (see the example in the project).
+Don't forget to implement `STLinkProtocol` and initialize the `STTweetLabel`'s delegates in the view controller which manages your `STTweetLabel` (see the example in the project).
 
 You can change the fonts and colors for the different words (#Hashtag/@People AND http://link.com) via the `STTweetLabel` attributes.
 
 ## Demo
 
-Build and run the project in Xcode to see `STTweetLabel` in action. 
+Build and run the project STTweetLabelExample in Xcode to see `STTweetLabel` in action. 
 
 
 ## Example Usage
@@ -32,7 +32,14 @@ Build and run the project in Xcode to see `STTweetLabel` in action.
     [self.view addSubview:tweetLabel];
 ```
 
-When an user will click on a tappable word, the delegate method `- (void)tweetLinkClicked:(NSString *)link` will be called. The word clicked by the user is the parameter `(NSString *)link`.
+When an user will click on a tappable word, the delegate methods 
+``` objective-c
+- (void)twitterAccountClicked:(NSString *)link;
+- (void)twitterHashtagClicked:(NSString *)link;
+- (void)websiteClicked:(NSString *)link;
+```
+
+will be called. The word clicked by the user is the parameter `(NSString *)link`.
 
 ## Credits
 
