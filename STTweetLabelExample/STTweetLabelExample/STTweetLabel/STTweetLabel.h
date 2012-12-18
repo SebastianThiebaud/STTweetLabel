@@ -10,8 +10,10 @@
 
 @protocol STLinkProtocol <NSObject>
 
-@required
-- (void)tweetLinkClicked:(NSString *)link;
+@optional
+- (void)twitterAccountClicked:(NSString *)link;
+- (void)twitterHashtagClicked:(NSString *)link;
+- (void)websiteClicked:(NSString *)link;
 
 @end
 

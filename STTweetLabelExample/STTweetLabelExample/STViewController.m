@@ -47,9 +47,23 @@
 #pragma mark -
 #pragma mark STLink Protocol
 
-- (void)tweetLinkClicked:(NSString *)link
-{
-    [_displayLabel setText:link];
+- (void)twitterAccountClicked:(NSString *)link {
+
+    NSString *string = [NSString stringWithFormat:@"Twitter account:\n%@", link];
+    [_displayLabel setText:string];
+
+}
+- (void)twitterHashtagClicked:(NSString *)link {
+
+    NSString *string = [NSString stringWithFormat:@"Twitter hashtag:\n%@", link];
+    [_displayLabel setText:string];
+
+}
+- (void)websiteClicked:(NSString *)link {
+
+    NSString *string = [NSString stringWithFormat:@"Website:\n%@", link];
+    [_displayLabel setText:string];
+    
 }
 
 @end
