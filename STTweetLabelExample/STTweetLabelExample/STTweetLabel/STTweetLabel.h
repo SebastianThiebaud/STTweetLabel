@@ -26,6 +26,6 @@
 @property (nonatomic, strong) UIColor *colorLink;
 @property (nonatomic, strong) UIColor *colorHashtag;
 
-@property (nonatomic, strong) id delegate;
+@property (nonatomic, strong) id<STLinkProtocol> delegate;
 
 @end
