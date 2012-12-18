@@ -63,7 +63,14 @@
     <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview:</span><span class="n">tweetLabel</span><span class="p">];</span>
 </pre></div>
 
-<p>When an user will click on a tappable word, the delegate method <code>- (void)tweetLinkClicked:(NSString *)link</code> will be called. The word clicked by the user is the parameter <code>(NSString *)link</code>.</p>
+<p>When an user will click on a tappable word, the delegate methods </p>
+
+<div class="highlight"><pre><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">twitterAccountClicked:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">link</span><span class="p">;</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">twitterHashtagClicked:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">link</span><span class="p">;</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">websiteClicked:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">link</span><span class="p">;</span>
+</pre></div>
+
+<p>will be called. The word clicked by the user is the parameter <code>(NSString *)link</code>.</p>
 
 <h2>Credits</h2>
 
