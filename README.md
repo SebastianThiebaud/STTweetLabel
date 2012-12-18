@@ -36,7 +36,7 @@ When an user will click on a tappable word, the delegate method `- (void)tweetLi
 
 ## Credits
 
-Inspired by the original Twitter applications.
+Inspired by the original Twitter applications. Thanks to @TomGiana for disturbing me while I'm focused in my code!
 
 ## Contact
 
