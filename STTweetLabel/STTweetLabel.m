@@ -33,8 +33,15 @@
 
 - (void)drawTextInRect:(CGRect)rect
 {
-    _fontHashtag = self.font;
-    _fontLink = self.font;
+    if (_fontHashtag == nil)
+    {
+        _fontHashtag = self.font;
+    }
+    
+    if (_fontLink == nil)
+    {
+        _fontLink = self.font;
+    }
     
     [touchLocations removeAllObjects];
     [touchWords removeAllObjects];
@@ -49,6 +56,10 @@
 
     [self.textColor set];
 
+    // Regex to catch @mention #hashtag and link http(s)://
+    NSError *error;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"((@|#)([A-Z0-9a-z(é|ë|ê|è|à|â|ä|á|ù|ü|û|ú|ì|ï|î|í)_]+))|(http(s)?://([A-Z0-9a-z._-]*(/)?)*)" options:NSRegularExpressionCaseInsensitive error:&error];
+
     for (NSString *word in words)
     {
         CGSize sizeWord = [word sizeWithFont:self.font];
@@ -58,10 +69,6 @@
         {
             drawPoint = CGPointMake(0.0, drawPoint.y + sizeWord.height);
         }
-        
-        // Regex to catch @mention #hashtag and link http(s)://
-        NSError *error;
-        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"((@|#)([A-Z0-9a-z(é|ë|ê|è|à|â|ä|á|ù|ü|û|ú|ì|ï|î|í)_]+))|(http(s)?://([A-Z0-9a-z._-]*(/)?)*)" options:NSRegularExpressionCaseInsensitive error:&error];
         
         NSTextCheckingResult *match = [regex firstMatchInString:word options:0 range:NSMakeRange(0, [word length])];
         
