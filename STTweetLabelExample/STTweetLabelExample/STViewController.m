@@ -34,7 +34,7 @@
     [_tweetLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:17.0]];
     [_tweetLabel setTextColor:[UIColor blackColor]];
     [_tweetLabel setDelegate:self];
-    [_tweetLabel setText:@"Hi. This is a new tool for @you! Developed by->@SebThiebaud for #iPhone #ObjC... ;-) My GitHub page: https://t.co/pQXDoiYA"];
+    [_tweetLabel setText:@"Hi. This is a new tool for @you! Developed by->@SebThiebaud for #iPhone #ObjC... ;-)\nMy GitHub page: https://t.co/pQXDoiYA"];
     [self.view addSubview:_tweetLabel];
 }
 

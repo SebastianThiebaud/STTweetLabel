@@ -60,6 +60,9 @@
     NSError *error;
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"((@|#)([A-Z0-9a-z(é|ë|ê|è|à|â|ä|á|ù|ü|û|ú|ì|ï|î|í)_]+))|(http(s)?://([A-Z0-9a-z._-]*(/)?)*)" options:NSRegularExpressionCaseInsensitive error:&error];
 
+    // Regex to catch newline
+    NSRegularExpression *regexNewLine = [NSRegularExpression regularExpressionWithPattern:@">newLine" options:NSRegularExpressionCaseInsensitive error:&error];
+    
     for (NSString *word in words)
     {
         CGSize sizeWord = [word sizeWithFont:self.font];
@@ -113,9 +116,23 @@
         if (![postCharacters isEqualToString:@""])
         {
             [self.textColor set];
-            CGSize sizePostCharacters = [postCharacters sizeWithFont:self.font];
-            [postCharacters drawAtPoint:drawPoint withFont:self.font];
-            drawPoint = CGPointMake(drawPoint.x + sizePostCharacters.width, drawPoint.y);
+            
+            NSTextCheckingResult *matchNewLine = [regexNewLine firstMatchInString:postCharacters options:0 range:NSMakeRange(0, [postCharacters length])];
+
+            // If a newline is match
+            if (matchNewLine)
+            {
+                [[postCharacters substringToIndex:matchNewLine.range.location] drawAtPoint:drawPoint withFont:self.font];
+                drawPoint = CGPointMake(0.0, drawPoint.y + sizeWord.height);
+                [[postCharacters substringFromIndex:matchNewLine.range.location + matchNewLine.range.length] drawAtPoint:drawPoint withFont:self.font];
+                drawPoint = CGPointMake(drawPoint.x + [[postCharacters substringFromIndex:matchNewLine.range.location + matchNewLine.range.length] sizeWithFont:self.font].width, drawPoint.y);
+            }
+            else
+            {
+                CGSize sizePostCharacters = [postCharacters sizeWithFont:self.font];
+                [postCharacters drawAtPoint:drawPoint withFont:self.font];
+                drawPoint = CGPointMake(drawPoint.x + sizePostCharacters.width, drawPoint.y);
+            }
         }
         
         drawPoint = CGPointMake(drawPoint.x + sizeSpace.width, drawPoint.y);
@@ -171,6 +188,9 @@
     htmlString = [htmlString stringByReplacingOccurrencesOfString:@"&quot;" withString:@""""];
     htmlString = [htmlString stringByReplacingOccurrencesOfString:@"&#039;"  withString:@"'"];
     
+    // Newline character (if you have a better idea...)
+    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"\n"  withString:@">newLine"];
+   
     // Extras
     htmlString = [htmlString stringByReplacingOccurrencesOfString:@"<3" withString:@"♥"];
     
