@@ -7,7 +7,6 @@
 //
 
 #import "STViewController.h"
-
 #import "STTweetLabel.h"
 
 @interface STViewController ()
@@ -33,9 +32,36 @@
     
     [_tweetLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:17.0]];
     [_tweetLabel setTextColor:[UIColor blackColor]];
-    [_tweetLabel setDelegate:self];
     [_tweetLabel setText:@"Hi. This is a new tool for @you! Developed by->@SebThiebaud for #iPhone #ObjC... ;-)\nMy GitHub page: https://t.co/pQXDoiYA"];
+    
+    
+    STLinkCallbackBlock callbackBlock = ^(STLinkActionType actionType, NSString *link) {
+        
+        NSString *displayString = NULL;
+        
+        switch (actionType) {
+                
+            case STLinkActionTypeAccount:
+                displayString = [NSString stringWithFormat:@"Twitter account:\n%@", link];
+                break;
+                
+            case STLinkActionTypeHashtag:
+                displayString = [NSString stringWithFormat:@"Twitter hashtag:\n%@", link];
+                break;
+                
+            case STLinkActionTypeWebsite:
+                displayString = [NSString stringWithFormat:@"Website:\n%@", link];
+                break;
+        }
+        
+        [_displayLabel setText:displayString];
+        
+    };
+    
+    [_tweetLabel setCallbackBlock:callbackBlock];
+    
     [self.view addSubview:_tweetLabel];
+    
 }
 
 - (void)didReceiveMemoryWarning

@@ -8,14 +8,31 @@
 
 #import <UIKit/UIKit.h>
 
+#define DEPRECATED __attribute__ ((deprecated))
+
+typedef enum {
+    
+    STLinkActionTypeAccount,
+    STLinkActionTypeHashtag,
+    STLinkActionTypeWebsite
+    
+} STLinkActionType;
+
+typedef void(^STLinkCallbackBlock)(STLinkActionType actionType, NSString *link);
+
+/*
+ * Deprecated Delegate Callbacks.
+ * Please use NSBlocks instead.
+*/
+
 @protocol STLinkProtocol <NSObject>
 
 @optional
-- (void)twitterAccountClicked:(NSString *)link;
-- (void)twitterHashtagClicked:(NSString *)link;
-- (void)websiteClicked:(NSString *)link;
-
+- (void)twitterAccountClicked:(NSString *)link DEPRECATED;
+- (void)twitterHashtagClicked:(NSString *)link DEPRECATED;
+- (void)websiteClicked:(NSString *)link        DEPRECATED;
 @end
+
 
 @interface STTweetLabel : UILabel
 {
@@ -27,7 +44,8 @@
 @property (nonatomic, strong) UIFont *fontHashtag;
 @property (nonatomic, strong) UIColor *colorLink;
 @property (nonatomic, strong) UIColor *colorHashtag;
+@property (nonatomic, strong) id<STLinkProtocol> delegate DEPRECATED;
 
-@property (nonatomic, strong) id<STLinkProtocol> delegate;
+@property (nonatomic, copy) STLinkCallbackBlock callbackBlock;
 
 @end

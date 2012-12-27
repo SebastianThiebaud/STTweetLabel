@@ -160,12 +160,25 @@
                 if ([_delegate respondsToSelector:@selector(twitterAccountClicked:)]) {
                     [_delegate twitterAccountClicked:url];
                 }
+                
+                if (_callbackBlock != NULL) {
+                    
+                    _callbackBlock(STLinkActionTypeAccount, url);
+                    
+                }
+                
             }
             else if ([[touchWords objectAtIndex:idx] hasPrefix:@"#"])
             {
                 //Twitter hashtag clicked
                 if ([_delegate respondsToSelector:@selector(twitterHashtagClicked:)]) {
                     [_delegate twitterHashtagClicked:url];
+                }
+                
+                if (_callbackBlock != NULL) {
+                    
+                    _callbackBlock(STLinkActionTypeHashtag, url);
+                    
                 }
             }
             else if ([[touchWords objectAtIndex:idx] hasPrefix:@"http"])
@@ -175,6 +188,13 @@
                 if ([_delegate respondsToSelector:@selector(websiteClicked:)]) {
                     [_delegate websiteClicked:url];
                 }
+                
+                if (_callbackBlock != NULL) {
+                    
+                    _callbackBlock(STLinkActionTypeWebsite, url);
+                    
+                }
+                
             }
         }
     }];
