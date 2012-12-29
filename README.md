@@ -11,12 +11,28 @@ You need only 2 files:
 - `STTweetLabel.h`
 - `STTweetLabel.m`
 
-Don't forget to implement the `STLinkCallbackBlock`! Without implementing the callback block, you won't be able to detect if somebody has clicked on the hashtag, user account, or even a website!
+You can change the fonts and colors for the different words (#Hashtag/@People AND http://link.com) via the `STTweetLabel` attributes.
 
+## Demo
+
+Build and run the project STTweetLabelExample in Xcode to see `STTweetLabel` in action. 
+
+## Example Usage
+
+``` objective-c
+    STTweetLabel *tweetLabel = [[STTweetLabel alloc] initWithFrame:CGRectMake(20.0, 60.0, 280.0, 200.0)];
+    
+    [tweetLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:17.0]];
+    [tweetLabel setTextColor:[UIColor blackColor]];
+    [tweetLabel setText:@"Hi. This is a new tool for @you! Developed by->@SebThiebaud for #iPhone #ObjC... ;-) My GitHub page: https://t.co/pQXDoiYA"];
+    [self.view addSubview:tweetLabel];
+```
+
+Don't forget to implement the `STLinkCallbackBlock`. Without implementing the callback block, you won't be able to detect if somebody has clicked on the hashtag, user account or even a website.
 Blocks are easy. All you need to do is add a few lines of code:
 
-    // declare the Callback Block
-	STLinkCallbackBlock callbackBlock = ^(STLinkActionType actionType, NSString *link) {
+``` objective-c
+    STLinkCallbackBlock callbackBlock = ^(STLinkActionType actionType, NSString *link) {
 	        
         NSString *displayString = NULL;
         
@@ -42,44 +58,21 @@ Blocks are easy. All you need to do is add a few lines of code:
         [_displayLabel setText:displayString];
         
     };
-	    
+```
+
 Once you have added those few lines of code (depending on what you want to do when the user taps on something), make sure to tell your instance of STTweetLabel to call this block:
 
+``` objective-c
     [_tweetLabel setCallbackBlock:callbackBlock];
-
-You can change the fonts and colors for the different words (#Hashtag/@People AND http://link.com) via the `STTweetLabel` attributes.
-
-## Demo
-
-Build and run the project STTweetLabelExample in Xcode to see `STTweetLabel` in action. 
-
-
-## Example Usage
-
-``` objective-c
-    STTweetLabel *tweetLabel = [[STTweetLabel alloc] initWithFrame:CGRectMake(20.0, 60.0, 280.0, 200.0)];
+```
     
-    [tweetLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:17.0]];
-    [tweetLabel setTextColor:[UIColor blackColor]];
-    [tweetLabel setDelegate:self];
-    [tweetLabel setText:@"Hi. This is a new tool for @you! Developed by->@SebThiebaud for #iPhone #ObjC... ;-) My GitHub page: https://t.co/pQXDoiYA"];
-    [self.view addSubview:tweetLabel];
-```
-
-When an user will click on a tappable word, the delegate methods 
-``` objective-c
-- (void)twitterAccountClicked:(NSString *)link;
-- (void)twitterHashtagClicked:(NSString *)link;
-- (void)websiteClicked:(NSString *)link;
-```
-
-will be called. The word clicked by the user is the parameter `(NSString *)link`.
-
 ## Credits
 
-Inspired by the original Twitter applications. Thanks to @TomGiana for disturbing me while I'm focused in my code!
+Inspired by the original Twitter applications.
 
-And thanks to @max_k [http://github.com/maxkramer] for implementing NSBlocks for me! 
+## Thanks to
+ - @TomGiana for disturbing me while I'm focused in my code!
+ - @max_k [http://github.com/maxkramer] for implementing NSBlocks! 
 
 ## Contact
 
