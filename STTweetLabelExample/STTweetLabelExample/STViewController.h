@@ -8,10 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-#import "STTweetLabel.h"
-
 @class STTweetLabel;
-@interface STViewController : UIViewController <STLinkProtocol>
+@interface STViewController : UIViewController
 
 @property (strong, nonatomic) STTweetLabel *tweetLabel;
 @property (strong, nonatomic) IBOutlet UILabel *displayLabel;
