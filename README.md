@@ -11,6 +11,42 @@ You need only 2 files:
 - `STTweetLabel.h`
 - `STTweetLabel.m`
 
+Don't forget to implement the `STLinkCallbackBlock`! Without implementing the callback block, you won't be able to detect if somebody has clicked on the hashtag, user account, or even a website!
+
+Blocks are easy. All you need to do is add a few lines of code:
+
+    // declare the Callback Block
+	STLinkCallbackBlock callbackBlock = ^(STLinkActionType actionType, NSString *link) {
+	        
+        NSString *displayString = NULL;
+        
+        // determine what the user clicked on
+        switch (actionType) {
+                
+            // if the user clicked on an account (@_max_k)    
+            case STLinkActionTypeAccount:
+                displayString = [NSString stringWithFormat:@"Twitter account:\n%@", link];
+                break;
+            
+            // if the user clicked on a hashtag (#thisisreallycool)
+            case STLinkActionTypeHashtag:
+                displayString = [NSString stringWithFormat:@"Twitter hashtag:\n%@", link];
+                break;
+            
+            // if the user clicked on a website (http://github.com/SebastienThiebaud)
+            case STLinkActionTypeWebsite:
+                displayString = [NSString stringWithFormat:@"Website:\n%@", link];
+                break;
+        }
+        
+        [_displayLabel setText:displayString];
+        
+    };
+	    
+Once you have added those few lines of code (depending on what you want to do when the user taps on something), make sure to tell your instance of STTweetLabel to call this block:
+
+    [_tweetLabel setCallbackBlock:callbackBlock];
+
 You can change the fonts and colors for the different words (#Hashtag/@People AND http://link.com) via the `STTweetLabel` attributes.
 
 ## Demo
