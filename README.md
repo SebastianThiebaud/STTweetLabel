@@ -11,8 +11,6 @@ You need only 2 files:
 - `STTweetLabel.h`
 - `STTweetLabel.m`
 
-Don't forget to implement `STLinkProtocol` and initialize the `STTweetLabel`'s delegates in the view controller which manages your `STTweetLabel` (see the example in the project).
-
 You can change the fonts and colors for the different words (#Hashtag/@People AND http://link.com) via the `STTweetLabel` attributes.
 
 ## Demo
@@ -44,6 +42,8 @@ will be called. The word clicked by the user is the parameter `(NSString *)link`
 ## Credits
 
 Inspired by the original Twitter applications. Thanks to @TomGiana for disturbing me while I'm focused in my code!
+
+And thanks to @max_k [http://github.com/maxkramer] for implementing NSBlocks for me! 
 
 ## Contact
 
