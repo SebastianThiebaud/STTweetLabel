@@ -44,9 +44,7 @@
 <ul>
 <li><code>STTweetLabel.h</code></li>
 <li><code>STTweetLabel.m</code></li>
-</ul><p>Don't forget to implement <code>STLinkProtocol</code> and initialize the <code>STTweetLabel</code>'s delegate in the view controller which manages your <code>STTweetLabel</code> (see the example in the project).</p>
-
-<p>You can change the fonts and colors for the different words (#Hashtag/<a href="https://github.com/People" class="user-mention">@People</a> AND <a href="http://link.com">http://link.com</a>) via the <code>STTweetLabel</code> attributes.</p>
+</ul><p>You can change the fonts and colors for the different words (#Hashtag/<a href="https://github.com/People" class="user-mention">@People</a> AND <a href="http://link.com">http://link.com</a>) via the <code>STTweetLabel</code> attributes.</p>
 
 <h2>Demo</h2>
 
@@ -58,19 +56,45 @@
 
     <span class="p">[</span><span class="n">tweetLabel</span> <span class="nl">setFont:</span><span class="p">[</span><span class="n">UIFont</span> <span class="nl">fontWithName:</span><span class="s">@"HelveticaNeue"</span> <span class="nl">size:</span><span class="mf">17.0</span><span class="p">]];</span>
     <span class="p">[</span><span class="n">tweetLabel</span> <span class="nl">setTextColor:</span><span class="p">[</span><span class="n">UIColor</span> <span class="n">blackColor</span><span class="p">]];</span>
-    <span class="p">[</span><span class="n">tweetLabel</span> <span class="nl">setDelegate:</span><span class="n">self</span><span class="p">];</span>
     <span class="p">[</span><span class="n">tweetLabel</span> <span class="nl">setText:</span><span class="s">@"Hi. This is a new tool for @you! Developed by-&gt;@SebThiebaud for #iPhone #ObjC... ;-) My GitHub page: https://t.co/pQXDoiYA"</span><span class="p">];</span>
     <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview:</span><span class="n">tweetLabel</span><span class="p">];</span>
 </pre></div>
 
-<p>When an user will click on a tappable word, the delegate methods </p>
+<p>Don't forget to implement the <code>STLinkCallbackBlock</code>. Without implementing the callback block, you won't be able to detect if somebody has clicked on the hashtag, user account or even a website.
+Blocks are easy. All you need to do is add a few lines of code:</p>
 
-<div class="highlight"><pre><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">twitterAccountClicked:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">link</span><span class="p">;</span>
-<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">twitterHashtagClicked:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">link</span><span class="p">;</span>
-<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">websiteClicked:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">link</span><span class="p">;</span>
+<div class="highlight"><pre>    <span class="n">STLinkCallbackBlock</span> <span class="n">callbackBlock</span> <span class="o">=</span> <span class="o">^</span><span class="p">(</span><span class="n">STLinkActionType</span> <span class="n">actionType</span><span class="p">,</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">link</span><span class="p">)</span> <span class="p">{</span>
+
+        <span class="n">NSString</span> <span class="o">*</span><span class="n">displayString</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+
+        <span class="c1">// determine what the user clicked on</span>
+        <span class="k">switch</span> <span class="p">(</span><span class="n">actionType</span><span class="p">)</span> <span class="p">{</span>
+
+            <span class="c1">// if the user clicked on an account (@_max_k)    </span>
+            <span class="k">case</span> <span class="nl">STLinkActionTypeAccount:</span>
+                <span class="n">displayString</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSString</span> <span class="nl">stringWithFormat:</span><span class="s">@"Twitter account:</span><span class="se">\n</span><span class="s">%@"</span><span class="p">,</span> <span class="n">link</span><span class="p">];</span>
+                <span class="k">break</span><span class="p">;</span>
+
+            <span class="c1">// if the user clicked on a hashtag (#thisisreallycool)</span>
+            <span class="k">case</span> <span class="nl">STLinkActionTypeHashtag:</span>
+                <span class="n">displayString</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSString</span> <span class="nl">stringWithFormat:</span><span class="s">@"Twitter hashtag:</span><span class="se">\n</span><span class="s">%@"</span><span class="p">,</span> <span class="n">link</span><span class="p">];</span>
+                <span class="k">break</span><span class="p">;</span>
+
+            <span class="c1">// if the user clicked on a website (http://github.com/SebastienThiebaud)</span>
+            <span class="k">case</span> <span class="nl">STLinkActionTypeWebsite:</span>
+                <span class="n">displayString</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSString</span> <span class="nl">stringWithFormat:</span><span class="s">@"Website:</span><span class="se">\n</span><span class="s">%@"</span><span class="p">,</span> <span class="n">link</span><span class="p">];</span>
+                <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="p">[</span><span class="n">_displayLabel</span> <span class="nl">setText:</span><span class="n">displayString</span><span class="p">];</span>
+
+    <span class="p">};</span>
 </pre></div>
 
-<p>will be called. The word clicked by the user is the parameter <code>(NSString *)link</code>.</p>
+<p>Once you have added those few lines of code (depending on what you want to do when the user taps on something), make sure to tell your instance of STTweetLabel to call this block:</p>
+
+<div class="highlight"><pre>    <span class="p">[</span><span class="n">_tweetLabel</span> <span class="nl">setCallbackBlock:</span><span class="n">callbackBlock</span><span class="p">];</span>
+</pre></div>
 
 <h2>Credits</h2>
 
