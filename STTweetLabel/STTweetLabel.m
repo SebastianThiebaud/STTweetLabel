@@ -33,6 +33,8 @@
 
 - (void)drawTextInRect:(CGRect)rect
 {
+//    [super drawTextInRect:rect];
+
     if (_fontHashtag == nil)
     {
         _fontHashtag = self.font;
@@ -65,6 +67,7 @@
     
     for (NSString *word in words)
     {
+        NSLog(@"%@", word);
         CGSize sizeWord = [word sizeWithFont:self.font];
         
         // Test if the new word must be in a new line
@@ -83,15 +86,30 @@
         // Draw the prefix of the word (if it has a prefix)
         if (![preCharacters isEqualToString:@""])
         {
+            // Shadow case
+            if (self.shadowColor != NULL)
+            {
+                [self.shadowColor set];
+                [preCharacters drawAtPoint:CGPointMake(drawPoint.x + self.shadowOffset.width, drawPoint.y + self.shadowOffset.height) withFont:self.font];
+            }
+
             [self.textColor set];
             CGSize sizePreCharacters = [preCharacters sizeWithFont:self.font];
             [preCharacters drawAtPoint:drawPoint withFont:self.font];
+                    
             drawPoint = CGPointMake(drawPoint.x + sizePreCharacters.width, drawPoint.y);
         }
         
         // Draw the touchable word
         if (![wordCharacters isEqualToString:@""])
-        {
+        {            
+            // Shadow case
+            if (self.shadowColor != NULL)
+            {
+                [self.shadowColor set];
+                [wordCharacters drawAtPoint:CGPointMake(drawPoint.x + self.shadowOffset.width, drawPoint.y + self.shadowOffset.height) withFont:self.font];
+            }
+
             // Set the color for mention/hashtag OR weblink
             if ([wordCharacters hasPrefix:@"#"] || [wordCharacters hasPrefix:@"@"])
             {
@@ -101,36 +119,62 @@
             {
                 [_colorLink set];
             }
-            
+
             CGSize sizeWordCharacters = [wordCharacters sizeWithFont:self.font];
-            [wordCharacters drawAtPoint:drawPoint withFont:self.font];
-            
+            [wordCharacters drawAtPoint:drawPoint withFont:self.font];            
+
             // Stock the touchable zone
             [touchWords addObject:wordCharacters];
             [touchLocations addObject:[NSValue valueWithCGRect:CGRectMake(drawPoint.x, drawPoint.y, sizeWordCharacters.width, sizeWordCharacters.height)]];
-            
+
             drawPoint = CGPointMake(drawPoint.x + sizeWordCharacters.width, drawPoint.y);
         }
         
         // Draw the suffix of the word (if it has a suffix) else the word is not touchable
         if (![postCharacters isEqualToString:@""])
-        {
-            [self.textColor set];
-            
+        {            
             NSTextCheckingResult *matchNewLine = [regexNewLine firstMatchInString:postCharacters options:0 range:NSMakeRange(0, [postCharacters length])];
 
             // If a newline is match
             if (matchNewLine)
             {
+                // Shadow case
+                if (self.shadowColor != NULL)
+                {
+                    [self.shadowColor set];
+                    [[postCharacters substringToIndex:matchNewLine.range.location] drawAtPoint:CGPointMake(drawPoint.x + self.shadowOffset.width, drawPoint.y + self.shadowOffset.height) withFont:self.font];
+                }
+
+                [self.textColor set];
+
                 [[postCharacters substringToIndex:matchNewLine.range.location] drawAtPoint:drawPoint withFont:self.font];
                 drawPoint = CGPointMake(0.0, drawPoint.y + sizeWord.height);
+ 
+                // Shadow case
+                if (self.shadowColor != NULL)
+                {
+                    [self.shadowColor set];
+                    [[postCharacters substringFromIndex:matchNewLine.range.location + matchNewLine.range.length] drawAtPoint:CGPointMake(drawPoint.x + self.shadowOffset.width, drawPoint.y + self.shadowOffset.height) withFont:self.font];
+                }
+                
+                [self.textColor set];
+
                 [[postCharacters substringFromIndex:matchNewLine.range.location + matchNewLine.range.length] drawAtPoint:drawPoint withFont:self.font];
                 drawPoint = CGPointMake(drawPoint.x + [[postCharacters substringFromIndex:matchNewLine.range.location + matchNewLine.range.length] sizeWithFont:self.font].width, drawPoint.y);
             }
             else
             {
+                // Shadow case
+                if (self.shadowColor != NULL)
+                {
+                    [self.shadowColor set];
+                    [postCharacters drawAtPoint:CGPointMake(drawPoint.x + self.shadowOffset.width, drawPoint.y + self.shadowOffset.height) withFont:self.font];
+                }
+                
+                [self.textColor set];
                 CGSize sizePostCharacters = [postCharacters sizeWithFont:self.font];
                 [postCharacters drawAtPoint:drawPoint withFont:self.font];
+                
                 drawPoint = CGPointMake(drawPoint.x + sizePostCharacters.width, drawPoint.y);
             }
         }

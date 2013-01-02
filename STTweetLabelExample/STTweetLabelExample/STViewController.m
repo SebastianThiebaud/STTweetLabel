@@ -31,6 +31,8 @@
     _tweetLabel = [[STTweetLabel alloc] initWithFrame:CGRectMake(20.0, 60.0, 280.0, 200.0)];
     [_tweetLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:17.0]];
     [_tweetLabel setTextColor:[UIColor blackColor]];
+//    [_tweetLabel setShadowColor:[UIColor colorWithWhite:0.8 alpha:1.0]];
+//    [_tweetLabel setShadowOffset:CGSizeMake(2.0, 1.0)];
     [_tweetLabel setText:@"Hi. This is a new tool for @you! Developed by->@SebThiebaud for #iPhone #ObjC... ;-)\nMy GitHub page: https://t.co/pQXDoiYA"];
     
     
