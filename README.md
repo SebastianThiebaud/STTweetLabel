@@ -68,10 +68,10 @@ Once you have added those few lines of code (depending on what you want to do wh
     
 ## Credits
 
-Inspired by the original Twitter applications.
+Inspired by the original Twitter application.
 
 ## Thanks to
- - @TomGiana for disturbing me while I'm focused in my code!
+ - @Twittom180 [http://github.com/TomGiana] for disturbing me while I'm focused in my code!
  - @max_k [http://github.com/maxkramer] for implementing NSBlocks! 
 
 ## Contact
