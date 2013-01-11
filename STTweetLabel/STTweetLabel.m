@@ -216,6 +216,11 @@
     UITouch *touch = event.allTouches.anyObject;
     CGPoint touchPoint = [touch locationInView:self];
     
+    if ([touchLocations count] == 0)
+    {
+        [super touchesEnded:touches withEvent:event];
+    }
+    
     [touchLocations enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
     {
         CGRect touchZone = [obj CGRectValue];
@@ -268,6 +273,10 @@
                 }
                 
             }
+        }
+        else
+        {
+            [super touchesEnded:touches withEvent:event];
         }
     }];
 }
