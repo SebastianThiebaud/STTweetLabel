@@ -20,6 +20,10 @@
         [self setNumberOfLines:0];
         [self setLineBreakMode:NSLineBreakByWordWrapping];
         
+        // Init by default spaces
+        _wordSpace = 0.0;
+        _lineSpace = 0.0;
+        
         // Alloc and init the arrays which stock the touchable words and their location
         touchLocations = [[NSMutableArray alloc] init];
         touchWords = [[NSMutableArray alloc] init];
@@ -53,13 +57,13 @@
     CGPoint drawPoint = CGPointMake(0.0, 0.0);
     // Calculate the size of a space with the actual font
     CGSize sizeSpace = [@" " sizeWithFont:self.font constrainedToSize:rect.size lineBreakMode:self.lineBreakMode];
-
+    
     [self.textColor set];
-
+    
     // Regex to catch @mention #hashtag and link http(s)://
     NSError *error;
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"((@|#)([A-Z0-9a-z(é|ë|ê|è|à|â|ä|á|ù|ü|û|ú|ì|ï|î|í)_]+))|(http(s)?://([A-Z0-9a-z._-]*(/)?)*)" options:NSRegularExpressionCaseInsensitive error:&error];
-
+    
     // Regex to catch newline
     NSRegularExpression *regexNewLine = [NSRegularExpression regularExpressionWithPattern:@">newLine" options:NSRegularExpressionCaseInsensitive error:&error];
     
@@ -97,9 +101,9 @@
             // Test if the new word must be in a new line
             if (drawPoint.x + sizeWord.width > rect.size.width)
             {
-                drawPoint = CGPointMake(0.0, drawPoint.y + sizeWord.height);
+                drawPoint = CGPointMake(0.0, drawPoint.y + sizeWord.height + _lineSpace);
             }
-                    
+            
             NSTextCheckingResult *match = [regex firstMatchInString:word options:0 range:NSMakeRange(0, [word length])];
             
             // Dissolve the word (for example a hashtag: #youtube!, we want only #youtube)
@@ -116,24 +120,24 @@
                     [self.shadowColor set];
                     [preCharacters drawAtPoint:CGPointMake(drawPoint.x + self.shadowOffset.width, drawPoint.y + self.shadowOffset.height) withFont:self.font];
                 }
-
+                
                 [self.textColor set];
                 CGSize sizePreCharacters = [preCharacters sizeWithFont:self.font];
                 [preCharacters drawAtPoint:drawPoint withFont:self.font];
-                        
-                drawPoint = CGPointMake(drawPoint.x + sizePreCharacters.width, drawPoint.y);
+                
+                drawPoint = CGPointMake(drawPoint.x + sizePreCharacters.width + _wordSpace, drawPoint.y);
             }
             
             // Draw the touchable word
             if (![wordCharacters isEqualToString:@""])
-            {            
+            {
                 // Shadow case
                 if (self.shadowColor != NULL)
                 {
                     [self.shadowColor set];
                     [wordCharacters drawAtPoint:CGPointMake(drawPoint.x + self.shadowOffset.width, drawPoint.y + self.shadowOffset.height) withFont:self.font];
                 }
-
+                
                 // Set the color for mention/hashtag OR weblink
                 if ([wordCharacters hasPrefix:@"#"] || [wordCharacters hasPrefix:@"@"])
                 {
@@ -143,22 +147,22 @@
                 {
                     [_colorLink set];
                 }
-
+                
                 CGSize sizeWordCharacters = [wordCharacters sizeWithFont:self.font];
-                [wordCharacters drawAtPoint:drawPoint withFont:self.font];            
-
+                [wordCharacters drawAtPoint:drawPoint withFont:self.font];
+                
                 // Stock the touchable zone
                 [touchWords addObject:wordCharacters];
                 [touchLocations addObject:[NSValue valueWithCGRect:CGRectMake(drawPoint.x, drawPoint.y, sizeWordCharacters.width, sizeWordCharacters.height)]];
-
-                drawPoint = CGPointMake(drawPoint.x + sizeWordCharacters.width, drawPoint.y);
+                
+                drawPoint = CGPointMake(drawPoint.x + sizeWordCharacters.width + _wordSpace, drawPoint.y);
             }
             
             // Draw the suffix of the word (if it has a suffix) else the word is not touchable
             if (![postCharacters isEqualToString:@""])
-            {            
+            {
                 NSTextCheckingResult *matchNewLine = [regexNewLine firstMatchInString:postCharacters options:0 range:NSMakeRange(0, [postCharacters length])];
-
+                
                 // If a newline is match
                 if (matchNewLine)
                 {
@@ -168,12 +172,12 @@
                         [self.shadowColor set];
                         [[postCharacters substringToIndex:matchNewLine.range.location] drawAtPoint:CGPointMake(drawPoint.x + self.shadowOffset.width, drawPoint.y + self.shadowOffset.height) withFont:self.font];
                     }
-
+                    
                     [self.textColor set];
-
+                    
                     [[postCharacters substringToIndex:matchNewLine.range.location] drawAtPoint:drawPoint withFont:self.font];
-                    drawPoint = CGPointMake(0.0, drawPoint.y + sizeWord.height);
-     
+                    drawPoint = CGPointMake(0.0, drawPoint.y + sizeWord.height + _lineSpace);
+                    
                     // Shadow case
                     if (self.shadowColor != NULL)
                     {
@@ -182,7 +186,7 @@
                     }
                     
                     [self.textColor set];
-
+                    
                     [[postCharacters substringFromIndex:matchNewLine.range.location + matchNewLine.range.length] drawAtPoint:drawPoint withFont:self.font];
                     drawPoint = CGPointMake(drawPoint.x + [[postCharacters substringFromIndex:matchNewLine.range.location + matchNewLine.range.length] sizeWithFont:self.font].width, drawPoint.y);
                 }
@@ -199,18 +203,18 @@
                     CGSize sizePostCharacters = [postCharacters sizeWithFont:self.font];
                     [postCharacters drawAtPoint:drawPoint withFont:self.font];
                     
-                    drawPoint = CGPointMake(drawPoint.x + sizePostCharacters.width, drawPoint.y);
+                    drawPoint = CGPointMake(drawPoint.x + sizePostCharacters.width + _wordSpace, drawPoint.y);
                 }
             }
             
             if (!loopWord)
             {
-                drawPoint = CGPointMake(drawPoint.x + sizeSpace.width, drawPoint.y);
+                drawPoint = CGPointMake(drawPoint.x + sizeSpace.width + _wordSpace, drawPoint.y);
             }
         } while (loopWord);
-    } 
+    }
 }
-    
+
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
     UITouch *touch = event.allTouches.anyObject;
@@ -222,63 +226,63 @@
     }
     
     [touchLocations enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
-    {
-        CGRect touchZone = [obj CGRectValue];
-        
-        if (CGRectContainsPoint(touchZone, touchPoint))
-        {
-            //A touchable word is found
-            
-            NSString *url = [touchWords objectAtIndex:idx];
-            
-            if ([[touchWords objectAtIndex:idx] hasPrefix:@"@"])
-            {
-                //Twitter account clicked
-                if ([_delegate respondsToSelector:@selector(twitterAccountClicked:)]) {
-                    [_delegate twitterAccountClicked:url];
-                }
-                
-                if (_callbackBlock != NULL) {
-                    
-                    _callbackBlock(STLinkActionTypeAccount, url);
-                    
-                }
-                
-            }
-            else if ([[touchWords objectAtIndex:idx] hasPrefix:@"#"])
-            {
-                //Twitter hashtag clicked
-                if ([_delegate respondsToSelector:@selector(twitterHashtagClicked:)]) {
-                    [_delegate twitterHashtagClicked:url];
-                }
-                
-                if (_callbackBlock != NULL) {
-                    
-                    _callbackBlock(STLinkActionTypeHashtag, url);
-                    
-                }
-            }
-            else if ([[touchWords objectAtIndex:idx] hasPrefix:@"http"])
-            {
-                
-                //Twitter hashtag clicked
-                if ([_delegate respondsToSelector:@selector(websiteClicked:)]) {
-                    [_delegate websiteClicked:url];
-                }
-                
-                if (_callbackBlock != NULL) {
-                    
-                    _callbackBlock(STLinkActionTypeWebsite, url);
-                    
-                }
-                
-            }
-        }
-        else
-        {
-            [super touchesEnded:touches withEvent:event];
-        }
-    }];
+     {
+         CGRect touchZone = [obj CGRectValue];
+         
+         if (CGRectContainsPoint(touchZone, touchPoint))
+         {
+             //A touchable word is found
+             
+             NSString *url = [touchWords objectAtIndex:idx];
+             
+             if ([[touchWords objectAtIndex:idx] hasPrefix:@"@"])
+             {
+                 //Twitter account clicked
+                 if ([_delegate respondsToSelector:@selector(twitterAccountClicked:)]) {
+                     [_delegate twitterAccountClicked:url];
+                 }
+                 
+                 if (_callbackBlock != NULL) {
+                     
+                     _callbackBlock(STLinkActionTypeAccount, url);
+                     
+                 }
+                 
+             }
+             else if ([[touchWords objectAtIndex:idx] hasPrefix:@"#"])
+             {
+                 //Twitter hashtag clicked
+                 if ([_delegate respondsToSelector:@selector(twitterHashtagClicked:)]) {
+                     [_delegate twitterHashtagClicked:url];
+                 }
+                 
+                 if (_callbackBlock != NULL) {
+                     
+                     _callbackBlock(STLinkActionTypeHashtag, url);
+                     
+                 }
+             }
+             else if ([[touchWords objectAtIndex:idx] hasPrefix:@"http"])
+             {
+                 
+                 //Twitter hashtag clicked
+                 if ([_delegate respondsToSelector:@selector(websiteClicked:)]) {
+                     [_delegate websiteClicked:url];
+                 }
+                 
+                 if (_callbackBlock != NULL) {
+                     
+                     _callbackBlock(STLinkActionTypeWebsite, url);
+                     
+                 }
+                 
+             }
+         }
+         else
+         {
+             [super touchesEnded:touches withEvent:event];
+         }
+     }];
 }
 
 - (NSString *)htmlToText:(NSString *)htmlString
@@ -291,7 +295,7 @@
     
     // Newline character (if you have a better idea...)
     htmlString = [htmlString stringByReplacingOccurrencesOfString:@"\n"  withString:@">newLine"];
-   
+    
     // Extras
     htmlString = [htmlString stringByReplacingOccurrencesOfString:@"<3" withString:@"♥"];
     

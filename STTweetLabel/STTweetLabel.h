@@ -23,7 +23,7 @@ typedef void(^STLinkCallbackBlock)(STLinkActionType actionType, NSString *link);
 /*
  * Deprecated Delegate Callbacks.
  * Please use NSBlocks instead.
-*/
+ */
 
 @protocol STLinkProtocol <NSObject>
 
@@ -44,6 +44,9 @@ typedef void(^STLinkCallbackBlock)(STLinkActionType actionType, NSString *link);
 @property (nonatomic, strong) UIFont *fontHashtag;
 @property (nonatomic, strong) UIColor *colorLink;
 @property (nonatomic, strong) UIColor *colorHashtag;
+@property (nonatomic, assign) float wordSpace;
+@property (nonatomic, assign) float lineSpace;
+
 @property (nonatomic, strong) id<STLinkProtocol> delegate DEPRECATED;
 
 @property (nonatomic, copy) STLinkCallbackBlock callbackBlock;
