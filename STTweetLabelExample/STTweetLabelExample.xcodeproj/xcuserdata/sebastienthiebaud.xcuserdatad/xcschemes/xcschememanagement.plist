@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>Documentation.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 		<key>STTweetLabelExample.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -12,6 +17,11 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>2527647C16AB82CB00103B6D</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>254E4346167E7475004191B6</key>
 		<dict>
 			<key>primary</key>
