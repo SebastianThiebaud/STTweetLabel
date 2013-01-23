@@ -28,12 +28,11 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
 
-    _tweetLabel = [[STTweetLabel alloc] initWithFrame:CGRectMake(20.0, 60.0, 280.0, 200.0)];
+    _tweetLabel = [[STTweetLabel alloc] initWithFrame:CGRectMake(20.0, 60.0, 280.0, 230.0)];
     [_tweetLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:17.0]];
-    [_tweetLabel setTextColor:[UIColor blackColor]];    
-    [_tweetLabel setText:@"Hi. This is a new tool for @you! Developed by->@SebThiebaud for #iPhone #ObjC... ;-)\nMy GitHub page: https://t.co/pQXDoiYA"];
+    [_tweetLabel setTextColor:[UIColor blackColor]];
+    [_tweetLabel setText:@"Hi. This is a new tool for @you! Developed by->@SebThiebaud for #iPhone #Obj-C... ;-)\nMy GitHub page: https://www.github.com/SebastienThiebaud!"];
 
-    
     STLinkCallbackBlock callbackBlock = ^(STLinkActionType actionType, NSString *link) {
         
         NSString *displayString = NULL;

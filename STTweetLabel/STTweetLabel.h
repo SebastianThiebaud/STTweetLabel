@@ -115,7 +115,7 @@ typedef enum {
 /**
  The color of the shadow text.
  
- The default value for this property is `[UIColor blackColor]`.
+ The default value for this property is `RGB(0,0,0)`.
  
  @warning You must specify a value for this parameter before `setText:`
  */

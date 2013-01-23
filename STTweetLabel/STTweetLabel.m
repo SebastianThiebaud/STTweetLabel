@@ -70,12 +70,17 @@
     
     // Regex to catch @mention #hashtag and link http(s)://
     NSError *error;
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"((@|#)([A-Z0-9a-z(é|ë|ê|è|à|â|ä|á|ù|ü|û|ú|ì|ï|î|í)_]+))|(http(s)?://([A-Z0-9a-z._-]*(/)?)*)" options:NSRegularExpressionCaseInsensitive error:&error];
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"((@|#)([A-Z0-9a-z(é|ë|ê|è|à|â|ä|á|ù|ü|û|ú|ì|ï|î|í)_-]+))|(http(s)?://([A-Z0-9a-z._-]*(/)?)*)" options:NSRegularExpressionCaseInsensitive error:&error];
     
     // Regex to catch newline
     NSRegularExpression *regexNewLine = [NSRegularExpression regularExpressionWithPattern:@"\\n" options:NSRegularExpressionCaseInsensitive error:&error];
+    
+    // Regex for forbidden chars on post
+    NSRegularExpression *regexForbiddenHashtag = [NSRegularExpression regularExpressionWithPattern:@"([^A-Z0-9a-z(é|ë|ê|è|à|â|ä|á|ù|ü|û|ú|ì|ï|î|í)_-]+)" options:NSRegularExpressionCaseInsensitive error:&error];
+    NSRegularExpression *regexForbiddenLink = [NSRegularExpression regularExpressionWithPattern:@"([^A-Z0-9a-z(é|ë|ê|è|à|â|ä|á|ù|ü|û|ú|ì|ï|î|í)./_-]+)" options:NSRegularExpressionCaseInsensitive error:&error];
 
     BOOL loopWord = NO;
+    BOOL removeWord = YES;
     int indexOrigin = 0;
 
     // 2 loops : one calculation (for alignments...) ; one for printing
@@ -84,12 +89,19 @@
         for (NSString *wordArray in words)
         {
             NSString *word = @"";
+            NSString *lastPrefix = @"";
             NSMutableString *alreadyPrintedWord = [[NSMutableString alloc] init];
+            NSMutableString *printedTouchableWord = [[NSMutableString alloc] init];
             
             do
             {
-                word = [wordArray substringFromIndex:[alreadyPrintedWord length]];
-                
+                if (removeWord)
+                {
+                    word = [wordArray substringFromIndex:[alreadyPrintedWord length]];
+                }
+
+                removeWord = YES;
+
                 sizeWord = [word sizeWithFont:self.font];
                 
                 if (sizeWord.width <= rect.size.width)
@@ -153,7 +165,7 @@
                 if (repeat)
                 {
                     NSTextCheckingResult *match = [regex firstMatchInString:word options:0 range:NSMakeRange(0, [word length])];
-                    
+
                     // Dissolve the word (for example a hashtag: #youtube!, we want only #youtube)
                     preCharacters = [word substringToIndex:match.range.location];
                     wordCharacters = [word substringWithRange:match.range];
@@ -200,13 +212,20 @@
                     }
                     
                     // Set the color for mention/hashtag OR weblink
-                    if ([wordCharacters hasPrefix:@"#"] || [wordCharacters hasPrefix:@"@"])
+                    if ([wordCharacters hasPrefix:@"#"])
                     {
                         [_colorHashtag set];
+                        lastPrefix = @"#";
+                    }
+                    else if ([wordCharacters hasPrefix:@"@"])
+                    {
+                        [_colorHashtag set];
+                        lastPrefix = @"@";
                     }
                     else if ([wordCharacters hasPrefix:@"http"])
                     {
                         [_colorLink set];
+                        lastPrefix = @"http";
                     }
                     
                     CGSize sizeWordCharacters = [wordCharacters sizeWithFont:self.font];
@@ -216,8 +235,10 @@
                         [wordCharacters drawAtPoint:drawPoint withFont:self.font];
                     }
                     
+                    [printedTouchableWord appendString:wordCharacters];
+                    
                     // Stock the touchable zone
-                    [touchWords addObject:wordCharacters];
+                    [touchWords addObject:printedTouchableWord];
                     [touchLocations addObject:[NSValue valueWithCGRect:CGRectMake(drawPoint.x, drawPoint.y, sizeWordCharacters.width, sizeWordCharacters.height)]];
                     
                     drawPoint = CGPointMake(drawPoint.x + sizeWordCharacters.width + _wordSpace, drawPoint.y);
@@ -310,12 +331,71 @@
                             }
                         }
                         
-                        [self.textColor set];
+                        if (([lastPrefix isEqualToString:@"@"] || [lastPrefix isEqualToString:@"#"]) && [regexForbiddenHashtag firstMatchInString:postCharacters options:0 range:NSMakeRange(0, [postCharacters length])])
+                        {
+                            NSTextCheckingResult *matchFor = [regexForbiddenHashtag firstMatchInString:postCharacters options:0 range:NSMakeRange(0, [postCharacters length])];
+                            
+                            if (matchFor.range.location > 0)
+                            {
+                                loopWord = YES;
+                                removeWord = NO;
+                                word = [postCharacters substringFromIndex:matchFor.range.location];
+                                postCharacters = [postCharacters substringToIndex:matchFor.range.location];
+                            }
+                            else
+                            {
+                                lastPrefix = @"";
+                            }
+                        }
+                        else if ([lastPrefix isEqualToString:@"http"] && [regexForbiddenLink firstMatchInString:postCharacters options:0 range:NSMakeRange(0, [postCharacters length])])
+                        {
+                            NSTextCheckingResult *matchFor = [regexForbiddenLink firstMatchInString:postCharacters options:0 range:NSMakeRange(0, [postCharacters length])];
+                            
+                            if (matchFor.range.location > 0)
+                            {
+                                loopWord = YES;
+                                removeWord = NO;
+                                word = [postCharacters substringFromIndex:matchFor.range.location];
+                                postCharacters = [postCharacters substringToIndex:matchFor.range.location];
+                            }
+                            else
+                            {
+                                lastPrefix = @"";
+                            }
+                        }
+                        
+                        // Set the color for mention/hashtag OR weblink
+                        if ([lastPrefix isEqualToString:@"#"])
+                        {
+                            [_colorHashtag set];
+                        }
+                        else if ([lastPrefix isEqualToString:@"@"])
+                        {
+                            [_colorHashtag set];
+                        }
+                        else if ([lastPrefix isEqualToString:@"http"])
+                        {
+                            [_colorLink set];
+                        }
+                        else
+                        {
+                            [self.textColor set];
+                        }
+
                         CGSize sizePostCharacters = [postCharacters sizeWithFont:self.font];
                         
                         if (repeat)
                         {
                             [postCharacters drawAtPoint:drawPoint withFont:self.font];
+                        }
+                        
+                        if (![lastPrefix isEqualToString:@""])
+                        {
+                            // Stock the touchable zone
+                            [touchWords addObject:printedTouchableWord];
+                            [touchLocations addObject:[NSValue valueWithCGRect:CGRectMake(drawPoint.x, drawPoint.y, sizePostCharacters.width, sizePostCharacters.height)]];
+                            
+                            [printedTouchableWord appendString:postCharacters];
                         }
                         
                         drawPoint = CGPointMake(drawPoint.x + sizePostCharacters.width + _wordSpace, drawPoint.y);
@@ -392,7 +472,7 @@
              //A touchable word is found
              
              NSString *url = [touchWords objectAtIndex:idx];
-             
+
              if ([[touchWords objectAtIndex:idx] hasPrefix:@"@"])
              {
                  //Twitter account clicked
