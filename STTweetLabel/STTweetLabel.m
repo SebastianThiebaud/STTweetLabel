@@ -16,6 +16,7 @@
     if (self) {
         // Set the basic properties
         [self setBackgroundColor:[UIColor clearColor]];
+        [self setClipsToBounds:NO];
         [self setUserInteractionEnabled:YES];
         [self setNumberOfLines:0];
         [self setLineBreakMode:NSLineBreakByWordWrapping];
@@ -73,7 +74,7 @@
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"((@|#)([A-Z0-9a-z(é|ë|ê|è|à|â|ä|á|ù|ü|û|ú|ì|ï|î|í)_-]+))|(http(s)?://([A-Z0-9a-z._-]*(/)?)*)" options:NSRegularExpressionCaseInsensitive error:&error];
     
     // Regex to catch newline
-    NSRegularExpression *regexNewLine = [NSRegularExpression regularExpressionWithPattern:@"\\n" options:NSRegularExpressionCaseInsensitive error:&error];
+    NSRegularExpression *regexNewLine = [NSRegularExpression regularExpressionWithPattern:@"\n" options:NSRegularExpressionCaseInsensitive error:&error];
     
     // Regex for forbidden chars on post
     NSRegularExpression *regexForbiddenHashtag = [NSRegularExpression regularExpressionWithPattern:@"([^A-Z0-9a-z(é|ë|ê|è|à|â|ä|á|ù|ü|û|ú|ì|ï|î|í)_-]+)" options:NSRegularExpressionCaseInsensitive error:&error];
@@ -297,26 +298,6 @@
                         }
                         
                         drawPoint = CGPointMake(originX, drawPoint.y + sizeWord.height + _lineSpace);
-                        
-                        // Shadow case
-                        if (self.shadowColor != NULL)
-                        {
-                            [self.shadowColor set];
-                            
-                            if (repeat)
-                            {
-                                [[postCharacters substringFromIndex:matchNewLine.range.location + matchNewLine.range.length] drawAtPoint:CGPointMake(drawPoint.x + self.shadowOffset.width, drawPoint.y + self.shadowOffset.height) withFont:self.font];
-                            }
-                        }
-                        
-                        [self.textColor set];
-                        
-                        if (repeat)
-                        {
-                            [[postCharacters substringFromIndex:matchNewLine.range.location + matchNewLine.range.length] drawAtPoint:drawPoint withFont:self.font];
-                        }
-                        
-                        drawPoint = CGPointMake(drawPoint.x + [[postCharacters substringFromIndex:matchNewLine.range.location + matchNewLine.range.length] sizeWithFont:self.font].width, drawPoint.y);
                     }
                     else
                     {
@@ -402,11 +383,11 @@
                     }
                 }
                 
-                if (!loopWord)
+                if (!loopWord && !matchNewLine)
                 {
                     drawPoint = CGPointMake(drawPoint.x + sizeSpace.width + _wordSpace, drawPoint.y);
                 }
-            } while (loopWord);            
+            } while (loopWord);
         }
     
         if (!repeat)
@@ -533,7 +514,11 @@
     
     // Extras
     htmlString = [htmlString stringByReplacingOccurrencesOfString:@"<3" withString:@"♥"];
-//    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+ 
+    // normalize and separate newline from other words
+    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"\r\n" withString:@" \n "];
+    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"\n" withString:@" \n "];
+    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"\\n" withString:@" \n "];
     
     return htmlString;
 }
