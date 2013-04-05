@@ -454,64 +454,62 @@
         [super touchesEnded:touches withEvent:event];
     }
     
-    [touchLocations enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
-     {
-         CGRect touchZone = [obj CGRectValue];
-         
-         if (CGRectContainsPoint(touchZone, touchPoint))
-         {
-             //A touchable word is found
-             
-             NSString *url = [touchWords objectAtIndex:idx];
-
-             if ([[touchWords objectAtIndex:idx] hasPrefix:@"@"])
-             {
-                 //Twitter account clicked
-                 if ([_delegate respondsToSelector:@selector(twitterAccountClicked:)]) {
-                     [_delegate twitterAccountClicked:url];
-                 }
-                 
-                 if (_callbackBlock != NULL) {
-                     
-                     _callbackBlock(STLinkActionTypeAccount, url);
-                     
-                 }
-                 
-             }
-             else if ([[touchWords objectAtIndex:idx] hasPrefix:@"#"])
-             {
-                 //Twitter hashtag clicked
-                 if ([_delegate respondsToSelector:@selector(twitterHashtagClicked:)]) {
-                     [_delegate twitterHashtagClicked:url];
-                 }
-                 
-                 if (_callbackBlock != NULL) {
-                     
-                     _callbackBlock(STLinkActionTypeHashtag, url);
-                     
-                 }
-             }
-             else if ([[touchWords objectAtIndex:idx] hasPrefix:@"http"])
-             {
-                 
-                 //Twitter hashtag clicked
-                 if ([_delegate respondsToSelector:@selector(websiteClicked:)]) {
-                     [_delegate websiteClicked:url];
-                 }
-                 
-                 if (_callbackBlock != NULL) {
-                     
-                     _callbackBlock(STLinkActionTypeWebsite, url);
-                     
-                 }
-                 
-             }
-         }
-         else
-         {
-             [super touchesEnded:touches withEvent:event];
-         }
-     }];
+	for (NSInteger idx = 0; idx < touchLocations.count; idx++) {
+		CGRect hotSpotRect = [[touchLocations objectAtIndex:idx] CGRectValue];
+		
+		if (CGRectContainsPoint(hotSpotRect, touchPoint)) {
+			//A touchable word is found
+            NSString *url = [touchWords objectAtIndex:idx];
+            
+            if ([[touchWords objectAtIndex:idx] hasPrefix:@"@"])
+            {
+                //Twitter account clicked
+                if ([_delegate respondsToSelector:@selector(twitterAccountClicked:)]) {
+                    [_delegate twitterAccountClicked:url];
+                }
+                
+                if (_callbackBlock != NULL) {
+                    
+                    _callbackBlock(STLinkActionTypeAccount, url);
+                    
+                }
+				return;
+                
+            }
+            else if ([[touchWords objectAtIndex:idx] hasPrefix:@"#"])
+            {
+                //Twitter hashtag clicked
+                if ([_delegate respondsToSelector:@selector(twitterHashtagClicked:)]) {
+                    [_delegate twitterHashtagClicked:url];
+                }
+                
+                if (_callbackBlock != NULL) {
+                    
+                    _callbackBlock(STLinkActionTypeHashtag, url);
+                    
+                }
+				return;
+            }
+            else if ([[touchWords objectAtIndex:idx] hasPrefix:@"http"])
+            {
+                
+                //Twitter hashtag clicked
+                if ([_delegate respondsToSelector:@selector(websiteClicked:)]) {
+                    [_delegate websiteClicked:url];
+                }
+                
+                if (_callbackBlock != NULL) {
+                    
+                    _callbackBlock(STLinkActionTypeWebsite, url);
+                    
+                }
+				return;
+            }
+		}
+	}
+	
+	//Should only reach this point if the touch point isn't within a tracked location
+	[super touchesEnded:touches withEvent:event];
 }
 
 - (NSString *)htmlToText:(NSString *)htmlString
