@@ -14,31 +14,41 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        // Set the basic properties
-        [self setBackgroundColor:[UIColor clearColor]];
-        [self setClipsToBounds:NO];
-        [self setUserInteractionEnabled:YES];
-        [self setNumberOfLines:0];
-        [self setLineBreakMode:NSLineBreakByWordWrapping];
-        
-        // Init by default spaces and alignments
-        _wordSpace = 0.0;
-        _lineSpace = 0.0;
-        _verticalAlignment = STVerticalAlignmentTop;
-        _horizontalAlignment = STHorizontalAlignmentLeft;
-        
-        // Alloc and init the arrays which stock the touchable words and their location
-        touchLocations = [[NSMutableArray alloc] init];
-        touchWords = [[NSMutableArray alloc] init];
-        
-        // Alloc and init the array for lines' size
-        sizeLines = [[NSMutableArray alloc] init];
-        
-        // Init touchable words colors
-        _colorHashtag = [UIColor colorWithWhite:170.0/255.0 alpha:1.0];
-        _colorLink = [UIColor colorWithRed:129.0/255.0 green:171.0/255.0 blue:193.0/255.0 alpha:1.0];
+        [self setUpLabel];
     }
     return self;
+}
+
+- (void)awakeFromNib
+{
+	[self setUpLabel];
+}
+
+- (void)setUpLabel
+{
+	// Set the basic properties
+	[self setBackgroundColor:[UIColor clearColor]];
+	[self setClipsToBounds:NO];
+	[self setUserInteractionEnabled:YES];
+	[self setNumberOfLines:0];
+	[self setLineBreakMode:NSLineBreakByWordWrapping];
+	
+	// Init by default spaces and alignments
+	_wordSpace = 0.0;
+	_lineSpace = 0.0;
+	_verticalAlignment = STVerticalAlignmentTop;
+	_horizontalAlignment = STHorizontalAlignmentLeft;
+	
+	// Alloc and init the arrays which stock the touchable words and their location
+	touchLocations = [[NSMutableArray alloc] init];
+	touchWords = [[NSMutableArray alloc] init];
+	
+	// Alloc and init the array for lines' size
+	sizeLines = [[NSMutableArray alloc] init];
+	
+	// Init touchable words colors
+	_colorHashtag = [UIColor colorWithWhite:170.0/255.0 alpha:1.0];
+	_colorLink = [UIColor colorWithRed:129.0/255.0 green:171.0/255.0 blue:193.0/255.0 alpha:1.0];
 }
 
 - (void)drawTextInRect:(CGRect)rect
