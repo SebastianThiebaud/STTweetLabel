@@ -41,6 +41,36 @@
     return self;
 }
 
+- (id)initWithCoder:(NSCoder *)aDecoder{
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        // Set the basic properties
+        [self setBackgroundColor:[UIColor clearColor]];
+        [self setClipsToBounds:NO];
+        [self setUserInteractionEnabled:YES];
+        [self setNumberOfLines:0];
+        [self setLineBreakMode:NSLineBreakByWordWrapping];
+        
+        // Init by default spaces and alignments
+        _wordSpace = 0.0;
+        _lineSpace = 0.0;
+        _verticalAlignment = STVerticalAlignmentTop;
+        _horizontalAlignment = STHorizontalAlignmentLeft;
+        
+        // Alloc and init the arrays which stock the touchable words and their location
+        touchLocations = [[NSMutableArray alloc] init];
+        touchWords = [[NSMutableArray alloc] init];
+        
+        // Alloc and init the array for lines' size
+        sizeLines = [[NSMutableArray alloc] init];
+        
+        // Init touchable words colors
+        _colorHashtag = [UIColor colorWithWhite:170.0/255.0 alpha:1.0];
+        _colorLink = [UIColor colorWithRed:129.0/255.0 green:171.0/255.0 blue:193.0/255.0 alpha:1.0];
+    }
+    return self;
+}
+
 - (void)drawTextInRect:(CGRect)rect
 {
     if (_fontHashtag == nil)
@@ -71,7 +101,7 @@
     
     // Regex to catch @mention #hashtag and link http(s)://
     NSError *error;
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"((@|#)([A-Z0-9a-z(é|ë|ê|è|à|â|ä|á|ù|ü|û|ú|ì|ï|î|í)_-]+))|(http(s)?://([A-Z0-9a-z._-]*(/)?)*)" options:NSRegularExpressionCaseInsensitive error:&error];
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"((@|#)([A-Z0-9a-z(é|ë|ê|è|à|â|ä|á|ù|ü|û|ú|ì|ï|î|í)_-]+))|(@|#)([\u4e00-\u9fa5]+)|(http(s)?://([A-Z0-9a-z._-]*(/)?)*)" options:NSRegularExpressionCaseInsensitive error:&error];
     
     // Regex to catch newline
     NSRegularExpression *regexNewLine = [NSRegularExpression regularExpressionWithPattern:@"\n" options:NSRegularExpressionCaseInsensitive error:&error];
