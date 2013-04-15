@@ -14,61 +14,41 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        // Set the basic properties
-        [self setBackgroundColor:[UIColor clearColor]];
-        [self setClipsToBounds:NO];
-        [self setUserInteractionEnabled:YES];
-        [self setNumberOfLines:0];
-        [self setLineBreakMode:NSLineBreakByWordWrapping];
-        
-        // Init by default spaces and alignments
-        _wordSpace = 0.0;
-        _lineSpace = 0.0;
-        _verticalAlignment = STVerticalAlignmentTop;
-        _horizontalAlignment = STHorizontalAlignmentLeft;
-        
-        // Alloc and init the arrays which stock the touchable words and their location
-        touchLocations = [[NSMutableArray alloc] init];
-        touchWords = [[NSMutableArray alloc] init];
-        
-        // Alloc and init the array for lines' size
-        sizeLines = [[NSMutableArray alloc] init];
-        
-        // Init touchable words colors
-        _colorHashtag = [UIColor colorWithWhite:170.0/255.0 alpha:1.0];
-        _colorLink = [UIColor colorWithRed:129.0/255.0 green:171.0/255.0 blue:193.0/255.0 alpha:1.0];
+        [self setUpLabel];
     }
     return self;
 }
 
-- (id)initWithCoder:(NSCoder *)aDecoder{
-    self = [super initWithCoder:aDecoder];
-    if (self) {
-        // Set the basic properties
-        [self setBackgroundColor:[UIColor clearColor]];
-        [self setClipsToBounds:NO];
-        [self setUserInteractionEnabled:YES];
-        [self setNumberOfLines:0];
-        [self setLineBreakMode:NSLineBreakByWordWrapping];
-        
-        // Init by default spaces and alignments
-        _wordSpace = 0.0;
-        _lineSpace = 0.0;
-        _verticalAlignment = STVerticalAlignmentTop;
-        _horizontalAlignment = STHorizontalAlignmentLeft;
-        
-        // Alloc and init the arrays which stock the touchable words and their location
-        touchLocations = [[NSMutableArray alloc] init];
-        touchWords = [[NSMutableArray alloc] init];
-        
-        // Alloc and init the array for lines' size
-        sizeLines = [[NSMutableArray alloc] init];
-        
-        // Init touchable words colors
-        _colorHashtag = [UIColor colorWithWhite:170.0/255.0 alpha:1.0];
-        _colorLink = [UIColor colorWithRed:129.0/255.0 green:171.0/255.0 blue:193.0/255.0 alpha:1.0];
-    }
-    return self;
+- (void)awakeFromNib
+{
+	[self setUpLabel];
+}
+
+- (void)setUpLabel
+{
+	// Set the basic properties
+	[self setBackgroundColor:[UIColor clearColor]];
+	[self setClipsToBounds:NO];
+	[self setUserInteractionEnabled:YES];
+	[self setNumberOfLines:0];
+	[self setLineBreakMode:NSLineBreakByWordWrapping];
+	
+	// Init by default spaces and alignments
+	_wordSpace = 0.0;
+	_lineSpace = 0.0;
+	_verticalAlignment = STVerticalAlignmentTop;
+	_horizontalAlignment = STHorizontalAlignmentLeft;
+	
+	// Alloc and init the arrays which stock the touchable words and their location
+	touchLocations = [[NSMutableArray alloc] init];
+	touchWords = [[NSMutableArray alloc] init];
+	
+	// Alloc and init the array for lines' size
+	sizeLines = [[NSMutableArray alloc] init];
+	
+	// Init touchable words colors
+	_colorHashtag = [UIColor colorWithWhite:170.0/255.0 alpha:1.0];
+	_colorLink = [UIColor colorWithRed:129.0/255.0 green:171.0/255.0 blue:193.0/255.0 alpha:1.0];
 }
 
 - (void)drawTextInRect:(CGRect)rect
@@ -474,64 +454,62 @@
         [super touchesEnded:touches withEvent:event];
     }
     
-    [touchLocations enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
-     {
-         CGRect touchZone = [obj CGRectValue];
-         
-         if (CGRectContainsPoint(touchZone, touchPoint))
-         {
-             //A touchable word is found
-             
-             NSString *url = [touchWords objectAtIndex:idx];
-
-             if ([[touchWords objectAtIndex:idx] hasPrefix:@"@"])
-             {
-                 //Twitter account clicked
-                 if ([_delegate respondsToSelector:@selector(twitterAccountClicked:)]) {
-                     [_delegate twitterAccountClicked:url];
-                 }
-                 
-                 if (_callbackBlock != NULL) {
-                     
-                     _callbackBlock(STLinkActionTypeAccount, url);
-                     
-                 }
-                 
-             }
-             else if ([[touchWords objectAtIndex:idx] hasPrefix:@"#"])
-             {
-                 //Twitter hashtag clicked
-                 if ([_delegate respondsToSelector:@selector(twitterHashtagClicked:)]) {
-                     [_delegate twitterHashtagClicked:url];
-                 }
-                 
-                 if (_callbackBlock != NULL) {
-                     
-                     _callbackBlock(STLinkActionTypeHashtag, url);
-                     
-                 }
-             }
-             else if ([[touchWords objectAtIndex:idx] hasPrefix:@"http"])
-             {
-                 
-                 //Twitter hashtag clicked
-                 if ([_delegate respondsToSelector:@selector(websiteClicked:)]) {
-                     [_delegate websiteClicked:url];
-                 }
-                 
-                 if (_callbackBlock != NULL) {
-                     
-                     _callbackBlock(STLinkActionTypeWebsite, url);
-                     
-                 }
-                 
-             }
-         }
-         else
-         {
-             [super touchesEnded:touches withEvent:event];
-         }
-     }];
+	for (NSInteger idx = 0; idx < touchLocations.count; idx++) {
+		CGRect hotSpotRect = [[touchLocations objectAtIndex:idx] CGRectValue];
+		
+		if (CGRectContainsPoint(hotSpotRect, touchPoint)) {
+			//A touchable word is found
+            NSString *url = [touchWords objectAtIndex:idx];
+            
+            if ([[touchWords objectAtIndex:idx] hasPrefix:@"@"])
+            {
+                //Twitter account clicked
+                if ([_delegate respondsToSelector:@selector(twitterAccountClicked:)]) {
+                    [_delegate twitterAccountClicked:url];
+                }
+                
+                if (_callbackBlock != NULL) {
+                    
+                    _callbackBlock(STLinkActionTypeAccount, url);
+                    
+                }
+				return;
+                
+            }
+            else if ([[touchWords objectAtIndex:idx] hasPrefix:@"#"])
+            {
+                //Twitter hashtag clicked
+                if ([_delegate respondsToSelector:@selector(twitterHashtagClicked:)]) {
+                    [_delegate twitterHashtagClicked:url];
+                }
+                
+                if (_callbackBlock != NULL) {
+                    
+                    _callbackBlock(STLinkActionTypeHashtag, url);
+                    
+                }
+				return;
+            }
+            else if ([[touchWords objectAtIndex:idx] hasPrefix:@"http"])
+            {
+                
+                //Twitter hashtag clicked
+                if ([_delegate respondsToSelector:@selector(websiteClicked:)]) {
+                    [_delegate websiteClicked:url];
+                }
+                
+                if (_callbackBlock != NULL) {
+                    
+                    _callbackBlock(STLinkActionTypeWebsite, url);
+                    
+                }
+				return;
+            }
+		}
+	}
+	
+	//Should only reach this point if the touch point isn't within a tracked location
+	[super touchesEnded:touches withEvent:event];
 }
 
 - (NSString *)htmlToText:(NSString *)htmlString
