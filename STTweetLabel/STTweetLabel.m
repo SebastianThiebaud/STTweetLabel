@@ -8,6 +8,10 @@
 
 #import "STTweetLabel.h"
 
+@interface STTweetLabel()
+@property (nonatomic) CGPoint startTouchPoint;
+@end
+
 @implementation STTweetLabel
 
 - (id)initWithFrame:(CGRect)frame
@@ -19,9 +23,9 @@
     return self;
 }
 
-- (void)awakeFromNib
-{
-	[self setUpLabel];
+- (void)awakeFromNib{
+    [super awakeFromNib];
+    [self setUpLabel];
 }
 
 - (void)setUpLabel
@@ -53,6 +57,17 @@
 
 - (void)drawTextInRect:(CGRect)rect
 {
+    
+    // Regex to catch @mention #hashtag and link http(s)://
+    NSError *error;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"((@|#)([A-Z0-9a-z(é|ë|ê|è|à|â|ä|á|ù|ü|û|ú|ì|ï|î|í)_-]+))|(@|#)([\u4e00-\u9fa5]+)|(http(s)?://([A-Z0-9a-z._-]*(/)?)*)" options:NSRegularExpressionCaseInsensitive error:&error];
+    NSTextCheckingResult *match = [regex firstMatchInString:self.text options:0 range:NSMakeRange(0, self.text.length)];
+    if (!match) {
+        //For those that don't have special expression, draw it with UILabel.
+        [super drawTextInRect:rect];
+        return;
+    }
+    
     if (_fontHashtag == nil)
     {
         _fontHashtag = self.font;
@@ -79,9 +94,7 @@
     
     [self.textColor set];
     
-    // Regex to catch @mention #hashtag and link http(s)://
-    NSError *error;
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"((@|#)([A-Z0-9a-z(é|ë|ê|è|à|â|ä|á|ù|ü|û|ú|ì|ï|î|í)_-]+))|(@|#)([\u4e00-\u9fa5]+)|(http(s)?://([A-Z0-9a-z._-]*(/)?)*)" options:NSRegularExpressionCaseInsensitive error:&error];
+    
     
     // Regex to catch newline
     NSRegularExpression *regexNewLine = [NSRegularExpression regularExpressionWithPattern:@"\n" options:NSRegularExpressionCaseInsensitive error:&error];
@@ -89,14 +102,14 @@
     // Regex for forbidden chars on post
     NSRegularExpression *regexForbiddenHashtag = [NSRegularExpression regularExpressionWithPattern:@"([^A-Z0-9a-z(é|ë|ê|è|à|â|ä|á|ù|ü|û|ú|ì|ï|î|í)_-]+)" options:NSRegularExpressionCaseInsensitive error:&error];
     NSRegularExpression *regexForbiddenLink = [NSRegularExpression regularExpressionWithPattern:@"([^A-Z0-9a-z(é|ë|ê|è|à|â|ä|á|ù|ü|û|ú|ì|ï|î|í)./_-]+)" options:NSRegularExpressionCaseInsensitive error:&error];
-
+    
     BOOL loopWord = NO;
     BOOL removeWord = YES;
     int indexOrigin = 0;
-
+    
     // 2 loops : one calculation (for alignments...) ; one for printing
     for (int repeat = 0; repeat < 2; repeat++)
-    {        
+    {
         for (NSString *wordArray in words)
         {
             NSString *word = @"";
@@ -110,9 +123,9 @@
                 {
                     word = [wordArray substringFromIndex:[alreadyPrintedWord length]];
                 }
-
+                
                 removeWord = YES;
-
+                
                 sizeWord = [word sizeWithFont:self.font];
                 
                 if (sizeWord.width <= rect.size.width)
@@ -134,14 +147,14 @@
                 }
                 
                 NSTextCheckingResult *matchNewLine = [regexNewLine firstMatchInString:word options:0 range:NSMakeRange(0, [word length])];
-
+                
                 // Test if the new word must be in a new line
                 if (drawPoint.x + sizeWord.width > rect.size.width && !matchNewLine)
                 {
                     float originX = 0.0;
                     
                     if (!repeat)
-                    {                        
+                    {
                         float newHAlignment = 0.0;
                         
                         switch (_horizontalAlignment) {
@@ -157,7 +170,7 @@
                             default:
                                 break;
                         }
-
+                        
                         [sizeLines addObject:[NSNumber numberWithFloat:newHAlignment]];
                     }
                     else
@@ -172,11 +185,11 @@
                 NSString *preCharacters = @"";
                 NSString *wordCharacters = @"";
                 NSString *postCharacters = word;
-
+                
                 if (repeat)
                 {
                     NSTextCheckingResult *match = [regex firstMatchInString:word options:0 range:NSMakeRange(0, [word length])];
-
+                    
                     // Dissolve the word (for example a hashtag: #youtube!, we want only #youtube)
                     preCharacters = [word substringToIndex:match.range.location];
                     wordCharacters = [word substringWithRange:match.range];
@@ -257,7 +270,7 @@
                 
                 // Draw the suffix of the word (if it has a suffix) else the word is not touchable
                 if (![postCharacters isEqualToString:@""])
-                {                    
+                {
                     // If a newline is match
                     if (matchNewLine)
                     {
@@ -372,7 +385,7 @@
                         {
                             [self.textColor set];
                         }
-
+                        
                         CGSize sizePostCharacters = [postCharacters sizeWithFont:self.font];
                         
                         if (repeat)
@@ -399,7 +412,7 @@
                 }
             } while (loopWord);
         }
-    
+        
         if (!repeat)
         {
             // Horizontal alignment
@@ -444,72 +457,99 @@
     }
 }
 
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+    [super touchesBegan:touches withEvent:event];
+    
+    //Record the starting point, so that when the user is dragging on a special label, it will not be a valid touch.
+    self.startTouchPoint = [[touches anyObject] locationInView:self];
+}
+
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
     UITouch *touch = event.allTouches.anyObject;
     CGPoint touchPoint = [touch locationInView:self];
     
+    if (fabs(self.startTouchPoint.x-touchPoint.x)>5 || fabs(self.startTouchPoint.y - touchPoint.y)>5) {
+        //Invalidate this touch.
+        [super touchesCancelled:touches withEvent:event];
+        return;
+    }
+    
     if ([touchLocations count] == 0)
     {
         [super touchesEnded:touches withEvent:event];
+        return;
     }
     
-	for (NSInteger idx = 0; idx < touchLocations.count; idx++) {
-		CGRect hotSpotRect = [[touchLocations objectAtIndex:idx] CGRectValue];
-		
-		if (CGRectContainsPoint(hotSpotRect, touchPoint)) {
-			//A touchable word is found
-            NSString *url = [touchWords objectAtIndex:idx];
-            
-            if ([[touchWords objectAtIndex:idx] hasPrefix:@"@"])
-            {
-                //Twitter account clicked
-                if ([_delegate respondsToSelector:@selector(twitterAccountClicked:)]) {
-                    [_delegate twitterAccountClicked:url];
-                }
-                
-                if (_callbackBlock != NULL) {
-                    
-                    _callbackBlock(STLinkActionTypeAccount, url);
-                    
-                }
-				return;
-                
-            }
-            else if ([[touchWords objectAtIndex:idx] hasPrefix:@"#"])
-            {
-                //Twitter hashtag clicked
-                if ([_delegate respondsToSelector:@selector(twitterHashtagClicked:)]) {
-                    [_delegate twitterHashtagClicked:url];
-                }
-                
-                if (_callbackBlock != NULL) {
-                    
-                    _callbackBlock(STLinkActionTypeHashtag, url);
-                    
-                }
-				return;
-            }
-            else if ([[touchWords objectAtIndex:idx] hasPrefix:@"http"])
-            {
-                
-                //Twitter hashtag clicked
-                if ([_delegate respondsToSelector:@selector(websiteClicked:)]) {
-                    [_delegate websiteClicked:url];
-                }
-                
-                if (_callbackBlock != NULL) {
-                    
-                    _callbackBlock(STLinkActionTypeWebsite, url);
-                    
-                }
-				return;
-            }
-		}
-	}
-	
-	//Should only reach this point if the touch point isn't within a tracked location
-	[super touchesEnded:touches withEvent:event];
+    __block BOOL touchableWordNotFound = YES;
+    [touchLocations enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
+     {
+         CGRect touchZone = [obj CGRectValue];
+         
+         if (CGRectContainsPoint(touchZone, touchPoint))
+         {
+             //A touchable word is found
+             
+             NSString *url = [touchWords objectAtIndex:idx];
+             
+             if ([[touchWords objectAtIndex:idx] hasPrefix:@"@"])
+             {
+                 //Twitter account clicked
+                 if ([_delegate respondsToSelector:@selector(twitterAccountClicked:)]) {
+                     [_delegate twitterAccountClicked:url];
+                 }
+                 
+                 if (_callbackBlock != NULL) {
+                     
+                     _callbackBlock(STLinkActionTypeAccount, url);
+                     
+                 }
+                 
+             }
+             else if ([[touchWords objectAtIndex:idx] hasPrefix:@"#"])
+             {
+                 //Twitter hashtag clicked
+                 if ([_delegate respondsToSelector:@selector(twitterHashtagClicked:)]) {
+                     [_delegate twitterHashtagClicked:url];
+                 }
+                 
+                 if (_callbackBlock != NULL) {
+                     
+                     _callbackBlock(STLinkActionTypeHashtag, url);
+                     
+                 }
+             }
+             else if ([[touchWords objectAtIndex:idx] hasPrefix:@"http"])
+             {
+                 
+                 //Twitter hashtag clicked
+                 if ([_delegate respondsToSelector:@selector(websiteClicked:)]) {
+                     [_delegate websiteClicked:url];
+                 }
+                 
+                 if (_callbackBlock != NULL) {
+                     
+                     _callbackBlock(STLinkActionTypeWebsite, url);
+                     
+                 }
+                 
+             }
+             
+             //Stop search.
+             touchableWordNotFound = NO;
+             *stop = YES;
+         }
+     }];
+    
+    if (touchableWordNotFound) {
+        //When the touch in the on a specail label, pass it to the supper.
+        [super touchesEnded:touches withEvent:event];
+    } else {
+        //When it's on a special label. intersect the touch. So it won't be passed to the super.
+        //This is important when STTweetLabel in placed in UITableViewCell.
+        //Prevent the cell get selected.
+        [super touchesCancelled:touches withEvent:event];
+    }
 }
 
 - (NSString *)htmlToText:(NSString *)htmlString
@@ -522,7 +562,7 @@
     
     // Extras
     htmlString = [htmlString stringByReplacingOccurrencesOfString:@"<3" withString:@"♥"];
- 
+    
     // normalize and separate newline from other words
     htmlString = [htmlString stringByReplacingOccurrencesOfString:@"\r\n" withString:@" \n "];
     htmlString = [htmlString stringByReplacingOccurrencesOfString:@"\n" withString:@" \n "];
