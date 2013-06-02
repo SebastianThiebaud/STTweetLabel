@@ -1,5 +1,4 @@
 # STTweetLabel
-![Travis build](https://api.travis-ci.org/SebastienThiebaud/STTweetLabel.png?branch=master "Travis build")
 
 A custom UILabel view controller for iOS with certain words tappable like Twitter (#Hashtag, @People and http://www.link.com/page)
 
