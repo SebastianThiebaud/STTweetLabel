@@ -173,7 +173,7 @@
                         
                         [sizeLines addObject:[NSNumber numberWithFloat:newHAlignment]];
                     }
-                    else
+                    else if(indexOrigin < [sizeLines count])
                     {
                         originX = [[sizeLines objectAtIndex:indexOrigin] floatValue];
                         indexOrigin++;
@@ -314,7 +314,7 @@
                             
                             [sizeLines addObject:[NSNumber numberWithFloat:newHAlignment]];
                         }
-                        else
+                        else if(indexOrigin < [sizeLines count])
                         {
                             originX = [[sizeLines objectAtIndex:indexOrigin] floatValue];
                             indexOrigin++;
