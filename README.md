@@ -14,8 +14,6 @@ You need only 2 files:
 
 You can change the fonts and colors for the different words (#Hashtag/@People AND http://link.com) via the `STTweetLabel` attributes.
 
-The official documentation is available here: http://doc.sebastienthiebaud.us/Classes/STTweetLabel.html
-
 ## Demo
 
 Build and run the project STTweetLabelExample in Xcode to see `STTweetLabel` in action. 
