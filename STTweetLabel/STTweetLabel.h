@@ -11,7 +11,8 @@
 typedef enum {
     STLinkActionTypeAccount,
     STLinkActionTypeHashtag,
-    STLinkActionTypeWebsite
+    STLinkActionTypeWebsite,
+    STLinkActionTypePicLink
 } STLinkActionType;
 
 typedef void(^STLinkCallbackBlock)(STLinkActionType actionType, NSString *link);
@@ -186,9 +187,9 @@ typedef enum {
  
  You can declare a STLinkCallbackBlock with `void(^STLinkCallbackBlock)(STLinkActionType actionType, NSString *link);`:
  
-     STLinkCallbackBlock callbackBlock = ^(STLinkActionType actionType, NSString *link) {
-        // Do something...
-     };
+ STLinkCallbackBlock callbackBlock = ^(STLinkActionType actionType, NSString *link) {
+ // Do something...
+ };
  */
 @property (nonatomic, copy) STLinkCallbackBlock callbackBlock;
 

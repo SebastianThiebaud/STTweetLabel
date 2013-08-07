@@ -60,7 +60,7 @@
     
     // Regex to catch @mention #hashtag and link http(s)://
     NSError *error;
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"((@|#)([A-Z0-9a-z(é|ë|ê|è|à|â|ä|á|ù|ü|û|ú|ì|ï|î|í)_-]+))|(@|#)([\u4e00-\u9fa5]+)|(http(s)?://([A-Z0-9a-z._-]*(/)?)*)" options:NSRegularExpressionCaseInsensitive error:&error];
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"((@|#)([A-Z0-9a-z(é|ë|ê|è|à|â|ä|á|ù|ü|û|ú|ì|ï|î|í)_-]+))|(@|#)([\u4e00-\u9fa5]+)|(http(s)?://([A-Z0-9a-z._-]*(/)?)*)|(pic.twitter.com/)([A-Z0-9a-z._-]*)" options:NSRegularExpressionCaseInsensitive error:&error];
     NSTextCheckingResult *match = [regex firstMatchInString:self.text options:0 range:NSMakeRange(0, self.text.length)];
     if (!match) {
         //For those that don't have special expression, draw it with UILabel.
@@ -251,6 +251,11 @@
                         [_colorLink set];
                         lastPrefix = @"http";
                     }
+                    else if ([wordCharacters hasPrefix:@"pic"])
+                    {
+                        [_colorLink set];
+                        lastPrefix = @"pic";
+                    }
                     
                     CGSize sizeWordCharacters = [wordCharacters sizeWithFont:self.font];
                     
@@ -367,6 +372,22 @@
                                 lastPrefix = @"";
                             }
                         }
+                        else if ([lastPrefix isEqualToString:@"pic"] && [regexForbiddenLink firstMatchInString:postCharacters options:0 range:NSMakeRange(0, [postCharacters length])])
+                        {
+                            NSTextCheckingResult *matchFor = [regexForbiddenLink firstMatchInString:postCharacters options:0 range:NSMakeRange(0, [postCharacters length])];
+                            
+                            if (matchFor.range.location > 0)
+                            {
+                                loopWord = YES;
+                                removeWord = NO;
+                                word = [postCharacters substringFromIndex:matchFor.range.location];
+                                postCharacters = [postCharacters substringToIndex:matchFor.range.location];
+                            }
+                            else
+                            {
+                                lastPrefix = @"";
+                            }
+                        }
                         
                         // Set the color for mention/hashtag OR weblink
                         if ([lastPrefix isEqualToString:@"#"])
@@ -378,6 +399,10 @@
                             [_colorHashtag set];
                         }
                         else if ([lastPrefix isEqualToString:@"http"])
+                        {
+                            [_colorLink set];
+                        }
+                        else if([lastPrefix isEqualToString:@"pic"])
                         {
                             [_colorLink set];
                         }
@@ -530,6 +555,21 @@
                  if (_callbackBlock != NULL) {
                      
                      _callbackBlock(STLinkActionTypeWebsite, url);
+                     
+                 }
+                 
+             }
+             else if ([[touchWords objectAtIndex:idx] hasPrefix:@"pic"])
+             {
+                 
+                 //Twitter picLink clicked
+                 if ([_delegate respondsToSelector:@selector(websiteClicked:)]) {
+                     [_delegate websiteClicked:url];
+                 }
+                 
+                 if (_callbackBlock != NULL) {
+                     
+                     _callbackBlock(STLinkActionTypePicLink, url);
                      
                  }
                  
