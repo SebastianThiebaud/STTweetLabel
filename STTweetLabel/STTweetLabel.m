@@ -51,8 +51,8 @@
 	sizeLines = [[NSMutableArray alloc] init];
 	
 	// Init touchable words colors
-	_colorHashtag = [UIColor colorWithWhite:170.0/255.0 alpha:1.0];
-	_colorLink = [UIColor colorWithRed:129.0/255.0 green:171.0/255.0 blue:193.0/255.0 alpha:1.0];
+	_colorHashtag = [[UIColor alloc] initWithWhite:170.0/255.0 alpha:1.0];
+	_colorLink = [[UIColor alloc] initWithRed:129.0/255.0 green:171.0/255.0 blue:193.0/255.0 alpha:1.0];
 }
 
 - (void)drawTextInRect:(CGRect)rect
