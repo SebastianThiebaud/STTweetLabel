@@ -1,10 +1,11 @@
 ### Version 3.0 is coming
 
 Important message: I'm currently working on STTweetLabel 3.0 because the actual version contains some bugs and misses a lot of features I can read in the issues section. Please open a new issue if you don't see your problem or wished enhancement [in the Wiki](https://github.com/SebastienThiebaud/STTweetLabel/wiki/STTweetLabel-3.0).
-A custom UILabel view controller for iOS with certain words tappable like Twitter (#Hashtag, @People and http://www.link.com/page)
 
 # STTweetLabel
 [![Travis Build](https://api.travis-ci.org/SebastienThiebaud/STTweetLabel.png?branch=master "Travis Build")](http://travis-ci.org/SebastienThiebaud/STTweetLabel)
+
+A custom UILabel for iOS with certain words tappable like Twitter (#Hashtag, @People and http://www.link.com/page)
 
 ![STTweetLabel screenshot](https://raw.github.com/SebastienThiebaud/STTweetLabel/master/screenshot.png "STTweetLabel Screenshot")
 
