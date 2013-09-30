@@ -1,2 +1,4 @@
 language: objective-c
-scheme: STTweetLabelExample
+
+before_script: travis/before_script.sh
+script: travis/script.sh
