@@ -262,6 +262,7 @@
 		254E4366167E7475004191B6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "STTweetLabelExample/STTweetLabelExample-Prefix.pch";
 				INFOPLIST_FILE = "STTweetLabelExample/STTweetLabelExample-Info.plist";
@@ -273,6 +274,7 @@
 		254E4367167E7475004191B6 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "STTweetLabelExample/STTweetLabelExample-Prefix.pch";
 				INFOPLIST_FILE = "STTweetLabelExample/STTweetLabelExample-Info.plist";
