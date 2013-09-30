@@ -2,11 +2,9 @@
 //  STViewController.h
 //  STTweetLabel
 //
-//  Created by Sebastien Thiebaud on 12/15/12.
-//  Copyright (c) 2012 Sebastien Thiebaud. All rights reserved.
+//  Created by Sebastien Thiebaud on 09/29/13.
+//  Copyright (c) 2013 Sebastien Thiebaud. All rights reserved.
 //
-
-#import <UIKit/UIKit.h>
 
 @class STTweetLabel;
 @interface STViewController : UIViewController
