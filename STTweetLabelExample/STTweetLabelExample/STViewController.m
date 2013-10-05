@@ -33,8 +33,8 @@
     [super viewDidLoad];
     
     STTweetLabel *tweetLabel = [[STTweetLabel alloc] initWithFrame:CGRectMake(10.0, 60.0, 300.0, 160.0)];
-    [tweetLabel setText:@"Duis sollicitudin #auctor consectetur. Vestibulum a luctus nibh, a scelerisque @ipsum. https://blog.wikimedia.org/2013/10/03/the-hidden-wikipedia-a-view-from-2022/ Maecenas feugiat sodales semper. Please connect to ssh://bot:zzz@apple.com:22"];
-    tweetLabel.textAlignment = NSTextAlignmentRight;
+    [tweetLabel setText:@"Hi. This is a new tool for @you! Developed by @SebThiebaud for #iPhone #ObjC... and #iOS7 ;-) My GitHub page: https://t.co/pQXDoiYA"];
+    tweetLabel.textAlignment = NSTextAlignmentLeft;
     [self.view addSubview:tweetLabel];
     
     CGSize size = [tweetLabel suggestedFrameSizeToFitEntireStringConstraintedToWidth:tweetLabel.frame.size.width];
