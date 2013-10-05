@@ -18,18 +18,18 @@ Build and run the project STTweetLabelExample in Xcode to see `STTweetLabel` in 
 ## Example Usage
 
 ``` objective-c
-    STTweetLabel *tweetLabel = [[STTweetLabel alloc] initWithFrame:CGRectMake(10.0, 60.0, 300.0, 160.0)];
-    [tweetLabel setText:@"Hi. This is a new tool for @you! Developed by @SebThiebaud for #iPhone #ObjC... and #iOS7 ;-) My GitHub page: https://t.co/pQXDoiYA"];
-    [self.view addSubview:tweetLabel];
+STTweetLabel *tweetLabel = [[STTweetLabel alloc] initWithFrame:CGRectMake(10.0, 60.0, 300.0, 160.0)];
+[tweetLabel setText:@"Hi. This is a new tool for @you! Developed by @SebThiebaud for #iPhone #ObjC... and #iOS7 ;-) My GitHub page: https://t.co/pQXDoiYA"];
+[self.view addSubview:tweetLabel];
 ```
 
 Don't forget to implement the `detectionBlock`. Without implementing this block, you won't be able to detect if somebody has clicked on the hashtag, handle or even a link.
 Blocks are easy. All you need to do is add a few lines of code:
 
 ``` objective-c
-    [tweetLabel setDetectionBlock:^(STTweetHotWord hotWord, NSString *string, NSString *protocol, NSRange range) {
-        // Do something
-    }];
+[tweetLabel setDetectionBlock:^(STTweetHotWord hotWord, NSString *string, NSString *protocol, NSRange range) {
+    // Do something
+}];
 ```
     
 ## Properties
