@@ -67,10 +67,10 @@
     
     _leftToRight = YES;
     
-    _attributesText = @{NSForegroundColorAttributeName: self.textColor};
-    _attributesHandle = @{NSForegroundColorAttributeName: [UIColor redColor]};
-    _attributesHashtag = @{NSForegroundColorAttributeName: [[UIColor alloc] initWithWhite:170.0/255.0 alpha:1.0]};
-    _attributesLink = @{NSForegroundColorAttributeName: [[UIColor alloc] initWithRed:129.0/255.0 green:171.0/255.0 blue:193.0/255.0 alpha:1.0]};
+    _attributesText = @{NSForegroundColorAttributeName: self.textColor, NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue" size:14.0]};
+    _attributesHandle = @{NSForegroundColorAttributeName: [UIColor redColor], NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue" size:14.0]};
+    _attributesHashtag = @{NSForegroundColorAttributeName: [[UIColor alloc] initWithWhite:170.0/255.0 alpha:1.0], NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue" size:14.0]};
+    _attributesLink = @{NSForegroundColorAttributeName: [[UIColor alloc] initWithRed:129.0/255.0 green:171.0/255.0 blue:193.0/255.0 alpha:1.0], NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue" size:14.0]};
     
     self.validProtocols = @[@"http://", @"https://", @"ssh://"];
 }
@@ -218,10 +218,12 @@
 
 - (CGSize)suggestedFrameSizeToFitEntireStringConstraintedToWidth:(CGFloat)width
 {
-    CGRect bounds = [self.attributedText boundingRectWithSize:CGSizeMake(width, INFINITY) options:NSStringDrawingUsesLineFragmentOrigin context:nil];
-    
-    NSLog(@"%@", self.attributedText);
-    NSLog(@"%@", NSStringFromCGRect(bounds));
+    if (_cleanText == nil)
+    {
+        return CGSizeZero;
+    }
+
+    CGRect bounds = [self.attributedText boundingRectWithSize:CGSizeMake(width, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin context:nil];
     
     return bounds.size;
 }
@@ -252,6 +254,11 @@
 
 - (void)setAttributes:(NSDictionary *)attributes
 {
+    if ([attributes objectForKey:NSFontAttributeName] == nil || [attributes objectForKey:NSForegroundColorAttributeName] == nil)
+    {
+        [NSException raise:NSInvalidArgumentException format:@"Attributes dictionary must contains NSFontAttributeName and NSForegroundColorAttributeName"];
+    }
+
     _attributesText = attributes;
     
     [self determineHotWords];
@@ -259,6 +266,11 @@
 
 - (void)setAttributes:(NSDictionary *)attributes hotWord:(STTweetHotWord)hotWord
 {
+    if ([attributes objectForKey:NSFontAttributeName] == nil || [attributes objectForKey:NSForegroundColorAttributeName] == nil)
+    {
+        [NSException raise:NSInvalidArgumentException format:@"Attributes dictionary must contains NSFontAttributeName and NSForegroundColorAttributeName"];
+    }
+    
     switch (hotWord)
     {
         case STTweetHandle:

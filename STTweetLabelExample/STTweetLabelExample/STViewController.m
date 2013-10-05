@@ -30,12 +30,12 @@
 {
     [super viewDidLoad];
     
-    STTweetLabel *tweetLabel = [[STTweetLabel alloc] initWithFrame:CGRectMake(5.0, 40.0, 310.0, 160.0)];
-    [tweetLabel setText:@"Duis sollicitudin #auctor consectetur. Vestibulum a luctus nibh, a scelerisque @ipsum. https://blog.wikimedia.org/2013/10/03/the-hidden-wikipedia-a-view-from-2022/ Maecenas feugiat sodales semper."];
+    STTweetLabel *tweetLabel = [[STTweetLabel alloc] initWithFrame:CGRectMake(10.0, 60.0, 300.0, 160.0)];
+    [tweetLabel setText:@"Duis sollicitudin #auctor consectetur. Vestibulum a luctus nibh, a scelerisque @ipsum. https://blog.wikimedia.org/2013/10/03/the-hidden-wikipedia-a-view-from-2022/ Maecenas feugiat sodales semper. Please connect to ssh://bot:zzz@apple.com:22"];
     [self.view addSubview:tweetLabel];
-    
-    NSLog(@"%@", NSStringFromCGSize([tweetLabel suggestedFrameSizeToFitEntireStringConstraintedToWidth:310.0]));
-    [tweetLabel setFrame:CGRectMake(5.0, 40.0, [tweetLabel suggestedFrameSizeToFitEntireStringConstraintedToWidth:310.0].width, [tweetLabel suggestedFrameSizeToFitEntireStringConstraintedToWidth:310.0].height)];
+ 
+    CGSize suggestedFrameSize = [tweetLabel suggestedFrameSizeToFitEntireStringConstraintedToWidth:300.0];
+    [tweetLabel setFrame:CGRectMake(10.0, 60.0, suggestedFrameSize.width, suggestedFrameSize.height)];
 }
 
 - (void)didReceiveMemoryWarning

@@ -27,7 +27,6 @@
 
 - (void)tearDown
 {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
 }
 
@@ -36,7 +35,7 @@
 
 - (void)test_setAndGetAttributesForText_setAttributes_attributes
 {
-    NSDictionary *attributes = @{NSForegroundColorAttributeName: [UIColor redColor], NSFontAttributeName: @"Helvetica"};
+    NSDictionary *attributes = @{NSForegroundColorAttributeName: [UIColor redColor], NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue" size:14.0]};
     
     [_tweetLabel setAttributes:attributes];
     
@@ -45,7 +44,7 @@
 
 - (void)test_setAndGetAttributesForHandle_setAttributes_attributes
 {
-    NSDictionary *attributes = @{NSForegroundColorAttributeName: [UIColor redColor], NSFontAttributeName: @"Helvetica"};
+    NSDictionary *attributes = @{NSForegroundColorAttributeName: [UIColor redColor], NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue" size:14.0]};
     
     [_tweetLabel setAttributes:attributes hotWord:STTweetHandle];
     
@@ -54,7 +53,7 @@
 
 - (void)test_setAndGetAttributesForHashtag_setAttributes_attributes
 {
-    NSDictionary *attributes = @{NSForegroundColorAttributeName: [UIColor redColor], NSFontAttributeName: @"Helvetica"};
+    NSDictionary *attributes = @{NSForegroundColorAttributeName: [UIColor redColor], NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue" size:14.0]};
     
     [_tweetLabel setAttributes:attributes hotWord:STTweetHashtag];
     
@@ -63,11 +62,39 @@
 
 - (void)test_setAndGetAttributesForLink_setAttributes_attributes
 {
-    NSDictionary *attributes = @{NSForegroundColorAttributeName: [UIColor redColor], NSFontAttributeName: @"Helvetica"};
+    NSDictionary *attributes = @{NSForegroundColorAttributeName: [UIColor redColor], NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue" size:14.0]};
     
     [_tweetLabel setAttributes:attributes hotWord:STTweetLink];
     
     XCTAssertEqualObjects(attributes, [_tweetLabel attributesForHotWord:STTweetLink], @"Link attributes should be %@ but %@ was returned instead.", attributes, [_tweetLabel attributesForHotWord:STTweetLink]);
+}
+
+- (void)test_setAndGetAttributesForText_setInvalidAttributes_exceptionThrown
+{
+    NSDictionary *attributes = @{NSForegroundColorAttributeName: [UIColor redColor]};
+    
+    XCTAssertThrowsSpecificNamed([_tweetLabel setAttributes:attributes], NSException, NSInvalidArgumentException, @"Attributes dictionary must contains NSFontAttributeName and NSForegroundColorAttributeName");
+}
+
+- (void)test_setAndGetAttributesForHandleHashtagLink_setInvalidAttributes_exceptionThrown
+{
+    NSDictionary *attributes = @{NSForegroundColorAttributeName: [UIColor redColor]};
+    
+    XCTAssertThrowsSpecificNamed([_tweetLabel setAttributes:attributes hotWord:0], NSException, NSInvalidArgumentException, @"Attributes dictionary must contains NSFontAttributeName and NSForegroundColorAttributeName");
+}
+
+- (void)test_setAndGetAttributesForText_setValidAttributes_exceptionNotThrown
+{
+    NSDictionary *attributes = @{NSForegroundColorAttributeName: [UIColor redColor], NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue" size:14.0]};
+    
+    XCTAssertNoThrowSpecificNamed([_tweetLabel setAttributes:attributes], NSException, NSInvalidArgumentException, @"Attributes dictionary contains NSFontAttributeName and NSForegroundColorAttributeName and shouldn't raise an exception.");
+}
+
+- (void)test_setAndGetAttributesForHandleHashtagLink_setValidAttributes_exceptionNotThrown
+{
+    NSDictionary *attributes = @{NSForegroundColorAttributeName: [UIColor redColor], NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue" size:14.0]};
+    
+    XCTAssertNoThrowSpecificNamed([_tweetLabel setAttributes:attributes hotWord:0], NSException, NSInvalidArgumentException, @"Attributes dictionary contains NSFontAttributeName and NSForegroundColorAttributeName and shouldn't raise an exception.");
 }
 
 #pragma mark -
