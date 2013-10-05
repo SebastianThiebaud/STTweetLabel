@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
     :tag => "3.0.0"
   }
 
-  s.platform     = :ios
-  s.source_files = 'STTweetLabel/STTweetLabel.{h,m}'
+  s.platform     = :ios, '7.0'
+  s.source_files = 'STTweetLabel/STTweetLabel.{h,m}', 'STTweetTextStorage.{h,m}'
   s.requires_arc = true
 end

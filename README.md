@@ -42,7 +42,7 @@ Blocks are easy. All you need to do is add a few lines of code:
 ## Methods
 
 - `-[STTweetLabel setAttributes:(NSDictionary *)attributes]`: Dictionary with attributes for all text. (Important: You need to specify `NSForegroundColorAttributeName` and `NSFontAttributeName` mandatory).
-- `-[STTweetLabel setAttributes:(NSDictionary *)attributes hotWord:(STTweetHotWord)hotWord]`: Dictionary with attributes for all text. (Important: You need to specify `NSForegroundColorAttributeName` and `NSFontAttributeName` mandatory).
+- `-[STTweetLabel setAttributes:(NSDictionary *)attributes hotWord:(STTweetHotWord)hotWord]`: Dictionary with attributes for specific STTweetHotWord. (Important: You need to specify `NSForegroundColorAttributeName` and `NSFontAttributeName` mandatory).
 - `-[STTweetLabel suggestedFrameSizeToFitEntireStringConstraintedToWidth:(CGFloat)width`: Returns the CGSize calculated for the text submitted.
 
 ## Credits
