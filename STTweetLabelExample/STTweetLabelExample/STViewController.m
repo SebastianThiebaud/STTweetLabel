@@ -33,6 +33,9 @@
     STTweetLabel *tweetLabel = [[STTweetLabel alloc] initWithFrame:CGRectMake(5.0, 40.0, 310.0, 160.0)];
     [tweetLabel setText:@"Duis sollicitudin #auctor consectetur. Vestibulum a luctus nibh, a scelerisque @ipsum. https://blog.wikimedia.org/2013/10/03/the-hidden-wikipedia-a-view-from-2022/ Maecenas feugiat sodales semper."];
     [self.view addSubview:tweetLabel];
+    
+    NSLog(@"%@", NSStringFromCGSize([tweetLabel suggestedFrameSizeToFitEntireStringConstraintedToWidth:310.0]));
+    [tweetLabel setFrame:CGRectMake(5.0, 40.0, [tweetLabel suggestedFrameSizeToFitEntireStringConstraintedToWidth:310.0].width, [tweetLabel suggestedFrameSizeToFitEntireStringConstraintedToWidth:310.0].height)];
 }
 
 - (void)didReceiveMemoryWarning

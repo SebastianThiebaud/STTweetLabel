@@ -15,11 +15,14 @@ typedef enum {
 @interface STTweetLabel : UILabel
 
 @property (nonatomic, strong) NSArray *validProtocols;
+@property (nonatomic, assign) BOOL leftToRight;
 
 - (void)setAttributes:(NSDictionary *)attributes;
 - (void)setAttributes:(NSDictionary *)attributes hotWord:(STTweetHotWord)hotWord;
 
 - (NSDictionary *)attributes;
 - (NSDictionary *)attributesForHotWord:(STTweetHotWord)hotWord;
+
+- (CGSize)suggestedFrameSizeToFitEntireStringConstraintedToWidth:(CGFloat)width;
 
 @end

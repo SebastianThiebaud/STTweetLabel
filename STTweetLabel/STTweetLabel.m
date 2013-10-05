@@ -14,6 +14,7 @@
 @interface STTweetLabel ()
 
 @property (nonatomic, strong) NSString *cleanText;
+
 @property (strong) NSMutableArray *rangesOfHotWords;
 
 @property (nonatomic, strong) NSDictionary *attributesText;
@@ -25,6 +26,7 @@
 - (void)determineHotWords;
 - (void)determineLinks;
 - (void)updateText;
+- (NSString *)temporaryStringWithSize:(int)size;
 
 @end
 
@@ -63,6 +65,8 @@
 	[self setUserInteractionEnabled:YES];
 	[self setNumberOfLines:0];
     
+    _leftToRight = YES;
+    
     _attributesText = @{NSForegroundColorAttributeName: self.textColor};
     _attributesHandle = @{NSForegroundColorAttributeName: [UIColor redColor]};
     _attributesHashtag = @{NSForegroundColorAttributeName: [[UIColor alloc] initWithWhite:170.0/255.0 alpha:1.0]};
@@ -83,6 +87,14 @@
     }
     
     NSMutableString *tmpText = [[NSMutableString alloc] initWithString:_cleanText];
+    
+    // Support RTL
+    if (!_leftToRight)
+    {
+        tmpText = [[NSMutableString alloc] init];
+        [tmpText appendString:@"\u200F"];
+        [tmpText appendString:_cleanText];
+    }
     
     // Define a character set for hot characters (@ handle, # hashtag)
     NSString *hotCharacters = @"@#";
@@ -119,7 +131,7 @@
             continue;
 
         // Determine the length of the hot word
-        int length = range.length;
+        int length = (int)range.length;
         
         while (range.location + length < tmpText.length && [validCharactersSet characterIsMember:[tmpText characterAtIndex:range.location + length]])
         {
@@ -152,14 +164,14 @@
         {
             NSRange range = [tmpText rangeOfString:substring];
             
-            [tmpText replaceCharactersInRange:range withString:[self temporaryStringWithSize:range.length]];
+            [tmpText replaceCharactersInRange:range withString:[self temporaryStringWithSize:(int)range.length]];
             
             // If the hot character is not preceded by a alphanumeric characater, ie email (sebastien@world.com)
             if (range.location > 0 && [tmpText characterAtIndex:range.location - 1] != ' ')
                 continue;
 
             // Determine the length of the hot word
-            int length = range.length;
+            int length = (int)range.length;
             
             while (range.location + length < tmpText.length && [validCharactersSet characterIsMember:[tmpText characterAtIndex:range.location + length]])
             {
@@ -187,11 +199,7 @@
     }
     
     [self setAttributedText:attributedString];
-    NSLog(@"%@", attributedString);
 }
-
-#pragma mark -
-#pragma mark Private utils methods
 
 - (NSString *)temporaryStringWithSize:(int)size
 {
@@ -203,6 +211,19 @@
     }
     
     return string;
+}
+
+#pragma mark -
+#pragma mark Public methods
+
+- (CGSize)suggestedFrameSizeToFitEntireStringConstraintedToWidth:(CGFloat)width
+{
+    CGRect bounds = [self.attributedText boundingRectWithSize:CGSizeMake(width, INFINITY) options:NSStringDrawingUsesLineFragmentOrigin context:nil];
+    
+    NSLog(@"%@", self.attributedText);
+    NSLog(@"%@", NSStringFromCGRect(bounds));
+    
+    return bounds.size;
 }
 
 #pragma mark -
@@ -254,6 +275,13 @@
     }
 }
 
+- (void)setLeftToRight:(BOOL)leftToRight
+{
+    _leftToRight = leftToRight;
+    
+    [self determineHotWords];
+}
+
 #pragma mark -
 #pragma mark Getters
 
@@ -283,6 +311,11 @@
         default:
             break;
     }
+}
+
+- (BOOL)isLeftToRight
+{
+    return _leftToRight;
 }
 
 #pragma mark -
