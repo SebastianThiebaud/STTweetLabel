@@ -215,6 +215,11 @@
     [_layoutManager addTextContainer:_textContainer];
     [_textStorage addLayoutManager:_layoutManager];
 
+    if (_textView != nil)
+    {
+        [_textView removeFromSuperview];
+    }
+    
     _textView = [[UITextView alloc] initWithFrame:self.bounds textContainer:_textContainer];
     _textView.delegate = self;
     _textView.backgroundColor = [UIColor clearColor];
