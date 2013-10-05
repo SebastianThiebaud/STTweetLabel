@@ -16,6 +16,7 @@
 @property (nonatomic, strong) NSString *cleanText;
 
 @property (strong) NSMutableArray *rangesOfHotWords;
+@property (strong) NSMutableArray *locationsOfHotWords;
 
 @property (nonatomic, strong) NSDictionary *attributesText;
 @property (nonatomic, strong) NSDictionary *attributesHandle;
@@ -31,6 +32,9 @@
 @end
 
 @implementation STTweetLabel
+{
+    CGPoint _startTouchPoint;
+}
 
 #pragma mark -
 #pragma mark Lifecycle
@@ -199,6 +203,36 @@
     }
     
     [self setAttributedText:attributedString];
+    
+    CGSize suggestedFrameSize = [self suggestedFrameSizeToFitEntireStringConstraintedToWidth:self.frame.size.width];
+    CGRect frame = self.frame;
+    frame.size = suggestedFrameSize;
+    self.frame = frame;
+    
+    _locationsOfHotWords = [[NSMutableArray alloc] init];
+    
+    for (NSDictionary *dictionary in _rangesOfHotWords)
+    {
+        NSRange range = NSRangeFromString([dictionary objectForKey:@"range"]);
+        
+        NSMutableAttributedString *tmpAttributedString = [[NSMutableAttributedString alloc] initWithAttributedString:attributedString];
+        [tmpAttributedString deleteCharactersInRange:NSMakeRange(range.location, tmpAttributedString.length - range.location)];
+
+        CGRect originBounds = [tmpAttributedString boundingRectWithSize:CGSizeMake(self.frame.size.width, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin context:nil];
+//        NSLog(@"%@", NSStringFromCGRect(originBounds));
+        
+        tmpAttributedString = [[NSMutableAttributedString alloc] initWithAttributedString:attributedString];
+        [tmpAttributedString deleteCharactersInRange:NSMakeRange(range.location + range.length, tmpAttributedString.length - (range.location + range.length))];
+        [tmpAttributedString deleteCharactersInRange:NSMakeRange(0, range.location)];
+        
+        CGRect sizeBounds = [tmpAttributedString boundingRectWithSize:CGSizeMake(self.frame.size.width, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin context:nil];
+//        NSLog(@"%@", NSStringFromCGRect(sizeBounds));
+
+        CGRect bounds = CGRectMake(originBounds.size.width, originBounds.size.height - sizeBounds.size.height, sizeBounds.size.width, sizeBounds.size.height);
+        NSLog(@"%@: %@",tmpAttributedString.string,  NSStringFromCGRect(bounds));
+        [_locationsOfHotWords addObject:[NSValue valueWithCGRect:bounds]];
+    }
+
 }
 
 - (NSString *)temporaryStringWithSize:(int)size
@@ -326,7 +360,7 @@
 }
 
 - (BOOL)isLeftToRight
-{
+{    
     return _leftToRight;
 }
 
@@ -337,12 +371,52 @@
 {
     [super touchesBegan:touches withEvent:event];
     
+    _startTouchPoint = [[touches anyObject] locationInView:self];
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [super touchesEnded:touches withEvent:event];
     
+    UITouch *touch = event.allTouches.anyObject;
+    CGPoint touchPoint = [touch locationInView:self];
+    
+    if (fabs(_startTouchPoint.x - touchPoint.x) > 5 || fabs(_startTouchPoint.y - touchPoint.y) > 5)
+    {
+        [super touchesCancelled:touches withEvent:event];
+        return;
+    }
+    
+    if ([_locationsOfHotWords count] == 0)
+    {
+        [super touchesEnded:touches withEvent:event];
+        return;
+    }
+    
+    __block BOOL touchableWordNotFound = YES;
+    
+    [_locationsOfHotWords enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
+    {
+        CGRect touchZone = [obj CGRectValue];
+
+        if (CGRectContainsPoint(touchZone, touchPoint))
+        {
+            NSLog(@"Found");
+            
+            //Stop search.
+            touchableWordNotFound = NO;
+            *stop = YES;
+        }
+     }];
+    
+    if (touchableWordNotFound)
+    {
+        [super touchesEnded:touches withEvent:event];
+    }
+    else
+    {
+        [super touchesCancelled:touches withEvent:event];
+    }
 }
 
 @end

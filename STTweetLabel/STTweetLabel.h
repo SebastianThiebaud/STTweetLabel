@@ -16,6 +16,7 @@ typedef enum {
 
 @property (nonatomic, strong) NSArray *validProtocols;
 @property (nonatomic, assign) BOOL leftToRight;
+//@property (nonatomic, copy) void (^detection)(STTweetHotWord hotWord, NSString *string);
 
 - (void)setAttributes:(NSDictionary *)attributes;
 - (void)setAttributes:(NSDictionary *)attributes hotWord:(STTweetHotWord)hotWord;

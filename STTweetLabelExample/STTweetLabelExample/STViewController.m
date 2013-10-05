@@ -36,6 +36,10 @@
  
     CGSize suggestedFrameSize = [tweetLabel suggestedFrameSizeToFitEntireStringConstraintedToWidth:300.0];
     [tweetLabel setFrame:CGRectMake(10.0, 60.0, suggestedFrameSize.width, suggestedFrameSize.height)];
+    
+//    [tweetLabel setDetection:^(STTweetHotWord hotWord, NSString *string) {
+//        NSLog(@"%d %@", hotWord, string);
+//    }];
 }
 
 - (void)didReceiveMemoryWarning
