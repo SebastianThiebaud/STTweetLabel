@@ -30,8 +30,8 @@
 {
     [super viewDidLoad];
     
-    STTweetLabel *tweetLabel = [[STTweetLabel alloc] initWithFrame:CGRectMake(5.0, 20.0, 310.0, 100.0)];
-    [tweetLabel setText:@"Il était une fois une étrange #Facon de parler @stephane !"];
+    STTweetLabel *tweetLabel = [[STTweetLabel alloc] initWithFrame:CGRectMake(5.0, 40.0, 310.0, 160.0)];
+    [tweetLabel setText:@"Duis sollicitudin #auctor consectetur. Vestibulum a luctus nibh, a scelerisque @ipsum. https://blog.wikimedia.org/2013/10/03/the-hidden-wikipedia-a-view-from-2022/ Maecenas feugiat sodales semper."];
     [self.view addSubview:tweetLabel];
 }
 

@@ -14,14 +14,12 @@ typedef enum {
 
 @interface STTweetLabel : UILabel
 
-@property (nonatomic, strong) UIColor *handleColor;
-@property (nonatomic, strong) UIColor *hashtagColor;
-@property (nonatomic, strong) UIColor *linkColor;
+@property (nonatomic, strong) NSArray *validProtocols;
 
-- (void)setText:(NSString *)text;
-- (NSString *)text;
+- (void)setAttributes:(NSDictionary *)attributes;
+- (void)setAttributes:(NSDictionary *)attributes hotWord:(STTweetHotWord)hotWord;
 
-- (void)setTextColor:(UIColor *)textColor;
-- (UIColor *)textColor;
+- (NSDictionary *)attributes;
+- (NSDictionary *)attributesForHotWord:(STTweetHotWord)hotWord;
 
 @end
