@@ -39,9 +39,6 @@
 @end
 
 @implementation STTweetLabel
-{
-    CGPoint _startTouchPoint;
-}
 
 #pragma mark -
 #pragma mark Lifecycle
