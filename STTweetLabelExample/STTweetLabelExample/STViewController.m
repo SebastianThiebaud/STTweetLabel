@@ -29,7 +29,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    
+    STTweetLabel *tweetLabel = [[STTweetLabel alloc] initWithFrame:CGRectMake(5.0, 20.0, 310.0, 100.0)];
+    [tweetLabel setText:@"Il était une fois une étrange #Facon de parler @stephane !"];
+    [self.view addSubview:tweetLabel];
 }
 
 - (void)didReceiveMemoryWarning
