@@ -19,7 +19,23 @@
 		254E436B167E74A2004191B6 /* STViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 254E4369167E74A2004191B6 /* STViewController.m */; };
 		254E436C167E74A2004191B6 /* STViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 254E436A167E74A2004191B6 /* STViewController.xib */; };
 		259D0B851680E7AF00D0D4AC /* STTweetLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 259D0B841680E7AF00D0D4AC /* STTweetLabel.m */; };
+		BE35E74418009143001F64D7 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE35E74318009143001F64D7 /* XCTest.framework */; };
+		BE35E74518009143001F64D7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 254E434D167E7475004191B6 /* Foundation.framework */; };
+		BE35E74618009143001F64D7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 254E434B167E7475004191B6 /* UIKit.framework */; };
+		BE35E74C18009143001F64D7 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = BE35E74A18009143001F64D7 /* InfoPlist.strings */; };
+		BE35E74E18009143001F64D7 /* STTweetLabel_Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = BE35E74D18009143001F64D7 /* STTweetLabel_Tests.m */; };
+		BE35E7571800B73C001F64D7 /* STTweetTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = BE35E7561800B73C001F64D7 /* STTweetTextStorage.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		BE35E75018009143001F64D7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 254E433E167E7475004191B6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 254E4346167E7475004191B6;
+			remoteInfo = STTweetLabelExample;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		254E4347167E7475004191B6 /* STTweetLabelExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = STTweetLabelExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -40,6 +56,14 @@
 		254E436A167E74A2004191B6 /* STViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STViewController.xib; sourceTree = "<group>"; };
 		259D0B831680E7AF00D0D4AC /* STTweetLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STTweetLabel.h; sourceTree = "<group>"; };
 		259D0B841680E7AF00D0D4AC /* STTweetLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STTweetLabel.m; sourceTree = "<group>"; };
+		BE35E74218009143001F64D7 /* STTweetLabel Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "STTweetLabel Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BE35E74318009143001F64D7 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		BE35E74918009143001F64D7 /* STTweetLabel Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "STTweetLabel Tests-Info.plist"; sourceTree = "<group>"; };
+		BE35E74B18009143001F64D7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		BE35E74D18009143001F64D7 /* STTweetLabel_Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = STTweetLabel_Tests.m; sourceTree = "<group>"; };
+		BE35E74F18009143001F64D7 /* STTweetLabel Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "STTweetLabel Tests-Prefix.pch"; sourceTree = "<group>"; };
+		BE35E7551800B73C001F64D7 /* STTweetTextStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STTweetTextStorage.h; sourceTree = "<group>"; };
+		BE35E7561800B73C001F64D7 /* STTweetTextStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STTweetTextStorage.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +77,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BE35E73F18009143001F64D7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BE35E74418009143001F64D7 /* XCTest.framework in Frameworks */,
+				BE35E74618009143001F64D7 /* UIKit.framework in Frameworks */,
+				BE35E74518009143001F64D7 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -60,6 +94,7 @@
 			isa = PBXGroup;
 			children = (
 				254E4351167E7475004191B6 /* STTweetLabelExample */,
+				BE35E74718009143001F64D7 /* STTweetLabel Tests */,
 				254E434A167E7475004191B6 /* Frameworks */,
 				254E4348167E7475004191B6 /* Products */,
 			);
@@ -69,6 +104,7 @@
 			isa = PBXGroup;
 			children = (
 				254E4347167E7475004191B6 /* STTweetLabelExample.app */,
+				BE35E74218009143001F64D7 /* STTweetLabel Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -79,6 +115,7 @@
 				254E434B167E7475004191B6 /* UIKit.framework */,
 				254E434D167E7475004191B6 /* Foundation.framework */,
 				254E434F167E7475004191B6 /* CoreGraphics.framework */,
+				BE35E74318009143001F64D7 /* XCTest.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -116,9 +153,30 @@
 			children = (
 				259D0B831680E7AF00D0D4AC /* STTweetLabel.h */,
 				259D0B841680E7AF00D0D4AC /* STTweetLabel.m */,
+				BE35E7551800B73C001F64D7 /* STTweetTextStorage.h */,
+				BE35E7561800B73C001F64D7 /* STTweetTextStorage.m */,
 			);
 			name = STTweetLabel;
 			path = ../../STTweetLabel;
+			sourceTree = "<group>";
+		};
+		BE35E74718009143001F64D7 /* STTweetLabel Tests */ = {
+			isa = PBXGroup;
+			children = (
+				BE35E74D18009143001F64D7 /* STTweetLabel_Tests.m */,
+				BE35E74818009143001F64D7 /* Supporting Files */,
+			);
+			path = "STTweetLabel Tests";
+			sourceTree = "<group>";
+		};
+		BE35E74818009143001F64D7 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				BE35E74918009143001F64D7 /* STTweetLabel Tests-Info.plist */,
+				BE35E74A18009143001F64D7 /* InfoPlist.strings */,
+				BE35E74F18009143001F64D7 /* STTweetLabel Tests-Prefix.pch */,
+			);
+			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -141,6 +199,24 @@
 			productReference = 254E4347167E7475004191B6 /* STTweetLabelExample.app */;
 			productType = "com.apple.product-type.application";
 		};
+		BE35E74118009143001F64D7 /* STTweetLabel Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BE35E75218009143001F64D7 /* Build configuration list for PBXNativeTarget "STTweetLabel Tests" */;
+			buildPhases = (
+				BE35E73E18009143001F64D7 /* Sources */,
+				BE35E73F18009143001F64D7 /* Frameworks */,
+				BE35E74018009143001F64D7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BE35E75118009143001F64D7 /* PBXTargetDependency */,
+			);
+			name = "STTweetLabel Tests";
+			productName = "STTweetLabel Tests";
+			productReference = BE35E74218009143001F64D7 /* STTweetLabel Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -150,6 +226,11 @@
 				CLASSPREFIX = ST;
 				LastUpgradeCheck = 0450;
 				ORGANIZATIONNAME = "Sebastien Thiebaud";
+				TargetAttributes = {
+					BE35E74118009143001F64D7 = {
+						TestTargetID = 254E4346167E7475004191B6;
+					};
+				};
 			};
 			buildConfigurationList = 254E4341167E7475004191B6 /* Build configuration list for PBXProject "STTweetLabelExample" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -164,6 +245,7 @@
 			projectRoot = "";
 			targets = (
 				254E4346167E7475004191B6 /* STTweetLabelExample */,
+				BE35E74118009143001F64D7 /* STTweetLabel Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -181,6 +263,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BE35E74018009143001F64D7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BE35E74C18009143001F64D7 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -190,18 +280,43 @@
 			files = (
 				254E4358167E7475004191B6 /* main.m in Sources */,
 				254E435C167E7475004191B6 /* STAppDelegate.m in Sources */,
+				BE35E7571800B73C001F64D7 /* STTweetTextStorage.m in Sources */,
 				254E436B167E74A2004191B6 /* STViewController.m in Sources */,
 				259D0B851680E7AF00D0D4AC /* STTweetLabel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BE35E73E18009143001F64D7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BE35E74E18009143001F64D7 /* STTweetLabel_Tests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		BE35E75118009143001F64D7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 254E4346167E7475004191B6 /* STTweetLabelExample */;
+			targetProxy = BE35E75018009143001F64D7 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		254E4354167E7475004191B6 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
 				254E4355167E7475004191B6 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		BE35E74A18009143001F64D7 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BE35E74B18009143001F64D7 /* en */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -213,12 +328,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -241,12 +356,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -262,6 +377,7 @@
 		254E4366167E7475004191B6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "STTweetLabelExample/STTweetLabelExample-Prefix.pch";
 				INFOPLIST_FILE = "STTweetLabelExample/STTweetLabelExample-Info.plist";
@@ -273,11 +389,79 @@
 		254E4367167E7475004191B6 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "STTweetLabelExample/STTweetLabelExample-Prefix.pch";
 				INFOPLIST_FILE = "STTweetLabelExample/STTweetLabelExample-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		BE35E75318009143001F64D7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/STTweetLabelExample.app/STTweetLabelExample";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "STTweetLabel Tests/STTweetLabel Tests-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = "STTweetLabel Tests/STTweetLabel Tests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		BE35E75418009143001F64D7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/STTweetLabelExample.app/STTweetLabelExample";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				ENABLE_NS_ASSERTIONS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "STTweetLabel Tests/STTweetLabel Tests-Prefix.pch";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = "STTweetLabel Tests/STTweetLabel Tests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
 			};
 			name = Release;
 		};
@@ -301,6 +485,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		BE35E75218009143001F64D7 /* Build configuration list for PBXNativeTarget "STTweetLabel Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BE35E75318009143001F64D7 /* Debug */,
+				BE35E75418009143001F64D7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
