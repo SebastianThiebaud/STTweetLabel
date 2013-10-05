@@ -98,6 +98,16 @@
 }
 
 #pragma mark -
+#pragma mark Text alignment
+
+- (void)test_setAndGetTextAlignment_setTextAlignment_textAlignment
+{
+    _tweetLabel.textAlignment = NSTextAlignmentRight;
+    
+    XCTAssertEqual(NSTextAlignmentRight, _tweetLabel.textAlignment, @"Text alignment should be %d but %d was resturned instead.", (int)NSTextAlignmentRight, (int)_tweetLabel.textAlignment);
+}
+
+#pragma mark -
 #pragma mark Valid protocols
 
 - (void)test_setAndGetValidProtocols_setProtocols_protocols

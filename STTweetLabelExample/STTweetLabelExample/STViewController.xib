@@ -7,6 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STViewController">
             <connections>
+                <outlet property="displayLabel" destination="XUC-rj-iH6" id="qY9-Ad-LS2"/>
                 <outlet property="view" destination="1" id="3"/>
             </connections>
         </placeholder>
@@ -26,11 +27,24 @@
                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="320" translatesAutoresizingMaskIntoConstraints="NO" id="XUC-rj-iH6">
+                    <rect key="frame" x="0.0" y="248" width="320" height="75"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="320" id="JHG-pD-iOy"/>
+                        <constraint firstAttribute="height" constant="75" id="ulK-Po-dZY"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
+                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="4" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="10" id="JZ1-Xz-puq"/>
+                <constraint firstItem="XUC-rj-iH6" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="WS6-uD-cV7"/>
                 <constraint firstItem="4" firstAttribute="top" secondItem="1" secondAttribute="top" constant="25" id="XMj-fa-tQQ"/>
+                <constraint firstItem="XUC-rj-iH6" firstAttribute="top" secondItem="1" secondAttribute="top" constant="248" id="pj4-H0-Gj2"/>
             </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>

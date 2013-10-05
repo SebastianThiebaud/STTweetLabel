@@ -8,20 +8,27 @@
 
 #import "STTweetLabel.h"
 
+#import "STTweetTextStorage.h"
+
 #pragma mark -
 #pragma mark STTweetLabel
 
-@interface STTweetLabel ()
+@interface STTweetLabel () <UITextViewDelegate>
+
+@property (strong) STTweetTextStorage *textStorage;
+@property (strong) NSLayoutManager *layoutManager;
+@property (strong) NSTextContainer *textContainer;
 
 @property (nonatomic, strong) NSString *cleanText;
 
 @property (strong) NSMutableArray *rangesOfHotWords;
-@property (strong) NSMutableArray *locationsOfHotWords;
 
 @property (nonatomic, strong) NSDictionary *attributesText;
 @property (nonatomic, strong) NSDictionary *attributesHandle;
 @property (nonatomic, strong) NSDictionary *attributesHashtag;
 @property (nonatomic, strong) NSDictionary *attributesLink;
+
+@property (strong) UITextView *textView;
 
 - (void)setupLabel;
 - (void)determineHotWords;
@@ -76,7 +83,7 @@
     _attributesHashtag = @{NSForegroundColorAttributeName: [[UIColor alloc] initWithWhite:170.0/255.0 alpha:1.0], NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue" size:14.0]};
     _attributesLink = @{NSForegroundColorAttributeName: [[UIColor alloc] initWithRed:129.0/255.0 green:171.0/255.0 blue:193.0/255.0 alpha:1.0], NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue" size:14.0]};
     
-    self.validProtocols = @[@"http://", @"https://", @"ssh://"];
+    self.validProtocols = @[@"http", @"https", @"ssh"];
 }
 
 #pragma mark -
@@ -89,6 +96,9 @@
     {
         return;
     }
+    
+    _textStorage = [[STTweetTextStorage alloc] init];
+    _layoutManager = [[NSLayoutManager alloc] init];
     
     NSMutableString *tmpText = [[NSMutableString alloc] initWithString:_cleanText];
     
@@ -143,7 +153,7 @@
         }
         
         // Register the hot word and its range
-        [_rangesOfHotWords addObject:@{@"hotWord": @(hotWord), @"range": NSStringFromRange(NSMakeRange(range.location, length))}];
+        [_rangesOfHotWords addObject:@{@"hotWord": @(hotWord), @"range": [NSValue valueWithRange:NSMakeRange(range.location, length)]}];
     }
     
     [self determineLinks];
@@ -162,7 +172,7 @@
 
     for (int index = 0; index < _validProtocols.count; index++)
     {
-        NSString *substring = _validProtocols[index];
+        NSString *substring = [NSString stringWithFormat:@"%@://", _validProtocols[index]];
         
         while ([tmpText rangeOfString:substring].location < tmpText.length)
         {
@@ -183,7 +193,7 @@
             }
 
             // Register the hot word and its range
-            [_rangesOfHotWords addObject:@{@"hotWord": @(STTweetLink), @"protocol": _validProtocols[index], @"range": NSStringFromRange(NSMakeRange(range.location, length))}];
+            [_rangesOfHotWords addObject:@{@"hotWord": @(STTweetLink), @"protocol": _validProtocols[index], @"range": [NSValue valueWithRange:NSMakeRange(range.location, length)]}];
         }
     }
 }
@@ -195,44 +205,26 @@
     
     for (NSDictionary *dictionary in _rangesOfHotWords)
     {
-        NSRange range = NSRangeFromString([dictionary objectForKey:@"range"]);
+        NSRange range = [[dictionary objectForKey:@"range"] rangeValue];
         
         STTweetHotWord hotWord = (STTweetHotWord)[[dictionary objectForKey:@"hotWord"] intValue];
         
         [attributedString setAttributes:[self attributesForHotWord:hotWord] range:range];
     }
     
-    [self setAttributedText:attributedString];
+    [_textStorage appendAttributedString:attributedString];
     
-    CGSize suggestedFrameSize = [self suggestedFrameSizeToFitEntireStringConstraintedToWidth:self.frame.size.width];
-    CGRect frame = self.frame;
-    frame.size = suggestedFrameSize;
-    self.frame = frame;
-    
-    _locationsOfHotWords = [[NSMutableArray alloc] init];
-    
-    for (NSDictionary *dictionary in _rangesOfHotWords)
-    {
-        NSRange range = NSRangeFromString([dictionary objectForKey:@"range"]);
-        
-        NSMutableAttributedString *tmpAttributedString = [[NSMutableAttributedString alloc] initWithAttributedString:attributedString];
-        [tmpAttributedString deleteCharactersInRange:NSMakeRange(range.location, tmpAttributedString.length - range.location)];
+    _textContainer = [[NSTextContainer alloc] initWithSize:CGSizeMake(self.frame.size.width, CGFLOAT_MAX)];
+    [_layoutManager addTextContainer:_textContainer];
+    [_textStorage addLayoutManager:_layoutManager];
 
-        CGRect originBounds = [tmpAttributedString boundingRectWithSize:CGSizeMake(self.frame.size.width, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin context:nil];
-//        NSLog(@"%@", NSStringFromCGRect(originBounds));
-        
-        tmpAttributedString = [[NSMutableAttributedString alloc] initWithAttributedString:attributedString];
-        [tmpAttributedString deleteCharactersInRange:NSMakeRange(range.location + range.length, tmpAttributedString.length - (range.location + range.length))];
-        [tmpAttributedString deleteCharactersInRange:NSMakeRange(0, range.location)];
-        
-        CGRect sizeBounds = [tmpAttributedString boundingRectWithSize:CGSizeMake(self.frame.size.width, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin context:nil];
-//        NSLog(@"%@", NSStringFromCGRect(sizeBounds));
-
-        CGRect bounds = CGRectMake(originBounds.size.width, originBounds.size.height - sizeBounds.size.height, sizeBounds.size.width, sizeBounds.size.height);
-        NSLog(@"%@: %@",tmpAttributedString.string,  NSStringFromCGRect(bounds));
-        [_locationsOfHotWords addObject:[NSValue valueWithCGRect:bounds]];
-    }
-
+    _textView = [[UITextView alloc] initWithFrame:self.bounds textContainer:_textContainer];
+    _textView.delegate = self;
+    _textView.backgroundColor = [UIColor clearColor];
+    _textView.textContainer.lineFragmentPadding = 0;
+    _textView.textContainerInset = UIEdgeInsetsZero;
+    _textView.userInteractionEnabled = NO;
+    [self addSubview:_textView];
 }
 
 - (NSString *)temporaryStringWithSize:(int)size
@@ -257,7 +249,7 @@
         return CGSizeZero;
     }
 
-    CGRect bounds = [self.attributedText boundingRectWithSize:CGSizeMake(width, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin context:nil];
+    CGRect bounds = [_textStorage.attributedString boundingRectWithSize:CGSizeMake(width, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin context:nil];
     
     return bounds.size;
 }
@@ -268,13 +260,6 @@
 - (void)setText:(NSString *)text
 {
     _cleanText = text;
-    
-    [self determineHotWords];
-}
-         
-- (void)setTextColor:(UIColor *)textColor
-{
-    [super setTextColor:textColor];
     
     [self determineHotWords];
 }
@@ -328,6 +313,13 @@
     [self determineHotWords];
 }
 
+- (void)setTextAlignment:(NSTextAlignment)textAlignment
+{
+    [super setTextAlignment:textAlignment];
+    
+    _textView.textAlignment = textAlignment;
+}
+
 #pragma mark -
 #pragma mark Getters
 
@@ -365,58 +357,34 @@
 }
 
 #pragma mark -
-#pragma mark UIView events
+#pragma mark Retrieve word after touch event
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [super touchesBegan:touches withEvent:event];
     
-    _startTouchPoint = [[touches anyObject] locationInView:self];
-}
-
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    [super touchesEnded:touches withEvent:event];
+    CGPoint touchLocation = [[touches anyObject] locationInView:self];
     
-    UITouch *touch = event.allTouches.anyObject;
-    CGPoint touchPoint = [touch locationInView:self];
-    
-    if (fabs(_startTouchPoint.x - touchPoint.x) > 5 || fabs(_startTouchPoint.y - touchPoint.y) > 5)
+    if (!CGRectContainsPoint(_textView.frame, touchLocation))
     {
-        [super touchesCancelled:touches withEvent:event];
         return;
     }
     
-    if ([_locationsOfHotWords count] == 0)
-    {
-        [super touchesEnded:touches withEvent:event];
-        return;
-    }
+    touchLocation = [[touches anyObject] locationInView:_textView];
     
-    __block BOOL touchableWordNotFound = YES;
+    NSUInteger glyphIndex = [_layoutManager glyphIndexForPoint:touchLocation inTextContainer:_textView.textContainer];
+    int charIndex = (int)[_layoutManager characterIndexForGlyphAtIndex:glyphIndex];
     
-    [_locationsOfHotWords enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
-    {
-        CGRect touchZone = [obj CGRectValue];
+    [_rangesOfHotWords enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        NSRange range = [[obj objectForKey:@"range"] rangeValue];
 
-        if (CGRectContainsPoint(touchZone, touchPoint))
+        if (charIndex >= range.location && charIndex < range.location + range.length)
         {
-            NSLog(@"Found");
+            _detectionBlock((STTweetHotWord)[[obj objectForKey:@"hotWord"] intValue], [_cleanText substringWithRange:range], [obj objectForKey:@"protocol"], range);
             
-            //Stop search.
-            touchableWordNotFound = NO;
             *stop = YES;
         }
-     }];
-    
-    if (touchableWordNotFound)
-    {
-        [super touchesEnded:touches withEvent:event];
-    }
-    else
-    {
-        [super touchesCancelled:touches withEvent:event];
-    }
+    }];
 }
 
 @end

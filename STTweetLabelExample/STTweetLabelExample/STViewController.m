@@ -11,6 +11,8 @@
 
 @interface STViewController ()
 
+@property (strong) IBOutlet UILabel *displayLabel;
+
 @end
 
 @implementation STViewController
@@ -32,14 +34,19 @@
     
     STTweetLabel *tweetLabel = [[STTweetLabel alloc] initWithFrame:CGRectMake(10.0, 60.0, 300.0, 160.0)];
     [tweetLabel setText:@"Duis sollicitudin #auctor consectetur. Vestibulum a luctus nibh, a scelerisque @ipsum. https://blog.wikimedia.org/2013/10/03/the-hidden-wikipedia-a-view-from-2022/ Maecenas feugiat sodales semper. Please connect to ssh://bot:zzz@apple.com:22"];
+    tweetLabel.textAlignment = NSTextAlignmentRight;
     [self.view addSubview:tweetLabel];
- 
-    CGSize suggestedFrameSize = [tweetLabel suggestedFrameSizeToFitEntireStringConstraintedToWidth:300.0];
-    [tweetLabel setFrame:CGRectMake(10.0, 60.0, suggestedFrameSize.width, suggestedFrameSize.height)];
     
-//    [tweetLabel setDetection:^(STTweetHotWord hotWord, NSString *string) {
-//        NSLog(@"%d %@", hotWord, string);
-//    }];
+    CGSize size = [tweetLabel suggestedFrameSizeToFitEntireStringConstraintedToWidth:tweetLabel.frame.size.width];
+    CGRect frame = tweetLabel.frame;
+    frame.size.height = size.height;
+    tweetLabel.frame = frame;
+    
+    [tweetLabel setDetectionBlock:^(STTweetHotWord hotWord, NSString *string, NSString *protocol, NSRange range) {
+        NSArray *hotWords = @[@"Handle", @"Hashtag", @"Link"];
+        
+        _displayLabel.text = [NSString stringWithFormat:@"%@ [%d,%d]: %@%@", hotWords[hotWord], (int)range.location, (int)range.length, string, (protocol != nil) ? [NSString stringWithFormat:@" *%@*", protocol] : @""];
+    }];
 }
 
 - (void)didReceiveMemoryWarning

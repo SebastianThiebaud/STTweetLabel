@@ -7,7 +7,7 @@
 //
 
 typedef enum {
-    STTweetHandle = 1,
+    STTweetHandle = 0,
     STTweetHashtag,
     STTweetLink
 } STTweetHotWord;
@@ -16,7 +16,7 @@ typedef enum {
 
 @property (nonatomic, strong) NSArray *validProtocols;
 @property (nonatomic, assign) BOOL leftToRight;
-//@property (nonatomic, copy) void (^detection)(STTweetHotWord hotWord, NSString *string);
+@property (nonatomic, copy) void (^detectionBlock)(STTweetHotWord hotWord, NSString *string, NSString *protocol, NSRange range);
 
 - (void)setAttributes:(NSDictionary *)attributes;
 - (void)setAttributes:(NSDictionary *)attributes hotWord:(STTweetHotWord)hotWord;
