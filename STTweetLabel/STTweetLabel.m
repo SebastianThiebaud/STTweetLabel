@@ -244,7 +244,7 @@
                     
                     length++;
                 }
-                else if (actualChar == endChar || actualChar == ' ')
+                else if (!charIsMember || actualChar == endChar || actualChar == ' ')
                 {
                     break;
                 }
