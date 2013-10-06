@@ -137,4 +137,30 @@
     XCTAssertEqual(NO, _tweetLabel.leftToRight, @"Writing direction (left to right) should be %d but %d was returned instead.", NO, _tweetLabel.leftToRight);
 }
 
+#pragma mark -
+#pragma mark Text selection
+
+- (void)test_setAndGetTextSelectable_setTextSelectable_textSelectable
+{
+    [_tweetLabel setTextSelectable:YES];
+    
+    XCTAssertEqual(YES, _tweetLabel.textSelectable, @"Text selectable should be %d but %d was returned instead.", YES, _tweetLabel.textSelectable);
+}
+
+- (void)test_setAndGetTextSelectable_setTextNotSelectable_textNotSelectable
+{
+    [_tweetLabel setTextSelectable:NO];
+    
+    XCTAssertEqual(NO, _tweetLabel.textSelectable, @"Text selectable should be %d but %d was returned instead.", NO, _tweetLabel.textSelectable);
+}
+
+- (void)test_setAndGetSelectionColor_setSelectionColor_selectionColor
+{
+    UIColor *redColor = [UIColor redColor];
+    
+    [_tweetLabel setSelectionColor:redColor];
+    
+    XCTAssertEqualObjects(redColor, _tweetLabel.selectionColor, @"Selection color should be %@ but %@ was returned instead.", redColor, _tweetLabel.selectionColor);
+}
+
 @end

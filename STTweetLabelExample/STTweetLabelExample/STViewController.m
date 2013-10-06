@@ -33,7 +33,7 @@
     [super viewDidLoad];
     
     STTweetLabel *tweetLabel = [[STTweetLabel alloc] initWithFrame:CGRectMake(10.0, 60.0, 300.0, 160.0)];
-    [tweetLabel setText:@"Magnifaïqueee ma cherieeee RT “@EmilieRadioFr: J'en ai vu des choucroutes, mais là... WOAW (Palais Royal cet aprèm) http://t.co/A14fHlVE3L”"];
+    [tweetLabel setText:@"Hi. This is a new tool for @you! Developed by @SebThiebaud for #iPhone #ObjC... and #iOS7 ;-) My GitHub page: https://t.co/pQXDoiYA"];
     tweetLabel.textAlignment = NSTextAlignmentLeft;
     [self.view addSubview:tweetLabel];
     
