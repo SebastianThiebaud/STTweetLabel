@@ -35,9 +35,11 @@ Blocks are easy. All you need to do is add a few lines of code:
 ## Properties
 
 - `NSString *text`: The text to display.
-- `NSArray *validProtocols`: All valid protocols for link (by default: http, https).
-- `BOOL leftToRight`: Writing direction (by default: YES).
-- `NSTextAlignment textAlignment`: Text alignment (by default: NSTextAlignmentLeft).
+- `NSArray *validProtocols`: All valid protocols for link (by default: `@[@"http", @"https"]`).
+- `BOOL leftToRight`: Writing direction (by default: `YES`).
+- `BOOL textSelectable`: Allows the user to select the text (by default: `YES`).
+- `UIColor *selectionColor`: If `BOOL textSelectable` is enabled, it's the color of the selection's background (by default: `[UIColor colorWithWhite:0.9 alpha:1.0]`).
+- `NSTextAlignment textAlignment`: Text alignment (by default: `NSTextAlignmentLeft`).
 
 ## Methods
 

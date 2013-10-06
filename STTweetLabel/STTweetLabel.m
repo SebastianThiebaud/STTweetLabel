@@ -43,6 +43,7 @@
     BOOL _isTouchesMoved;
     NSRange _selectableRange;
     int _firstCharIndex;
+    CGPoint _firstTouchLocation;
 }
 
 #pragma mark -
@@ -83,8 +84,7 @@
 - (void)copy:(id)sender
 {
     [[UIPasteboard generalPasteboard] setString:[_cleanText substringWithRange:_selectableRange]];
-    
-    NSLog(@"%@", [[UIPasteboard generalPasteboard] string]);
+    [_textStorage removeAttribute:NSBackgroundColorAttributeName range:_selectableRange];
 }
 
 #pragma mark -
@@ -445,6 +445,7 @@
     _isTouchesMoved = NO;
     [_textStorage removeAttribute:NSBackgroundColorAttributeName range:_selectableRange];
     _selectableRange = NSMakeRange(0, 0);
+    _firstTouchLocation = [[touches anyObject] locationInView:_textView];
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
@@ -453,6 +454,9 @@
     
     if (!_textSelectable)
     {
+        UIMenuController *menuController = [UIMenuController sharedMenuController];
+        [menuController setMenuVisible:NO animated:YES];
+        
         return;
     }
     
@@ -473,6 +477,8 @@
     }
     else if (charIndex < _firstCharIndex)
     {
+        _firstTouchLocation = [[touches anyObject] locationInView:_textView];
+        
         _selectableRange = NSMakeRange(charIndex, _firstCharIndex - charIndex);
     }
     
@@ -483,22 +489,18 @@
 {
     [super touchesEnded:touches withEvent:event];
    
+    CGPoint touchLocation = [[touches anyObject] locationInView:self];
+
     if (_isTouchesMoved)
     {
-        NSUInteger glyphIndex = [_layoutManager glyphIndexForCharacterAtIndex:_selectableRange.location];
-        CGPoint point = [_layoutManager locationForGlyphAtIndex:glyphIndex];
-        
-        NSLog(@"%@", NSStringFromCGPoint(point));
         UIMenuController *menuController = [UIMenuController sharedMenuController];
-        [menuController setTargetRect:CGRectMake(point.x, point.y, 10.0, 10.0) inView:self];
+        [menuController setTargetRect:CGRectMake(_firstTouchLocation.x, _firstTouchLocation.y, 1.0, 1.0) inView:self];
         [menuController setMenuVisible:YES animated:YES];
         
         [self becomeFirstResponder];
 
         return;
     }
-    
-    CGPoint touchLocation = [[touches anyObject] locationInView:self];
     
     if (!CGRectContainsPoint(_textView.frame, touchLocation))
     {
