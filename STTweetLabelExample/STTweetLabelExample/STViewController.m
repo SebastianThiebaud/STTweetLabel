@@ -42,6 +42,8 @@
     frame.size.height = size.height;
     tweetLabel.frame = frame;
     
+    NSLog(@"%@", NSStringFromCGSize(size));
+    
     [tweetLabel setDetectionBlock:^(STTweetHotWord hotWord, NSString *string, NSString *protocol, NSRange range) {
         NSArray *hotWords = @[@"Handle", @"Hashtag", @"Link"];
         
