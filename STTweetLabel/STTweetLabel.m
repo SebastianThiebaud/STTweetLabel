@@ -144,9 +144,18 @@
         // Determine the length of the hot word
         int length = (int)range.length;
         
-        while (range.location + length < tmpText.length && [validCharactersSet characterIsMember:[tmpText characterAtIndex:range.location + length]])
+        while (range.location + length < tmpText.length)
         {
-            length++;
+            BOOL charIsMember = [validCharactersSet characterIsMember:[tmpText characterAtIndex:range.location + length]];
+            
+            if (charIsMember)
+            {
+                length++;
+            }
+            else
+            {
+                break;
+            }
         }
         
         // Register the hot word and its range
@@ -177,16 +186,41 @@
             
             [tmpText replaceCharactersInRange:range withString:[self temporaryStringWithSize:(int)range.length]];
             
-            // If the hot character is not preceded by a alphanumeric characater, ie email (sebastien@world.com)
-            if (range.location > 0 && [tmpText characterAtIndex:range.location - 1] != ' ')
-                continue;
+            char previousChar = ' ';
+            
+            // If the protocol is preceded by a character, we stock it
+            if (range.location > 0)
+            {
+                previousChar = [tmpText characterAtIndex:range.location - 1];
+            }
 
             // Determine the length of the hot word
             int length = (int)range.length;
+            int occurences = 0;
             
-            while (range.location + length < tmpText.length && [validCharactersSet characterIsMember:[tmpText characterAtIndex:range.location + length]])
+            while (range.location + length < tmpText.length)
             {
-                length++;
+                char actualChar = [tmpText characterAtIndex:range.location + length];
+                BOOL charIsMember = [validCharactersSet characterIsMember:actualChar];
+                char endChar = [self otherMemberOfCouple:previousChar];
+                
+                if (charIsMember && ((previousChar == ' ' || actualChar != endChar) || (actualChar == endChar && occurences >= 1)))
+                {
+                    if (actualChar == previousChar)
+                    {
+                        occurences++;
+                    }
+                    else if (actualChar == endChar)
+                    {
+                        occurences--;
+                    }
+                    
+                    length++;
+                }
+                else if (actualChar == endChar || actualChar == ' ')
+                {
+                    break;
+                }
             }
 
             // Register the hot word and its range
@@ -239,6 +273,22 @@
     }
     
     return string;
+}
+
+- (char)otherMemberOfCouple:(char)member
+{
+    switch (member)
+    {
+        case '(':
+            return ')';
+            break;
+        case '[':
+            return ']';
+            break;
+        default:
+            return ' ';
+            break;
+    }
 }
 
 #pragma mark -
