@@ -283,7 +283,7 @@
     
     _textView = [[UITextView alloc] initWithFrame:self.bounds textContainer:_textContainer];
     _textView.delegate = self;
-    _textView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+    _textView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     _textView.backgroundColor = [UIColor clearColor];
     _textView.textContainer.lineFragmentPadding = 0;
     _textView.textContainerInset = UIEdgeInsetsZero;
