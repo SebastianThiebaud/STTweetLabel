@@ -141,6 +141,7 @@
     // Define a character set for the complete world (determine the end of the hot word)
     NSMutableCharacterSet *validCharactersSet = [NSMutableCharacterSet alphanumericCharacterSet];
     [validCharactersSet removeCharactersInString:@"!@#$%^&*()-={[]}|;:',<>.?/"];
+    [validCharactersSet addCharactersInString:@"_"];
     
     _rangesOfHotWords = [[NSMutableArray alloc] init];
     
@@ -283,6 +284,7 @@
     
     _textView = [[UITextView alloc] initWithFrame:self.bounds textContainer:_textContainer];
     _textView.delegate = self;
+    _textView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     _textView.backgroundColor = [UIColor clearColor];
     _textView.textContainer.lineFragmentPadding = 0;
     _textView.textContainerInset = UIEdgeInsetsZero;
