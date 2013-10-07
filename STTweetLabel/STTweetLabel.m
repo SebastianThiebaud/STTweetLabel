@@ -40,7 +40,10 @@
 
 @implementation STTweetLabel
 {
-    CGPoint _startTouchPoint;
+    BOOL _isTouchesMoved;
+    NSRange _selectableRange;
+    int _firstCharIndex;
+    CGPoint _firstTouchLocation;
 }
 
 #pragma mark -
@@ -66,6 +69,25 @@
 }
 
 #pragma mark -
+#pragma mark Responder
+
+- (BOOL)canBecomeFirstResponder
+{
+    return YES;
+}
+
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender
+{
+    return (action == @selector(copy:));
+}
+
+- (void)copy:(id)sender
+{
+    [[UIPasteboard generalPasteboard] setString:[_cleanText substringWithRange:_selectableRange]];
+    [_textStorage removeAttribute:NSBackgroundColorAttributeName range:_selectableRange];
+}
+
+#pragma mark -
 #pragma mark Setup
 
 - (void)setupLabel
@@ -77,6 +99,8 @@
 	[self setNumberOfLines:0];
     
     _leftToRight = YES;
+    _textSelectable = YES;
+    _selectionColor = [UIColor colorWithWhite:0.9 alpha:1.0];
     
     _attributesText = @{NSForegroundColorAttributeName: self.textColor, NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue" size:14.0]};
     _attributesHandle = @{NSForegroundColorAttributeName: [UIColor redColor], NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue" size:14.0]};
@@ -147,9 +171,18 @@
         // Determine the length of the hot word
         int length = (int)range.length;
         
-        while (range.location + length < tmpText.length && [validCharactersSet characterIsMember:[tmpText characterAtIndex:range.location + length]])
+        while (range.location + length < tmpText.length)
         {
-            length++;
+            BOOL charIsMember = [validCharactersSet characterIsMember:[tmpText characterAtIndex:range.location + length]];
+            
+            if (charIsMember)
+            {
+                length++;
+            }
+            else
+            {
+                break;
+            }
         }
         
         // Register the hot word and its range
@@ -180,16 +213,41 @@
             
             [tmpText replaceCharactersInRange:range withString:[self temporaryStringWithSize:(int)range.length]];
             
-            // If the hot character is not preceded by a alphanumeric characater, ie email (sebastien@world.com)
-            if (range.location > 0 && [tmpText characterAtIndex:range.location - 1] != ' ')
-                continue;
+            char previousChar = ' ';
+            
+            // If the protocol is preceded by a character, we stock it
+            if (range.location > 0)
+            {
+                previousChar = [tmpText characterAtIndex:range.location - 1];
+            }
 
             // Determine the length of the hot word
             int length = (int)range.length;
+            int occurences = 0;
             
-            while (range.location + length < tmpText.length && [validCharactersSet characterIsMember:[tmpText characterAtIndex:range.location + length]])
+            while (range.location + length < tmpText.length)
             {
-                length++;
+                char actualChar = [tmpText characterAtIndex:range.location + length];
+                BOOL charIsMember = [validCharactersSet characterIsMember:actualChar];
+                char endChar = [self otherMemberOfCouple:previousChar];
+                
+                if (charIsMember && ((previousChar == ' ' || actualChar != endChar) || (actualChar == endChar && occurences >= 1)))
+                {
+                    if (actualChar == previousChar)
+                    {
+                        occurences++;
+                    }
+                    else if (actualChar == endChar)
+                    {
+                        occurences--;
+                    }
+                    
+                    length++;
+                }
+                else if (!charIsMember || actualChar == endChar || actualChar == ' ')
+                {
+                    break;
+                }
             }
 
             // Register the hot word and its range
@@ -218,6 +276,11 @@
     [_layoutManager addTextContainer:_textContainer];
     [_textStorage addLayoutManager:_layoutManager];
 
+    if (_textView != nil)
+    {
+        [_textView removeFromSuperview];
+    }
+    
     _textView = [[UITextView alloc] initWithFrame:self.bounds textContainer:_textContainer];
     _textView.delegate = self;
     _textView.backgroundColor = [UIColor clearColor];
@@ -237,6 +300,22 @@
     }
     
     return string;
+}
+
+- (char)otherMemberOfCouple:(char)member
+{
+    switch (member)
+    {
+        case '(':
+            return ')';
+            break;
+        case '[':
+            return ']';
+            break;
+        default:
+            return ' ';
+            break;
+    }
 }
 
 #pragma mark -
@@ -363,21 +442,76 @@
 {
     [super touchesBegan:touches withEvent:event];
     
+    _isTouchesMoved = NO;
+    [_textStorage removeAttribute:NSBackgroundColorAttributeName range:_selectableRange];
+    _selectableRange = NSMakeRange(0, 0);
+    _firstTouchLocation = [[touches anyObject] locationInView:_textView];
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [super touchesMoved:touches withEvent:event];
+    
+    if (!_textSelectable)
+    {
+        UIMenuController *menuController = [UIMenuController sharedMenuController];
+        [menuController setMenuVisible:NO animated:YES];
+        
+        return;
+    }
+    
+    _isTouchesMoved = YES;
+    
+    int charIndex = (int)[self charIndexAtLocation:[[touches anyObject] locationInView:_textView]];
+    
+    [_textStorage removeAttribute:NSBackgroundColorAttributeName range:_selectableRange];
+    
+    if (_selectableRange.length == 0)
+    {
+        _selectableRange = NSMakeRange(charIndex, 1);
+        _firstCharIndex = charIndex;
+    }
+    else if (charIndex > _firstCharIndex)
+    {
+        _selectableRange = NSMakeRange(_firstCharIndex, charIndex - _firstCharIndex + 1);
+    }
+    else if (charIndex < _firstCharIndex)
+    {
+        _firstTouchLocation = [[touches anyObject] locationInView:_textView];
+        
+        _selectableRange = NSMakeRange(charIndex, _firstCharIndex - charIndex);
+    }
+    
+    [_textStorage addAttribute:NSBackgroundColorAttributeName value:_selectionColor range:_selectableRange];
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [super touchesEnded:touches withEvent:event];
+   
     CGPoint touchLocation = [[touches anyObject] locationInView:self];
+
+    if (_isTouchesMoved)
+    {
+        UIMenuController *menuController = [UIMenuController sharedMenuController];
+        [menuController setTargetRect:CGRectMake(_firstTouchLocation.x, _firstTouchLocation.y, 1.0, 1.0) inView:self];
+        [menuController setMenuVisible:YES animated:YES];
+        
+        [self becomeFirstResponder];
+
+        return;
+    }
     
     if (!CGRectContainsPoint(_textView.frame, touchLocation))
     {
         return;
     }
-    
-    touchLocation = [[touches anyObject] locationInView:_textView];
-    
-    NSUInteger glyphIndex = [_layoutManager glyphIndexForPoint:touchLocation inTextContainer:_textView.textContainer];
-    int charIndex = (int)[_layoutManager characterIndexForGlyphAtIndex:glyphIndex];
+
+    int charIndex = (int)[self charIndexAtLocation:[[touches anyObject] locationInView:_textView]];
     
     [_rangesOfHotWords enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         NSRange range = [[obj objectForKey:@"range"] rangeValue];
-
+        
         if (charIndex >= range.location && charIndex < range.location + range.length)
         {
             _detectionBlock((STTweetHotWord)[[obj objectForKey:@"hotWord"] intValue], [_cleanText substringWithRange:range], [obj objectForKey:@"protocol"], range);
@@ -385,6 +519,12 @@
             *stop = YES;
         }
     }];
+}
+
+- (NSUInteger)charIndexAtLocation:(CGPoint)touchLocation
+{
+    NSUInteger glyphIndex = [_layoutManager glyphIndexForPoint:touchLocation inTextContainer:_textView.textContainer];
+    return [_layoutManager characterIndexForGlyphAtIndex:glyphIndex];
 }
 
 @end

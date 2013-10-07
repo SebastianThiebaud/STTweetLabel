@@ -12,4 +12,7 @@
 
 - (NSAttributedString *)attributedString;
 
+- (void)addAttributes:(NSDictionary *)attrs range:(NSRange)range;
+- (void)removeAttribute:(NSString *)name range:(NSRange)range;
+
 @end

@@ -48,6 +48,22 @@
     [self endEditing];
 }
 
+- (void)addAttributes:(NSDictionary *)attrs range:(NSRange)range
+{
+    [self beginEditing];
+    [_backingStore addAttributes:attrs range:range];
+    [self edited:NSTextStorageEditedAttributes range:range changeInLength:0];
+    [self endEditing];
+}
+
+- (void)removeAttribute:(NSString *)name range:(NSRange)range
+{
+    [self beginEditing];
+    [_backingStore removeAttribute:name range:range];
+    [self edited:NSTextStorageEditedAttributes range:range changeInLength:0];
+    [self endEditing];
+}
+
 - (void)replaceCharactersInRange:(NSRange)range withString:(NSString *)string
 {
     [self beginEditing];

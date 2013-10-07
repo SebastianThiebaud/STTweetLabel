@@ -1,6 +1,6 @@
 language: objective-c
-
 before_install:
-    - cd STTweetLabelExample
-before_script: ../travis/before_script.sh
-script: ../travis/script.sh
+  - brew update
+  - brew unlink xctool
+  - brew install xctool --HEAD
+script: rake test
