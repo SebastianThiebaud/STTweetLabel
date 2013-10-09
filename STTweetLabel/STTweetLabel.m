@@ -188,6 +188,9 @@
         
         // Register the hot word and its range
         [_rangesOfHotWords addObject:@{@"hotWord": @(hotWord), @"range": [NSValue valueWithRange:NSMakeRange(range.location, length)]}];
+        
+        // Optionally store the hot word and its range
+        if (_storeBlock) _storeBlock(hotWord, [_cleanText substringWithRange:NSMakeRange(range.location, length)], nil, NSMakeRange(range.location, length));
     }
     
     [self determineLinks];
@@ -262,6 +265,9 @@
 
             // Register the hot word and its range
             [_rangesOfHotWords addObject:@{@"hotWord": @(STTweetLink), @"protocol": _validProtocols[index], @"range": [NSValue valueWithRange:NSMakeRange(range.location, length)]}];
+            
+            // Optionally store the hot word and its range
+            if (_storeBlock) _storeBlock(STTweetLink, [_cleanText substringWithRange:NSMakeRange(range.location, length)], _validProtocols[index], NSMakeRange(range.location, length));
         }
     }
 }
@@ -533,7 +539,7 @@
         
         if (charIndex >= range.location && charIndex < range.location + range.length)
         {
-            _detectionBlock((STTweetHotWord)[[obj objectForKey:@"hotWord"] intValue], [_cleanText substringWithRange:range], [obj objectForKey:@"protocol"], range);
+            if (_detectionBlock) _detectionBlock((STTweetHotWord)[[obj objectForKey:@"hotWord"] intValue], [_cleanText substringWithRange:range], [obj objectForKey:@"protocol"], range);
             
             *stop = YES;
         }

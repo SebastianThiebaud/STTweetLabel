@@ -31,6 +31,14 @@ Blocks are easy. All you need to do is add a few lines of code:
     // Do something
 }];
 ```
+
+Optionally, you can store the hot word and its range for autocomplete or statistics. Don't forget to implement the `storeBlock` before setting the text.
+
+``` objective-c
+[tweetLabel setStoreBlock:^(STTweetHotWord hotWord, NSString *string, NSString *protocol, NSRange range) {
+    // Do something
+}];
+```
     
 ## Properties
 

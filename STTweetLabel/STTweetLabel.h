@@ -19,6 +19,7 @@ typedef enum {
 @property (nonatomic, assign) BOOL textSelectable;
 @property (nonatomic, strong) UIColor *selectionColor;
 @property (nonatomic, copy) void (^detectionBlock)(STTweetHotWord hotWord, NSString *string, NSString *protocol, NSRange range);
+@property (nonatomic, copy) void (^storeBlock)(STTweetHotWord hotWord, NSString *string, NSString *protocol, NSRange range);
 
 - (void)setAttributes:(NSDictionary *)attributes;
 - (void)setAttributes:(NSDictionary *)attributes hotWord:(STTweetHotWord)hotWord;
