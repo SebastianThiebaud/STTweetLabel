@@ -204,6 +204,8 @@
     [validCharactersSet removeCharactersInString:@"!@#$%^&*()-={[]}|;:',<>.?/"];
     [validCharactersSet addCharactersInString:@"!*'();:@&=+$,/?#[].-"];
 
+    NSMutableCharacterSet *invalidEndingCharacterSet = [NSMutableCharacterSet characterSetWithCharactersInString:@"!*'();:=+,#."];
+    
     for (int index = 0; index < _validProtocols.count; index++)
     {
         NSString *substring = [NSString stringWithFormat:@"%@://", _validProtocols[index]];
@@ -225,6 +227,7 @@
             // Determine the length of the hot word
             int length = (int)range.length;
             int occurences = 0;
+            BOOL lastCharacterIsAllowedToBeSpecial = NO;
             
             while (range.location + length < tmpText.length)
             {
@@ -240,6 +243,7 @@
                     }
                     else if (actualChar == endChar)
                     {
+                        lastCharacterIsAllowedToBeSpecial = YES;
                         occurences--;
                     }
                     
@@ -249,6 +253,11 @@
                 {
                     break;
                 }
+            }
+            
+            while ([invalidEndingCharacterSet characterIsMember:[tmpText characterAtIndex:range.location + length - 1]] && !lastCharacterIsAllowedToBeSpecial)
+            {
+                length--;
             }
 
             // Register the hot word and its range
@@ -333,6 +342,14 @@
     CGRect bounds = [_textStorage.attributedString boundingRectWithSize:CGSizeMake(width, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin context:nil];
     
     return bounds.size;
+}
+
+#pragma mark -
+#pragma mark Private methods
+
+- (NSArray *)hotWordsList
+{
+    return _rangesOfHotWords;
 }
 
 #pragma mark -
