@@ -45,7 +45,7 @@
     [_tweetLabel setText:text];
     NSArray *hotWords = [self hotWordsListForSampleText:text];
 
-    NSLog(@"%@", hotWords);
+//    NSLog(@"%@", hotWords);
     
     XCTAssertEqual(results.count, hotWords.count, @"Number of hot words should be %d but %d was returned instead.", results.count, hotWords.count);
     
