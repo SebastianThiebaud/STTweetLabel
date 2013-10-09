@@ -30,6 +30,45 @@
     [super tearDown];
 }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
+
+- (NSArray *)hotWordsListForSampleText:(NSString *)text
+{
+    return [_tweetLabel performSelector:@selector(hotWordsList)];
+}
+
+#pragma clang diagnostic pop
+
+- (void)initiateTestFromSample:(NSString *)text results:(NSArray *)results
+{
+    [_tweetLabel setText:text];
+    NSArray *hotWords = [self hotWordsListForSampleText:text];
+
+    NSLog(@"%@", hotWords);
+    
+    XCTAssertEqual(results.count, hotWords.count, @"Number of hot words should be %d but %d was returned instead.", results.count, hotWords.count);
+    
+    if (results.count == hotWords.count)
+    {
+        int i = 0;
+        
+        for (NSDictionary *hotWord in hotWords)
+        {
+            XCTAssertEqual([[results[i] objectForKey:@"hotWord"] intValue], [[hotWord objectForKey:@"hotWord"] intValue], @"Hot word's type should be %d but %d was returned instead.", [[results[i] objectForKey:@"hotWord"] intValue], [[hotWord objectForKey:@"hotWord"] intValue]);
+            XCTAssertEqualObjects([results[i] objectForKey:@"range"], [hotWord objectForKey:@"range"], @"Hot word's range should be %@ but %@ was returned instead: \"%@\" against \"%@\".", NSStringFromRange([[results[i] objectForKey:@"range"] rangeValue]), NSStringFromRange([[hotWord objectForKey:@"range"] rangeValue]), [text substringWithRange:[[results[i] objectForKey:@"range"] rangeValue]], [text substringWithRange:[[hotWord objectForKey:@"range"] rangeValue]]);
+            
+            
+            if ([hotWord objectForKey:@"protocol"])
+            {
+                XCTAssertEqualObjects([results[i] objectForKey:@"protocol"], [hotWord objectForKey:@"protocol"], @"Link's protocol should be %@ but %@ was returned instead.", [results[i] objectForKey:@"protocol"], [hotWord objectForKey:@"protocol"]);
+            }
+            
+            i++;
+        }
+    }
+}
+
 #pragma mark -
 #pragma mark Text attributes
 
@@ -161,6 +200,133 @@
     [_tweetLabel setSelectionColor:redColor];
     
     XCTAssertEqualObjects(redColor, _tweetLabel.selectionColor, @"Selection color should be %@ but %@ was returned instead.", redColor, _tweetLabel.selectionColor);
+}
+
+#pragma mark -
+#pragma mark Data 
+
+- (void)test_setTextAndGetHotWords_setTextWithSampleDemoText_hotWords
+{
+    NSString *string = @"Hi. This is a new tool for @you! Developed by @SebThiebaud for #iPhone #ObjC... and #iOS7 ;-) My GitHub page: https://t.co/pQXDoiYA";
+    NSArray *results = @[
+                         @{@"hotWord": @(STTweetHandle), @"range": [NSValue valueWithRange:NSMakeRange(27, 4)]},
+                         @{@"hotWord": @(STTweetHandle), @"range": [NSValue valueWithRange:NSMakeRange(46, 12)]},
+                         @{@"hotWord": @(STTweetHashtag), @"range": [NSValue valueWithRange:NSMakeRange(63, 7)]},
+                         @{@"hotWord": @(STTweetHashtag), @"range": [NSValue valueWithRange:NSMakeRange(71, 5)]},
+                         @{@"hotWord": @(STTweetHashtag), @"range": [NSValue valueWithRange:NSMakeRange(84, 5)]},
+                         @{@"hotWord": @(STTweetLink), @"range": [NSValue valueWithRange:NSMakeRange(110, 21)], @"protocol": @"https"}
+                         ];
+    
+    [self initiateTestFromSample:string results:results];
+}
+
+- (void)test_setTextAndGetHotWords_setTextWithNoHotWords_hotWords
+{
+    NSString *string = @"This is a sample test.";
+    NSArray *results = nil;
+    
+    [self initiateTestFromSample:string results:results];
+}
+
+- (void)test_setTextAndGetHotWords_setTextWithOneHandle_hotWords
+{
+    NSString *string = @"This is a sample test with @handle.";
+    NSArray *results = @[
+                         @{@"hotWord": @(STTweetHandle), @"range": [NSValue valueWithRange:NSMakeRange(27, 7)]}
+                         ];
+    
+    [self initiateTestFromSample:string results:results];
+}
+
+- (void)test_setTextAndGetHotWords_setTextWithOneInvalidHandle_hotWords
+{
+    NSString *string = @"This is a sample test with username@email.com";
+    NSArray *results = nil;
+    
+    [self initiateTestFromSample:string results:results];
+}
+
+- (void)test_setTextAndGetHotWords_setTextWithOneLink_hotWords
+{
+    NSString *string = @"This is a sample test with http://www.link.com/";
+    NSArray *results = @[
+                         @{@"hotWord": @(STTweetLink), @"range": [NSValue valueWithRange:NSMakeRange(27, 20)], @"protocol": @"http"}
+                         ];
+    
+    [self initiateTestFromSample:string results:results];
+}
+
+- (void)test_setTextAndGetHotWords_setTextWithOneLinkHttps_hotWords
+{
+    NSString *string = @"This is a sample test with https://www.link.com/";
+    NSArray *results = @[
+                         @{@"hotWord": @(STTweetLink), @"range": [NSValue valueWithRange:NSMakeRange(27, 21)], @"protocol": @"https"}
+                         ];
+    
+    [self initiateTestFromSample:string results:results];
+}
+
+- (void)test_setTextAndGetHotWords_setTextWithOneHandleAndOneHashtag_hotWords
+{
+    NSString *string = @"This is a sample test with @handle and #hashtag.";
+    NSArray *results = @[
+                         @{@"hotWord": @(STTweetHandle), @"range": [NSValue valueWithRange:NSMakeRange(27, 7)]},
+                         @{@"hotWord": @(STTweetHashtag), @"range": [NSValue valueWithRange:NSMakeRange(39, 8)]}
+                         ];
+    
+    [self initiateTestFromSample:string results:results];
+}
+
+- (void)test_setTextAndGetHotWords_setTextWithOneHashtagWithInvalidSpecialCharacters_hotWords
+{
+    NSString *string = @"This is a sample test with #hashtag-special.";
+    NSArray *results = @[
+                         @{@"hotWord": @(STTweetHashtag), @"range": [NSValue valueWithRange:NSMakeRange(27, 8)]}
+                         ];
+    
+    [self initiateTestFromSample:string results:results];
+}
+
+- (void)test_setTextAndGetHotWords_setTextWithOneHashtagWithValidSpecialCharacters_hotWords
+{
+    NSString *string = @"This is a sample test with #hashtag_special.";
+    NSArray *results = @[
+                         @{@"hotWord": @(STTweetHashtag), @"range": [NSValue valueWithRange:NSMakeRange(27, 16)]}
+                         ];
+    
+    [self initiateTestFromSample:string results:results];
+}
+
+- (void)test_setTextAndGetHotWords_setTextWithOneHandleAndOneHashtagAndOneSimpleLink_hotWords
+{
+    NSString *string = @"This is a sample test with @handle, #hashtag and http://link.com/hello-buddy.";
+    NSArray *results = @[
+                         @{@"hotWord": @(STTweetHandle), @"range": [NSValue valueWithRange:NSMakeRange(27, 7)]},
+                         @{@"hotWord": @(STTweetHashtag), @"range": [NSValue valueWithRange:NSMakeRange(36, 8)]},
+                         @{@"hotWord": @(STTweetLink), @"range": [NSValue valueWithRange:NSMakeRange(49, 27)], @"protocol": @"http"}
+                         ];
+    
+    [self initiateTestFromSample:string results:results];
+}
+
+- (void)test_setTextAndGetHotWords_setTextWithOneLinkWithSpecialCharacters_hotWords
+{
+    NSString *string = @"This is a sample test with http://www.link.com/directory/path/resources?timestamp=10303000&handle=dfhj[]";
+    NSArray *results = @[
+                         @{@"hotWord": @(STTweetLink), @"range": [NSValue valueWithRange:NSMakeRange(27, 77)], @"protocol": @"http"}
+                         ];
+    
+    [self initiateTestFromSample:string results:results];
+}
+
+- (void)test_setTextAndGetHotWords_setTextWithOneEncapsulateLinkWithSpecialCharacters_hotWords
+{
+    NSString *string = @"This is a sample test with (http://www.link.com/directory/path/resources?timestamp=10303000&handle=dfhj()&next(arg))";
+    NSArray *results = @[
+                         @{@"hotWord": @(STTweetLink), @"range": [NSValue valueWithRange:NSMakeRange(28, 87)], @"protocol": @"http"}
+                         ];
+    
+    [self initiateTestFromSample:string results:results];
 }
 
 @end
