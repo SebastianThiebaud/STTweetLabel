@@ -33,6 +33,34 @@
     [super viewDidLoad];
     
     STTweetLabel *tweetLabel = [[STTweetLabel alloc] initWithFrame:CGRectMake(10.0, 60.0, 300.0, 160.0)];
+    
+    [tweetLabel setStoreBlock:^(STTweetHotWord hotWord, NSString *string, NSString *protocol, NSRange range) {
+        NSString *userDefaultsKey;
+        switch (hotWord)
+        {
+            case STTweetHandle:
+                userDefaultsKey = @"UserDefaultsHandleKey";
+                break;
+            case STTweetHashtag:
+                userDefaultsKey = @"UserDefaultsHashtagKey";
+                break;
+            case STTweetLink:
+                userDefaultsKey = @"UserDefaultsLinkKey";
+                break;
+            default:
+                break;
+        }
+        NSData *userDefaultsData = [[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsKey];
+        NSMutableSet *userDefaultsSet = userDefaultsData ? [NSKeyedUnarchiver unarchiveObjectWithData:userDefaultsData] : [[NSMutableSet alloc] init];
+        if (![userDefaultsSet containsObject:string])
+        {
+            [userDefaultsSet addObject:string];
+            userDefaultsData = [NSKeyedArchiver archivedDataWithRootObject:userDefaultsSet];
+            [[NSUserDefaults standardUserDefaults] setObject:userDefaultsData forKey:userDefaultsKey];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
+    }];
+    
     [tweetLabel setText:@"Hi. This is a new tool for @you! Developed by @SebThiebaud for #iPhone #ObjC... and #iOS7 ;-) My GitHub page: https://t.co/pQXDoiYA"];
     tweetLabel.textAlignment = NSTextAlignmentLeft;
     [self.view addSubview:tweetLabel];
