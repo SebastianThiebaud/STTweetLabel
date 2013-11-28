@@ -1,3 +1,5 @@
 language: objective-c
-before_install: "git submodule init && git submodule update && sudo gem update --system && sudo gem install bundler && bundle install"
-script: "bundle exec rake test --trace"
+before_install:
+    - brew update
+    - brew install xctool
+script: xctool -project STTweetLabelExample -scheme STTweetLabelExample test
