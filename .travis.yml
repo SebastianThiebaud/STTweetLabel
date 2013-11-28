@@ -1,4 +1,4 @@
 language: objective-c
 before_install:
     - brew update
-script: xctool -project STTweetLabelExample -scheme STTweetLabelExample test
+script: xctool -project STTweetLabelExample.xcodeproj -scheme STTweetLabelExample test
