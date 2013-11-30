@@ -1,3 +1,6 @@
 language: objective-c
-before_install: "git submodule init && git submodule update && sudo gem update --system && sudo gem install bundler && bundle install"
-script: "bundle exec rake test --trace"
+xcode_sdk: iphonesimulator
+before_install:
+    - brew update
+    - cd STTweetLabelExample
+script: xcodebuild -project STTweetLabelExample.xcodeproj -scheme STTweetLabelExample -sdk iphonesimulator test

@@ -202,7 +202,7 @@
     // Define a character set for the complete world (determine the end of the hot word)
     NSMutableCharacterSet *validCharactersSet = [NSMutableCharacterSet alphanumericCharacterSet];
     [validCharactersSet removeCharactersInString:@"!@#$%^&*()-={[]}|;:',<>.?/"];
-    [validCharactersSet addCharactersInString:@"!*'();:@&=+$,/?#[].-"];
+    [validCharactersSet addCharactersInString:@"!*'();:@&=+$,/?#[].-_"];
 
     NSMutableCharacterSet *invalidEndingCharacterSet = [NSMutableCharacterSet characterSetWithCharactersInString:@"!*'();:=+,#."];
     
