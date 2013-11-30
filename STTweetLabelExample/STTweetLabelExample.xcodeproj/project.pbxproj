@@ -384,7 +384,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "STTweetLabelExample/STTweetLabelExample-Prefix.pch";
 				INFOPLIST_FILE = "STTweetLabelExample/STTweetLabelExample-Info.plist";
@@ -398,7 +398,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "STTweetLabelExample/STTweetLabelExample-Prefix.pch";
 				INFOPLIST_FILE = "STTweetLabelExample/STTweetLabelExample-Info.plist";
