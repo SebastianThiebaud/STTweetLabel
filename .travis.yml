@@ -3,4 +3,4 @@ xcode_sdk: iphonesimulator
 before_install:
     - brew update
     - cd STTweetLabelExample
-script: xctool -project STTweetLabelExample.xcodeproj -scheme STTweetLabelExample test
+script: xctool -project STTweetLabelExample.xcodeproj -scheme STTweetLabelExample -sdk iphonesimulator test
