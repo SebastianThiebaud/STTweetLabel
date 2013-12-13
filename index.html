@@ -31,97 +31,89 @@
         <hr>
 
         <section id="main_content">
-          <h1>STTweetLabel</h1>
+          <h1>
+<a name="sttweetlabel" class="anchor" href="#sttweetlabel"><span class="octicon octicon-link"></span></a>STTweetLabel</h1>
 
-<p>A custom UILabel view controller for iOS with certain words tappable like Twitter (#Hashtag, <a href="https://github.com/People" class="user-mention">@People</a> and <a href="http://www.link.com/page">http://www.link.com/page</a>)</p>
+<p>A custom UILabel for iOS with certain words tappable like Twitter (#Hashtag, <a href="https://github.com/Handle" class="user-mention">@Handle</a> and links).</p>
 
 <p><img src="https://raw.github.com/SebastienThiebaud/STTweetLabel/master/screenshot.png" alt="STTweetLabel screenshot" title="STTweetLabel Screenshot"></p>
 
-<h2>Documentation</h2>
+<h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
 
-<p>You need only 2 files:</p>
+<p>Please use CocoaPods and include STTweetLabel in your Podfile.</p>
 
-<ul>
-<li><code>STTweetLabel.h</code></li>
-<li><code>STTweetLabel.m</code></li>
-</ul><p>You can change the fonts and colors for the different words (#Hashtag/<a href="https://github.com/People" class="user-mention">@People</a> AND <a href="http://link.com">http://link.com</a>) via the <code>STTweetLabel</code> attributes.</p>
+<p>Important: STTweetLabel 3.0 is based on TextKit and is only compatible with iOS 7 and above.</p>
 
-<p>The official documentation is available here: <a href="http://doc.sebastienthiebaud.us/Classes/STTweetLabel.html">http://doc.sebastienthiebaud.us/Classes/STTweetLabel.html</a></p>
-
-<h2>Demo</h2>
+<h2>
+<a name="demo" class="anchor" href="#demo"><span class="octicon octicon-link"></span></a>Demo</h2>
 
 <p>Build and run the project STTweetLabelExample in Xcode to see <code>STTweetLabel</code> in action. </p>
 
-<h2>Example Usage</h2>
+<h2>
+<a name="example-usage" class="anchor" href="#example-usage"><span class="octicon octicon-link"></span></a>Example Usage</h2>
 
-<div class="highlight"><pre>    <span class="n">STTweetLabel</span> <span class="o">*</span><span class="n">tweetLabel</span> <span class="o">=</span> <span class="p">[[</span><span class="n">STTweetLabel</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithFrame:</span><span class="n">CGRectMake</span><span class="p">(</span><span class="mf">20.0</span><span class="p">,</span> <span class="mf">60.0</span><span class="p">,</span> <span class="mf">280.0</span><span class="p">,</span> <span class="mf">200.0</span><span class="p">)];</span>
-
-    <span class="p">[</span><span class="n">tweetLabel</span> <span class="nl">setFont:</span><span class="p">[</span><span class="n">UIFont</span> <span class="nl">fontWithName:</span><span class="s">@"HelveticaNeue"</span> <span class="nl">size:</span><span class="mf">17.0</span><span class="p">]];</span>
-    <span class="p">[</span><span class="n">tweetLabel</span> <span class="nl">setTextColor:</span><span class="p">[</span><span class="n">UIColor</span> <span class="n">blackColor</span><span class="p">]];</span>
-    <span class="p">[</span><span class="n">tweetLabel</span> <span class="nl">setText:</span><span class="s">@"Hi. This is a new tool for @you! Developed by-&gt;@SebThiebaud for #iPhone #ObjC... ;-) My GitHub page: https://t.co/pQXDoiYA"</span><span class="p">];</span>
-    <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview:</span><span class="n">tweetLabel</span><span class="p">];</span>
+<div class="highlight highlight-objective-c"><pre><span class="n">STTweetLabel</span> <span class="o">*</span><span class="n">tweetLabel</span> <span class="o">=</span> <span class="p">[[</span><span class="n">STTweetLabel</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">initWithFrame</span><span class="o">:</span><span class="n">CGRectMake</span><span class="p">(</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">60.0</span><span class="p">,</span> <span class="mf">300.0</span><span class="p">,</span> <span class="mf">160.0</span><span class="p">)];</span>
+<span class="p">[</span><span class="n">tweetLabel</span> <span class="n">setText</span><span class="o">:</span><span class="s">@"Hi. This is a new tool for @you! Developed by @SebThiebaud for #iPhone #ObjC... and #iOS7 ;-) My GitHub page: https://t.co/pQXDoiYA"</span><span class="p">];</span>
+<span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">view</span> <span class="n">addSubview</span><span class="o">:</span><span class="n">tweetLabel</span><span class="p">];</span>
 </pre></div>
 
-<p>Don't forget to implement the <code>STLinkCallbackBlock</code>. Without implementing the callback block, you won't be able to detect if somebody has clicked on the hashtag, user account or even a website.
+<p>Don't forget to implement the <code>detectionBlock</code>. Without implementing this block, you won't be able to detect if somebody has clicked on the hashtag, handle or even a link.
 Blocks are easy. All you need to do is add a few lines of code:</p>
 
-<div class="highlight"><pre>    <span class="n">STLinkCallbackBlock</span> <span class="n">callbackBlock</span> <span class="o">=</span> <span class="o">^</span><span class="p">(</span><span class="n">STLinkActionType</span> <span class="n">actionType</span><span class="p">,</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">link</span><span class="p">)</span> <span class="p">{</span>
-
-        <span class="n">NSString</span> <span class="o">*</span><span class="n">displayString</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-
-        <span class="c1">// determine what the user clicked on</span>
-        <span class="k">switch</span> <span class="p">(</span><span class="n">actionType</span><span class="p">)</span> <span class="p">{</span>
-
-            <span class="c1">// if the user clicked on an account (@_max_k)    </span>
-            <span class="k">case</span> <span class="nl">STLinkActionTypeAccount:</span>
-                <span class="n">displayString</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSString</span> <span class="nl">stringWithFormat:</span><span class="s">@"Twitter account:</span><span class="se">\n</span><span class="s">%@"</span><span class="p">,</span> <span class="n">link</span><span class="p">];</span>
-                <span class="k">break</span><span class="p">;</span>
-
-            <span class="c1">// if the user clicked on a hashtag (#thisisreallycool)</span>
-            <span class="k">case</span> <span class="nl">STLinkActionTypeHashtag:</span>
-                <span class="n">displayString</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSString</span> <span class="nl">stringWithFormat:</span><span class="s">@"Twitter hashtag:</span><span class="se">\n</span><span class="s">%@"</span><span class="p">,</span> <span class="n">link</span><span class="p">];</span>
-                <span class="k">break</span><span class="p">;</span>
-
-            <span class="c1">// if the user clicked on a website (http://github.com/SebastienThiebaud)</span>
-            <span class="k">case</span> <span class="nl">STLinkActionTypeWebsite:</span>
-                <span class="n">displayString</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSString</span> <span class="nl">stringWithFormat:</span><span class="s">@"Website:</span><span class="se">\n</span><span class="s">%@"</span><span class="p">,</span> <span class="n">link</span><span class="p">];</span>
-                <span class="k">break</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="p">[</span><span class="n">_displayLabel</span> <span class="nl">setText:</span><span class="n">displayString</span><span class="p">];</span>
-
-    <span class="p">};</span>
+<div class="highlight highlight-objective-c"><pre><span class="p">[</span><span class="n">tweetLabel</span> <span class="n">setDetectionBlock</span><span class="o">:^</span><span class="p">(</span><span class="n">STTweetHotWord</span> <span class="n">hotWord</span><span class="p">,</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">string</span><span class="p">,</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">protocol</span><span class="p">,</span> <span class="n">NSRange</span> <span class="n">range</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Do something</span>
+<span class="p">}];</span>
 </pre></div>
 
-<p>Once you have added those few lines of code (depending on what you want to do when the user taps on something), make sure to tell your instance of STTweetLabel to call this block:</p>
+<h2>
+<a name="properties" class="anchor" href="#properties"><span class="octicon octicon-link"></span></a>Properties</h2>
 
-<div class="highlight"><pre>    <span class="p">[</span><span class="n">_tweetLabel</span> <span class="nl">setCallbackBlock:</span><span class="n">callbackBlock</span><span class="p">];</span>
-</pre></div>
+<ul>
+<li>
+<code>NSString *text</code>: The text to display.</li>
+<li>
+<code>NSArray *validProtocols</code>: All valid protocols for link (by default: <code>@[@"http", @"https"]</code>).</li>
+<li>
+<code>BOOL leftToRight</code>: Writing direction (by default: <code>YES</code>).</li>
+<li>
+<code>BOOL textSelectable</code>: Allows the user to select the text (by default: <code>YES</code>).</li>
+<li>
+<code>UIColor *selectionColor</code>: If <code>BOOL textSelectable</code> is enabled, it's the color of the selection's background (by default: <code>[UIColor colorWithWhite:0.9 alpha:1.0]</code>).</li>
+<li>
+<code>NSTextAlignment textAlignment</code>: Text alignment (by default: <code>NSTextAlignmentLeft</code>).</li>
+</ul><h2>
+<a name="methods" class="anchor" href="#methods"><span class="octicon octicon-link"></span></a>Methods</h2>
 
-<h2>Credits</h2>
+<ul>
+<li>
+<code>-[STTweetLabel setAttributes:(NSDictionary *)attributes]</code>: Dictionary with attributes for all text. (Important: You need to specify <code>NSForegroundColorAttributeName</code> and <code>NSFontAttributeName</code> mandatory).</li>
+<li>
+<code>-[STTweetLabel setAttributes:(NSDictionary *)attributes hotWord:(STTweetHotWord)hotWord]</code>: Dictionary with attributes for specific STTweetHotWord. (Important: You need to specify <code>NSForegroundColorAttributeName</code> and <code>NSFontAttributeName</code> mandatory).</li>
+<li>
+<code>-[STTweetLabel suggestedFrameSizeToFitEntireStringConstraintedToWidth:(CGFloat)width</code>: Returns the CGSize calculated for the text submitted.</li>
+</ul><h2>
+<a name="credits" class="anchor" href="#credits"><span class="octicon octicon-link"></span></a>Credits</h2>
 
 <p>Inspired by the original Twitter application.</p>
 
-<h2>Thanks to</h2>
-
-<ul>
-<li>@Twittom180 [<a href="http://github.com/TomGiana">http://github.com/TomGiana</a>] for disturbing me while I'm focused in my code!</li>
-<li>@max_k [<a href="http://github.com/maxkramer">http://github.com/maxkramer</a>] for implementing NSBlocks! </li>
-</ul><h2>Contact</h2>
+<h2>
+<a name="contact" class="anchor" href="#contact"><span class="octicon octicon-link"></span></a>Contact</h2>
 
 <p>Sebastien Thiebaud</p>
 
 <ul>
 <li><a href="http://github.com/SebastienThiebaud">http://github.com/SebastienThiebaud</a></li>
 <li><a href="http://twitter.com/SebThiebaud">http://twitter.com/SebThiebaud</a></li>
-</ul><h2>License</h2>
+</ul><h2>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
 
 <p>STTweetLabel is available under the MIT license.</p>
         </section>
 
         <footer>
           STTweetLabel is maintained by <a href="https://github.com/SebastienThiebaud">SebastienThiebaud</a><br>
-          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
         </footer>
 
         
