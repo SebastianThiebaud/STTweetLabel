@@ -22,6 +22,7 @@
 @property (nonatomic, strong) NSString *cleanText;
 
 @property (strong) NSMutableArray *rangesOfHotWords;
+@property (strong) NSMutableArray *rangesOfCustomHotwords;
 
 @property (nonatomic, strong) NSDictionary *attributesText;
 @property (nonatomic, strong) NSDictionary *attributesHandle;
@@ -113,6 +114,31 @@
 #pragma mark -
 #pragma mark Printing and calculating text
 
+-(void)addCustomHotwordForRange:(NSRange)range hotWord:(STTweetHotWord)hotWord
+{
+    if(!_rangesOfCustomHotwords) _rangesOfCustomHotwords = [NSMutableArray array];
+    
+    [_rangesOfCustomHotwords addObject:@{@"hotWord": @(hotWord), @"range": [NSValue valueWithRange:range]}];
+    [self determineHotWords];
+}
+
+-(void)clearCustomHotwords
+{
+    _rangesOfCustomHotwords = [NSMutableArray array];
+    [self determineHotWords];
+}
+
+-(void)addCustomHotwordsForRanges:(NSArray *)array
+{
+    if(!_rangesOfCustomHotwords) _rangesOfCustomHotwords = [NSMutableArray array];
+    
+    [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        [_rangesOfCustomHotwords addObject:obj];
+    }];
+    
+    [self determineHotWords];
+}
+
 - (void)determineHotWords
 {
     // Need a text
@@ -189,6 +215,10 @@
         // Register the hot word and its range
         [_rangesOfHotWords addObject:@{@"hotWord": @(hotWord), @"range": [NSValue valueWithRange:NSMakeRange(range.location, length)]}];
     }
+    
+    [_rangesOfCustomHotwords enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        [_rangesOfHotWords addObject:obj];
+    }];
     
     [self determineLinks];
     
@@ -358,8 +388,7 @@
 - (void)setText:(NSString *)text
 {
     _cleanText = text;
-    
-    [self determineHotWords];
+    [self clearCustomHotwords];
 }
 
 - (void)setValidProtocols:(NSArray *)validProtocols
