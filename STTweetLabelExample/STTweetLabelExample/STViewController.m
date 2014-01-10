@@ -35,6 +35,9 @@
     STTweetLabel *tweetLabel = [[STTweetLabel alloc] initWithFrame:CGRectMake(10.0, 60.0, 300.0, 160.0)];
     [tweetLabel setText:@"Hi. This is a new tool for @you! Developed by @SebThiebaud for #iPhone #ObjC... and #iOS7 ;-) My GitHub page: https://t.co/pQXDoiYA"];
     tweetLabel.textAlignment = NSTextAlignmentLeft;
+    
+    [tweetLabel addCustomHotwordForRange:NSMakeRange(97, 6) hotWord:STTweetLink];
+    
     [self.view addSubview:tweetLabel];
     
     CGSize size = [tweetLabel suggestedFrameSizeToFitEntireStringConstraintedToWidth:tweetLabel.frame.size.width];

@@ -23,6 +23,10 @@ typedef enum {
 - (void)setAttributes:(NSDictionary *)attributes;
 - (void)setAttributes:(NSDictionary *)attributes hotWord:(STTweetHotWord)hotWord;
 
+-(void)addCustomHotwordForRange:(NSRange)range hotWord:(STTweetHotWord)hotWord;
+-(void)clearCustomHotwords;
+-(void)addCustomHotwordsForRanges:(NSArray *)array;
+
 - (NSDictionary *)attributes;
 - (NSDictionary *)attributesForHotWord:(STTweetHotWord)hotWord;
 

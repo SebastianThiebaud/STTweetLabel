@@ -5,34 +5,34 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>07C12E3B-50A0-45B9-AA7F-923C04908480</string>
+	<string>847AFC16-A53C-406B-92B0-AAA421762658</string>
 	<key>IDESourceControlProjectName</key>
 	<string>STTweetLabelExample</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>D2B5469B-FFE8-44F3-9BAD-28F0412E4E1F</key>
-		<string>ssh://github.com/SebastienThiebaud/STTweetLabel.git</string>
+		<key>AAA8A5A7-3C0A-4220-88E3-E3CAE5CB82B4</key>
+		<string>https://github.com/codeslaw/STTweetLabel.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>STTweetLabelExample/STTweetLabelExample.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>D2B5469B-FFE8-44F3-9BAD-28F0412E4E1F</key>
+		<key>AAA8A5A7-3C0A-4220-88E3-E3CAE5CB82B4</key>
 		<string>../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>ssh://github.com/SebastienThiebaud/STTweetLabel.git</string>
+	<string>https://github.com/codeslaw/STTweetLabel.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>D2B5469B-FFE8-44F3-9BAD-28F0412E4E1F</string>
+	<string>AAA8A5A7-3C0A-4220-88E3-E3CAE5CB82B4</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>D2B5469B-FFE8-44F3-9BAD-28F0412E4E1F</string>
+			<string>AAA8A5A7-3C0A-4220-88E3-E3CAE5CB82B4</string>
 			<key>IDESourceControlWCCName</key>
 			<string>STTweetLabel</string>
 		</dict>
