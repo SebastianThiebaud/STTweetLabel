@@ -48,6 +48,9 @@
     [tweetLabel setDetectionBlock:^(STTweetHotWord hotWord, NSString *string, NSString *protocol, NSRange range) {
         NSArray *hotWords = @[@"Handle", @"Hashtag", @"Link"];
         
+        if(hotWord == STTweetLink && [string isEqualToString:@"GitHub"])
+            string = @"http://www.github.com";
+        
         _displayLabel.text = [NSString stringWithFormat:@"%@ [%d,%d]: %@%@", hotWords[hotWord], (int)range.location, (int)range.length, string, (protocol != nil) ? [NSString stringWithFormat:@" *%@*", protocol] : @""];
     }];
 }
