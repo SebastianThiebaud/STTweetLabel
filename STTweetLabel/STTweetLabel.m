@@ -84,7 +84,11 @@
 - (void)copy:(id)sender
 {
     [[UIPasteboard generalPasteboard] setString:[_cleanText substringWithRange:_selectableRange]];
-    [_textStorage removeAttribute:NSBackgroundColorAttributeName range:_selectableRange];
+    
+    @try {
+        [_textStorage removeAttribute:NSBackgroundColorAttributeName range:_selectableRange];
+    } @catch (NSException *exception) {
+    }
 }
 
 #pragma mark -
@@ -210,9 +214,9 @@
     {
         NSString *substring = [NSString stringWithFormat:@"%@://", _validProtocols[index]];
         
-        while ([tmpText rangeOfString:substring].location < tmpText.length)
+        while ([tmpText.lowercaseString rangeOfString:substring].location < tmpText.length)
         {
-            NSRange range = [tmpText rangeOfString:substring];
+            NSRange range = [tmpText.lowercaseString rangeOfString:substring];
             
             [tmpText replaceCharactersInRange:range withString:[self temporaryStringWithSize:(int)range.length]];
             
@@ -462,7 +466,12 @@
     [super touchesBegan:touches withEvent:event];
     
     _isTouchesMoved = NO;
-    [_textStorage removeAttribute:NSBackgroundColorAttributeName range:_selectableRange];
+    
+    @try {
+        [_textStorage removeAttribute:NSBackgroundColorAttributeName range:_selectableRange];
+    } @catch (NSException *exception) {
+    }
+    
     _selectableRange = NSMakeRange(0, 0);
     _firstTouchLocation = [[touches anyObject] locationInView:_textView];
 }
@@ -483,7 +492,10 @@
     
     int charIndex = (int)[self charIndexAtLocation:[[touches anyObject] locationInView:_textView]];
     
-    [_textStorage removeAttribute:NSBackgroundColorAttributeName range:_selectableRange];
+    @try {
+        [_textStorage removeAttribute:NSBackgroundColorAttributeName range:_selectableRange];
+    } @catch (NSException *exception) {
+    }
     
     if (_selectableRange.length == 0)
     {
@@ -501,7 +513,10 @@
         _selectableRange = NSMakeRange(charIndex, _firstCharIndex - charIndex);
     }
     
-    [_textStorage addAttribute:NSBackgroundColorAttributeName value:_selectionColor range:_selectableRange];
+    @try {
+        [_textStorage addAttribute:NSBackgroundColorAttributeName value:_selectionColor range:_selectableRange];
+    } @catch (NSException *exception) {
+    }
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
