@@ -183,65 +183,12 @@
 - (void)determineLinks {
     NSMutableString *tmpText = [[NSMutableString alloc] initWithString:_cleanText];
 
-    /*// Define a character set for the complete world (determine the end of the hot word)
-    NSMutableCharacterSet *validCharactersSet = [NSMutableCharacterSet alphanumericCharacterSet];
-    [validCharactersSet removeCharactersInString:@"!@#$%^&*()-={[]}|;:',<>.?/"];
-    [validCharactersSet addCharactersInString:@"!*'();:@&=+$,/?#[].-_"];
-
-    NSMutableCharacterSet *invalidEndingCharacterSet = [NSMutableCharacterSet characterSetWithCharactersInString:@"!*'();:=+,#."];*/
-
-    //First of all, does it match our regex?
     NSError *regexError = nil;
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:STURLRegex options:0 error:&regexError];
 
     [regex enumerateMatchesInString:tmpText options:0 range:NSMakeRange(0, tmpText.length) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
         [_rangesOfHotWords addObject:@{@"hotWord": @(STTweetLink), @"protocol": @"N/A", @"range": [NSValue valueWithRange:result.range]}];
     }];
-
-    /*for (int index = 0; index < _validProtocols.count; index++) {
-        NSString *substring = [NSString stringWithFormat:@"%@://", _validProtocols[index]];
-        
-        while ([tmpText.lowercaseString rangeOfString:substring].location < tmpText.length) {
-            NSRange range = [tmpText.lowercaseString rangeOfString:substring];
-            
-            [tmpText replaceCharactersInRange:range withString:[self temporaryStringWithSize:(int)range.length]];
-            
-            char previousChar = ' ';
-            
-            // If the protocol is preceded by a character, we stock it
-            if (range.location > 0)
-                previousChar = [tmpText characterAtIndex:range.location - 1];
-            
-            // Determine the length of the hot word
-            int length = (int)range.length;
-            int occurences = 0;
-            BOOL lastCharacterIsAllowedToBeSpecial = NO;
-            
-            while (range.location + length < tmpText.length) {
-                char actualChar = [tmpText characterAtIndex:range.location + length];
-                BOOL charIsMember = [validCharactersSet characterIsMember:actualChar];
-                char endChar = [self otherMemberOfCouple:previousChar];
-                
-                if (charIsMember && ((previousChar == ' ' || actualChar != endChar) || (actualChar == endChar && occurences >= 1))) {
-                    if (actualChar == previousChar)
-                        occurences++;
-                    else if (actualChar == endChar) {
-                        lastCharacterIsAllowedToBeSpecial = YES;
-                        occurences--;
-                    }
-                    
-                    length++;
-                } else if (!charIsMember || actualChar == endChar || actualChar == ' ')
-                    break;
-            }
-            
-            while ([invalidEndingCharacterSet characterIsMember:[tmpText characterAtIndex:range.location + length - 1]] && !lastCharacterIsAllowedToBeSpecial)
-                length--;
-
-            // Register the hot word and its range
-            [_rangesOfHotWords addObject:@{@"hotWord": @(STTweetLink), @"protocol": _validProtocols[index], @"range": [NSValue valueWithRange:NSMakeRange(range.location, length)]}];
-        }
-    }*/
 }
 
 - (void)updateText
