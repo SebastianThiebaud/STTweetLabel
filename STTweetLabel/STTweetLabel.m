@@ -307,6 +307,7 @@
 #pragma mark Setters
 
 - (void)setText:(NSString *)text {
+    [super setText:@""];
     _cleanText = text;
     [self determineHotWords];
 }
