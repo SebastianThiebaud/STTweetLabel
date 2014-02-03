@@ -436,4 +436,14 @@
     return [_layoutManager characterIndexForGlyphAtIndex:glyphIndex];
 }
 
+- (void)setDetectionBlock:(void (^)(STTweetHotWord, NSString *, NSString *, NSRange))detectionBlock {
+    if (detectionBlock) {
+        _detectionBlock = [detectionBlock copy];
+        self.userInteractionEnabled = YES;
+    } else {
+        _detectionBlock = nil;
+        self.userInteractionEnabled = NO;
+    }
+}
+
 @end
