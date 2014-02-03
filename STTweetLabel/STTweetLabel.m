@@ -10,6 +10,9 @@
 
 #import "STTweetTextStorage.h"
 
+//Obtained from http://daringfireball.net/2010/07/improved_regex_for_matching_urls
+#define STURLRegex @"(?i)\\b((?:https?://|www\\d{0,3}[.]|[a-z0-9.\\-]+[.][a-z]{2,4}/)(?:[^\\s()<>]+|\\(([^\\s()<>]+|(\\([^\\s()<>]+\\)))*\\))+(?:\\(([^\\s()<>]+|(\\([^\\s()<>]+\\)))*\\)|[^\\s`!()\\[\\]{};:'\".,<>?«»“”‘’]))"
+
 #pragma mark -
 #pragma mark STTweetLabel
 
@@ -180,14 +183,22 @@
 - (void)determineLinks {
     NSMutableString *tmpText = [[NSMutableString alloc] initWithString:_cleanText];
 
-    // Define a character set for the complete world (determine the end of the hot word)
+    /*// Define a character set for the complete world (determine the end of the hot word)
     NSMutableCharacterSet *validCharactersSet = [NSMutableCharacterSet alphanumericCharacterSet];
     [validCharactersSet removeCharactersInString:@"!@#$%^&*()-={[]}|;:',<>.?/"];
     [validCharactersSet addCharactersInString:@"!*'();:@&=+$,/?#[].-_"];
 
-    NSMutableCharacterSet *invalidEndingCharacterSet = [NSMutableCharacterSet characterSetWithCharactersInString:@"!*'();:=+,#."];
-    
-    for (int index = 0; index < _validProtocols.count; index++) {
+    NSMutableCharacterSet *invalidEndingCharacterSet = [NSMutableCharacterSet characterSetWithCharactersInString:@"!*'();:=+,#."];*/
+
+    //First of all, does it match our regex?
+    NSError *regexError = nil;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:STURLRegex options:0 error:&regexError];
+
+    [regex enumerateMatchesInString:tmpText options:0 range:NSMakeRange(0, tmpText.length) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+        [_rangesOfHotWords addObject:@{@"hotWord": @(STTweetLink), @"protocol": @"N/A", @"range": [NSValue valueWithRange:result.range]}];
+    }];
+
+    /*for (int index = 0; index < _validProtocols.count; index++) {
         NSString *substring = [NSString stringWithFormat:@"%@://", _validProtocols[index]];
         
         while ([tmpText.lowercaseString rangeOfString:substring].location < tmpText.length) {
@@ -230,7 +241,7 @@
             // Register the hot word and its range
             [_rangesOfHotWords addObject:@{@"hotWord": @(STTweetLink), @"protocol": _validProtocols[index], @"range": [NSValue valueWithRange:NSMakeRange(range.location, length)]}];
         }
-    }
+    }*/
 }
 
 - (void)updateText
