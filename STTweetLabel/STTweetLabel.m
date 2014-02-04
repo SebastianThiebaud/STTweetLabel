@@ -7,11 +7,8 @@
 //
 
 #import "STTweetLabel.h"
-
 #import "STTweetTextStorage.h"
 
-//Obtained from http://daringfireball.net/2010/07/improved_regex_for_matching_urls
-//#define STURLRegex @"(?i)\\b((?:https?://|www\\d{0,3}[.]|[a-z0-9.\\-]+[.][a-z]{2,4}/)(?:[^\\s()<>]+|\\(([^\\s()<>]+|(\\([^\\s()<>]+\\)))*\\))+(?:\\(([^\\s()<>]+|(\\([^\\s()<>]+\\)))*\\)|[^\\s`!()\\[\\]{};:'\".,<>?«»“”‘’]))"
 #define STURLRegex @"(?i)\\b((?:[a-z][\\w-]+:(?:/{1,3}|[a-z0-9%])|www\\d{0,3}[.]|[a-z0-9.\\-]+[.][a-z]{2,4}/)(?:[^\\s()<>]+|\\(([^\\s()<>]+|(\\([^\\s()<>]+\\)))*\\))+(?:\\(([^\\s()<>]+|(\\([^\\s()<>]+\\)))*\\)|[^\\s`!()\\[\\]{};:'\".,<>?«»“”‘’]))"
 
 #pragma mark -
@@ -38,7 +35,6 @@
 - (void)determineHotWords;
 - (void)determineLinks;
 - (void)updateText;
-- (NSString *)temporaryStringWithSize:(int)size;
 
 @end
 
@@ -174,7 +170,8 @@
         }
         
         // Register the hot word and its range
-        [_rangesOfHotWords addObject:@{@"hotWord": @(hotWord), @"range": [NSValue valueWithRange:NSMakeRange(range.location, length)]}];
+        if (length > 1)
+            [_rangesOfHotWords addObject:@{@"hotWord": @(hotWord), @"range": [NSValue valueWithRange:NSMakeRange(range.location, length)]}];
     }
     
     [self determineLinks];
@@ -229,29 +226,6 @@
     _textView.textContainerInset = UIEdgeInsetsZero;
     _textView.userInteractionEnabled = NO;
     [self addSubview:_textView];
-}
-
-- (NSString *)temporaryStringWithSize:(int)size {
-    NSMutableString *string = [NSMutableString string];
-    
-    for (int i = 0; i < size; i++)
-        [string appendString:@"%"];
-    
-    return string;
-}
-
-- (char)otherMemberOfCouple:(char)member {
-    switch (member) {
-        case '(':
-            return ')';
-            break;
-        case '[':
-            return ']';
-            break;
-        default:
-            return ' ';
-            break;
-    }
 }
 
 #pragma mark -
@@ -315,14 +289,23 @@
 
 - (void)setLeftToRight:(BOOL)leftToRight {
     _leftToRight = leftToRight;
-    
+
     [self determineHotWords];
 }
 
 - (void)setTextAlignment:(NSTextAlignment)textAlignment {
     [super setTextAlignment:textAlignment];
-    
     _textView.textAlignment = textAlignment;
+}
+
+- (void)setDetectionBlock:(void (^)(STTweetHotWord, NSString *, NSString *, NSRange))detectionBlock {
+    if (detectionBlock) {
+        _detectionBlock = [detectionBlock copy];
+        self.userInteractionEnabled = YES;
+    } else {
+        _detectionBlock = nil;
+        self.userInteractionEnabled = NO;
+    }
 }
 
 #pragma mark -
@@ -443,16 +426,6 @@
 - (NSUInteger)charIndexAtLocation:(CGPoint)touchLocation {
     NSUInteger glyphIndex = [_layoutManager glyphIndexForPoint:touchLocation inTextContainer:_textView.textContainer];
     return [_layoutManager characterIndexForGlyphAtIndex:glyphIndex];
-}
-
-- (void)setDetectionBlock:(void (^)(STTweetHotWord, NSString *, NSString *, NSRange))detectionBlock {
-    if (detectionBlock) {
-        _detectionBlock = [detectionBlock copy];
-        self.userInteractionEnabled = YES;
-    } else {
-        _detectionBlock = nil;
-        self.userInteractionEnabled = NO;
-    }
 }
 
 @end
