@@ -44,8 +44,6 @@
 {
     [_tweetLabel setText:text];
     NSArray *hotWords = [self hotWordsListForSampleText:text];
-
-//    NSLog(@"%@", hotWords);
     
     XCTAssertEqual(results.count, hotWords.count, @"Number of hot words should be %d but %d was returned instead.", results.count, hotWords.count);
     
@@ -335,6 +333,23 @@
     NSArray *results = @[
                          @{@"hotWord": @(STTweetLink), @"range": [NSValue valueWithRange:NSMakeRange(27, 25)], @"protocol": @"http"}
                          ];
+    [self initiateTestFromSample:string results:results];
+}
+
+- (void)test_setTextAndGetHotWords_setTextWithOnlyAtSymbol_hotWords
+{
+    NSString *string = @"@";
+    NSArray *results = nil;
+    
+    [self initiateTestFromSample:string results:results];
+}
+
+
+- (void)test_setTextAndGetHotWords_setTextWithOnlyHashtagSymbol_hotWords
+{
+    NSString *string = @"#";
+    NSArray *results = nil;
+    
     [self initiateTestFromSample:string results:results];
 }
 
