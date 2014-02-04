@@ -313,7 +313,7 @@
 {
     NSString *string = @"This is a sample test with http://www.link.com/directory/path/resources?timestamp=10303000&handle=dfhj[]";
     NSArray *results = @[
-                         @{@"hotWord": @(STTweetLink), @"range": [NSValue valueWithRange:NSMakeRange(27, 77)], @"protocol": @"http"}
+                         @{@"hotWord": @(STTweetLink), @"range": [NSValue valueWithRange:NSMakeRange(27, 75)], @"protocol": @"http"}
                          ];
     
     [self initiateTestFromSample:string results:results];
@@ -326,6 +326,15 @@
                          @{@"hotWord": @(STTweetLink), @"range": [NSValue valueWithRange:NSMakeRange(28, 87)], @"protocol": @"http"}
                          ];
     
+    [self initiateTestFromSample:string results:results];
+}
+
+- (void)test_setTextAndGetHotWords_setTextWithOneLinkWithNoProtocol_hotWords
+{
+    NSString *string = @"This is a sample test with www.example.com/something";
+    NSArray *results = @[
+                         @{@"hotWord": @(STTweetLink), @"range": [NSValue valueWithRange:NSMakeRange(27, 25)], @"protocol": @"http"}
+                         ];
     [self initiateTestFromSample:string results:results];
 }
 
