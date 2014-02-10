@@ -192,7 +192,7 @@
             protocol = [link substringToIndex:protocolRange.location];
         }
 
-        if ([_validProtocols containsObject:protocol]) {
+        if ([_validProtocols containsObject:protocol.lowercaseString]) {
             [_rangesOfHotWords addObject:@{@"hotWord": @(STTweetLink), @"protocol": protocol, @"range": [NSValue valueWithRange:result.range]}];
         }
     }];
