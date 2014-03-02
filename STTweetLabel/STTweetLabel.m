@@ -308,6 +308,13 @@
     }
 }
 
+- (void)setAttributedText:(NSAttributedString *)attributedText {
+    self.text = attributedText.string;
+    if (self.text.length > 0) {
+        [self setAttributes:[attributedText attributesAtIndex:0 effectiveRange:NULL]];
+    }
+}
+
 #pragma mark -
 #pragma mark Getters
 
