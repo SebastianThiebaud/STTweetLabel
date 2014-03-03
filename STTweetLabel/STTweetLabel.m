@@ -260,8 +260,17 @@
 }
 
 - (void)setAttributes:(NSDictionary *)attributes {
-    if ([attributes objectForKey:NSFontAttributeName] == nil || [attributes objectForKey:NSForegroundColorAttributeName] == nil)
-        [NSException raise:NSInvalidArgumentException format:@"Attributes dictionary must contains NSFontAttributeName and NSForegroundColorAttributeName"];
+    if (!attributes[NSFontAttributeName]) {
+        NSMutableDictionary *copy = [attributes mutableCopy];
+        copy[NSFontAttributeName] = self.font;
+        attributes = [NSDictionary dictionaryWithDictionary:copy];
+    }
+    
+    if (!attributes[NSForegroundColorAttributeName]) {
+        NSMutableDictionary *copy = [attributes mutableCopy];
+        copy[NSForegroundColorAttributeName] = self.textColor;
+        attributes = [NSDictionary dictionaryWithDictionary:copy];
+    }
 
     _attributesText = attributes;
     
@@ -269,8 +278,17 @@
 }
 
 - (void)setAttributes:(NSDictionary *)attributes hotWord:(STTweetHotWord)hotWord {
-    if ([attributes objectForKey:NSFontAttributeName] == nil || [attributes objectForKey:NSForegroundColorAttributeName] == nil)
-        [NSException raise:NSInvalidArgumentException format:@"Attributes dictionary must contains NSFontAttributeName and NSForegroundColorAttributeName"];
+    if (!attributes[NSFontAttributeName]) {
+        NSMutableDictionary *copy = [attributes mutableCopy];
+        copy[NSFontAttributeName] = self.font;
+        attributes = [NSDictionary dictionaryWithDictionary:copy];
+    }
+    
+    if (!attributes[NSForegroundColorAttributeName]) {
+        NSMutableDictionary *copy = [attributes mutableCopy];
+        copy[NSForegroundColorAttributeName] = self.textColor;
+        attributes = [NSDictionary dictionaryWithDictionary:copy];
+    }
     
     switch (hotWord)  {
         case STTweetHandle:
@@ -305,6 +323,13 @@
     } else {
         _detectionBlock = nil;
         self.userInteractionEnabled = NO;
+    }
+}
+
+- (void)setAttributedText:(NSAttributedString *)attributedText {
+    self.text = attributedText.string;
+    if (self.text.length > 0) {
+        [self setAttributes:[attributedText attributesAtIndex:0 effectiveRange:NULL]];
     }
 }
 
