@@ -303,6 +303,8 @@
         default:
             break;
     }
+    
+    [self determineHotWords];
 }
 
 - (void)setLeftToRight:(BOOL)leftToRight {
