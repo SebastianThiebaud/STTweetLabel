@@ -225,6 +225,8 @@
     _textView.textContainer.lineFragmentPadding = 0;
     _textView.textContainerInset = UIEdgeInsetsZero;
     _textView.userInteractionEnabled = NO;
+    [_textView sizeToFit];
+    self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, _textView.frame.size.height);
     [self addSubview:_textView];
 }
 
