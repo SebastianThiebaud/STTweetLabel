@@ -8,6 +8,7 @@
 
 #import "STViewController.h"
 #import "STTweetLabel.h"
+#import "STTableViewController.h"
 
 @interface STViewController ()
 
@@ -40,11 +41,27 @@
         NSArray *hotWords = @[@"Handle", @"Hashtag", @"Link"];
         
         _displayLabel.text = [NSString stringWithFormat:@"%@ [%d,%d]: %@%@", hotWords[hotWord], (int)range.location, (int)range.length, string, (protocol != nil) ? [NSString stringWithFormat:@" *%@*", protocol] : @""];
+        
+        NSLog(@"%@", [NSString stringWithFormat:@"%@ [%d,%d]: %@%@", hotWords[hotWord], (int)range.location, (int)range.length, string, (protocol != nil) ? [NSString stringWithFormat:@" *%@*", protocol] : @""]);
     }];
+    
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    CGRect rect = CGRectMake(10.0f, 360.0f, 300.0f, 60.0f);
+    btn.frame = rect;
+    btn.backgroundColor = [UIColor colorWithRed:30/255.0 green:200/255.0 blue:125/255.0 alpha:1.0];
+    [btn setTitle:@"Customize Table View Cells for UITableView" forState:UIControlStateNormal];
+    [btn addTarget:self action:@selector(customizeTableView) forControlEvents:UIControlEventTouchDown];
+    [self.view addSubview:btn];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+}
+
+#pragma mark - 
+
+- (void)customizeTableView {
+    [self presentViewController:[[STTableViewController alloc] init] animated:YES completion:nil];
 }
 
 @end
