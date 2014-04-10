@@ -439,7 +439,7 @@
     if (!CGRectContainsPoint(_textView.frame, touchLocation))
         return;
 
-    int charIndex = (int)[self charIndexAtLocation:[[touches anyObject] locationInView:_textView]];
+    NSUInteger charIndex = [self charIndexAtLocation:[[touches anyObject] locationInView:_textView]];
     
     [_rangesOfHotWords enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         NSRange range = [[obj objectForKey:@"range"] rangeValue];
@@ -454,7 +454,12 @@
 
 - (NSUInteger)charIndexAtLocation:(CGPoint)touchLocation {
     NSUInteger glyphIndex = [_layoutManager glyphIndexForPoint:touchLocation inTextContainer:_textView.textContainer];
-    return [_layoutManager characterIndexForGlyphAtIndex:glyphIndex];
+    CGRect boundingRect = [_layoutManager boundingRectForGlyphRange:NSMakeRange(glyphIndex, 1) inTextContainer:_textView.textContainer];
+    
+    if (CGRectContainsPoint(boundingRect, touchLocation))
+        return [_layoutManager characterIndexForGlyphAtIndex:glyphIndex];
+    else
+        return -1;
 }
 
 @end
