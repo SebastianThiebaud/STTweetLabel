@@ -43,6 +43,8 @@ Blocks are easy. All you need to do is add a few lines of code:
 
 ## Methods
 
+**The two following methods refresh the component. That means you should only set the attributes at the initialization of your STTweetLabel instance.**
+
 - `-[STTweetLabel setAttributes:(NSDictionary *)attributes]`: Dictionary with attributes for all text.
 - `-[STTweetLabel setAttributes:(NSDictionary *)attributes hotWord:(STTweetHotWord)hotWord]`: Dictionary with attributes for specific STTweetHotWord.
 - `-[STTweetLabel suggestedFrameSizeToFitEntireStringConstraintedToWidth:(CGFloat)width`: Returns the CGSize calculated for the text submitted.
