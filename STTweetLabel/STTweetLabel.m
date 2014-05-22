@@ -238,6 +238,30 @@
     return [_textView sizeThatFits:CGSizeMake(width, CGFLOAT_MAX)];
 }
 
+//Cusomise hash tag color and handle color
+- (void)setHashTagColor:(UIColor *)hashTagColor
+{
+    if ([_hashTagColor isEqual:hashTagColor]) {
+        return;
+    }
+    
+    _hashTagColor = hashTagColor;
+    NSMutableDictionary *attribute = [self.attributesHashtag mutableCopy];
+    [attribute setObject:hashTagColor forKey:NSForegroundColorAttributeName];
+    self.attributesHashtag = attribute;
+}
+
+- (void)setHandleColor:(UIColor *)handleColor
+{
+    if ([_handleColor isEqual:handleColor]) {
+        return;
+    }
+    _handleColor = handleColor;
+    NSMutableDictionary *attribute = [self.attributesHandle mutableCopy];
+    [attribute setObject:handleColor forKey:NSForegroundColorAttributeName];
+    self.attributesHandle = attribute;
+}
+
 #pragma mark -
 #pragma mark Private methods
 

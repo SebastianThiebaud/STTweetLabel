@@ -27,6 +27,8 @@
     [super viewDidLoad];
     
     STTweetLabel *tweetLabel = [[STTweetLabel alloc] initWithFrame:CGRectMake(10.0, 60.0, 300.0, 160.0)];
+    tweetLabel.handleColor = [UIColor blueColor];
+    tweetLabel.hashTagColor = [UIColor cyanColor];
     [tweetLabel setText:@"Hi. This is a new tool for @you! Developed by @SebThiebaud for #iPhone #ObjC... and #iOS7 ;-) My GitHub page: Https://t.co/pQXDoiYA"];
     tweetLabel.textAlignment = NSTextAlignmentLeft;
     [self.view addSubview:tweetLabel];
