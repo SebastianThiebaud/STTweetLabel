@@ -45,7 +45,7 @@
     [_tweetLabel setText:text];
     NSArray *hotWords = [self hotWordsListForSampleText:text];
     
-    XCTAssertEqual(results.count, hotWords.count, @"Number of hot words should be %d but %d was returned instead.", results.count, hotWords.count);
+    XCTAssertEqual(results.count, hotWords.count, @"Number of hot words should be %ld but %ld was returned instead.", results.count, hotWords.count);
     
     if (results.count == hotWords.count)
     {
@@ -226,6 +226,16 @@
 {
     NSString *string = @"This is a sample test with username@email.com";
     NSArray *results = nil;
+    
+    [self initiateTestFromSample:string results:results];
+}
+
+- (void)test_setTextAndGetHotWords_setTextWithOneDotAndHandle_hotWords
+{
+    NSString *string = @"This is a sample test. .@Ok";
+    NSArray *results = @[
+                         @{@"hotWord": @(STTweetHandle), @"range": [NSValue valueWithRange:NSMakeRange(24, 3)]}
+                         ];
     
     [self initiateTestFromSample:string results:results];
 }
