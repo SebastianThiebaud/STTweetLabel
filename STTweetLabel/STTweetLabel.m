@@ -87,11 +87,11 @@
 #pragma mark Setup
 
 - (void)setupLabel {
-	// Set the basic properties
-	[self setBackgroundColor:[UIColor clearColor]];
-	[self setClipsToBounds:NO];
-	[self setUserInteractionEnabled:YES];
-	[self setNumberOfLines:0];
+        // Set the basic properties
+        [self setBackgroundColor:[UIColor clearColor]];
+        [self setClipsToBounds:NO];
+        [self setUserInteractionEnabled:YES];
+        [self setNumberOfLines:0];
     
     _leftToRight = YES;
     _textSelectable = YES;
@@ -370,7 +370,10 @@
 #pragma mark Retrieve word after touch event
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    [super touchesBegan:touches withEvent:event];
+    
+    if(![self getTouchedHotword:touches]) {
+        [super touchesBegan:touches withEvent:event];
+    }
     
     _isTouchesMoved = NO;
     
@@ -384,7 +387,10 @@
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-    [super touchesMoved:touches withEvent:event];
+    
+    if([self getTouchedHotword:touches] == nil) {
+        [super touchesMoved:touches withEvent:event];
+    }
     
     if (!_textSelectable) {
         UIMenuController *menuController = [UIMenuController sharedMenuController];
@@ -395,7 +401,7 @@
     
     _isTouchesMoved = YES;
     
-    int charIndex = (int)[self charIndexAtLocation:[[touches anyObject] locationInView:_textView]];
+    int charIndex = [self charIndexAtLocation:[[touches anyObject] locationInView:_textView]];
     
     @try {
         [_textStorage removeAttribute:NSBackgroundColorAttributeName range:_selectableRange];
@@ -420,8 +426,7 @@
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    [super touchesEnded:touches withEvent:event];
-   
+    
     CGPoint touchLocation = [[touches anyObject] locationInView:self];
 
     if (_isTouchesMoved) {
@@ -437,17 +442,14 @@
     if (!CGRectContainsPoint(_textView.frame, touchLocation))
         return;
 
-    NSUInteger charIndex = [self charIndexAtLocation:[[touches anyObject] locationInView:_textView]];
-    
-    [_rangesOfHotWords enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        NSRange range = [[obj objectForKey:@"range"] rangeValue];
+    id touchedHotword = [self getTouchedHotword:touches];
+    if(touchedHotword != nil) {
+        NSRange range = [[touchedHotword objectForKey:@"range"] rangeValue];
         
-        if (charIndex >= range.location && charIndex < range.location + range.length) {
-            _detectionBlock((STTweetHotWord)[[obj objectForKey:@"hotWord"] intValue], [_cleanText substringWithRange:range], [obj objectForKey:@"protocol"], range);
-            
-            *stop = YES;
-        }
-    }];
+        _detectionBlock((STTweetHotWord)[[touchedHotword objectForKey:@"hotWord"] intValue], [_cleanText substringWithRange:range], [touchedHotword objectForKey:@"protocol"], range);
+    } else {
+        [super touchesEnded:touches withEvent:event];
+    }
 }
 
 - (NSUInteger)charIndexAtLocation:(CGPoint)touchLocation {
@@ -458,6 +460,20 @@
         return [_layoutManager characterIndexForGlyphAtIndex:glyphIndex];
     else
         return -1;
+}
+
+- (id)getTouchedHotword:(NSSet *)touches {
+    NSUInteger charIndex = [self charIndexAtLocation:[[touches anyObject] locationInView:_textView]];
+    
+    for (id obj in _rangesOfHotWords) {
+        NSRange range = [[obj objectForKey:@"range"] rangeValue];
+        
+        if (charIndex >= range.location && charIndex < range.location + range.length) {
+            return obj;
+        }
+    }
+    
+    return nil;
 }
 
 @end
