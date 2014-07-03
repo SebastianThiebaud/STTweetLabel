@@ -206,7 +206,16 @@
     for (NSDictionary *dictionary in _rangesOfHotWords)  {
         NSRange range = [[dictionary objectForKey:@"range"] rangeValue];
         STTweetHotWord hotWord = (STTweetHotWord)[[dictionary objectForKey:@"hotWord"] intValue];
-        [attributedString setAttributes:[self attributesForHotWord:hotWord] range:range];
+        
+        NSString *hotWordString = [self.text substringWithRange:range];
+        if ([self.delegate respondsToSelector:@selector(shouldHighlightHotWord:)]) {
+            if ([self.delegate shouldHighlightHotWord:hotWordString]) {
+                [attributedString setAttributes:[self attributesForHotWord:hotWord] range:range];
+            }
+        }
+        else {
+            [attributedString setAttributes:[self attributesForHotWord:hotWord] range:range];
+        }
     }
     
     [_textStorage appendAttributedString:attributedString];
