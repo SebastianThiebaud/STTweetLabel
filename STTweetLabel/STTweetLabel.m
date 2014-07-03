@@ -208,8 +208,8 @@
         STTweetHotWord hotWord = (STTweetHotWord)[[dictionary objectForKey:@"hotWord"] intValue];
         
         NSString *hotWordString = [self.text substringWithRange:range];
-        if ([self.delegate respondsToSelector:@selector(shouldHighlightHotWord:)]) {
-            if ([self.delegate shouldHighlightHotWord:hotWordString]) {
+        if ([self.delegate respondsToSelector:@selector(sttweetLabel:shouldHighlightHotWord:)]) {
+            if ([self.delegate sttweetLabel:self shouldHighlightHotWord:hotWordString ]) {
                 [attributedString setAttributes:[self attributesForHotWord:hotWord] range:range];
             }
         }
