@@ -1,6 +1,6 @@
 [![Platform](https://img.shields.io/cocoapods/p/STTweetLabel.svg?style=flat)](http://cocoadocs.org/docsets/STTweetLabel)
 [![Version](https://img.shields.io/cocoapods/v/STTweetLabel.svg?style=flat)](http://cocoadocs.org/docsets/STTweetLabel)
-[![CI](http://img.shields.io/travis/SebastienThiebaud/STTweetLabel.svg?style=flat)](https://travis-ci.org/quri/STTweetLabel)
+[![CI](http://img.shields.io/travis/SebastienThiebaud/STTweetLabel.svg?style=flat)](https://travis-ci.org/SebastienThiebaud/STTweetLabel)
 [![License](https://img.shields.io/cocoapods/l/STTweetLabel.svg?style=flat)](http://cocoadocs.org/docsets/STTweetLabel)
 
 # STTweetLabel
