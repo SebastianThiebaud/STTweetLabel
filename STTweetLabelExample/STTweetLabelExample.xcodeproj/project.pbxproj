@@ -19,6 +19,9 @@
 		254E436B167E74A2004191B6 /* STViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 254E4369167E74A2004191B6 /* STViewController.m */; };
 		254E436C167E74A2004191B6 /* STViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 254E436A167E74A2004191B6 /* STViewController.xib */; };
 		259D0B851680E7AF00D0D4AC /* STTweetLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 259D0B841680E7AF00D0D4AC /* STTweetLabel.m */; };
+		8A276ED118F68A2900F05891 /* STTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A276ECF18F68A2900F05891 /* STTableViewController.m */; };
+		8A276ED218F68A2900F05891 /* STTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A276ED018F68A2900F05891 /* STTableViewController.xib */; };
+		8A3D3AFB18F67712001E95A3 /* STCustomizeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3D3AFA18F67712001E95A3 /* STCustomizeCell.m */; };
 		BE35E74418009143001F64D7 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE35E74318009143001F64D7 /* XCTest.framework */; };
 		BE35E74518009143001F64D7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 254E434D167E7475004191B6 /* Foundation.framework */; };
 		BE35E74618009143001F64D7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 254E434B167E7475004191B6 /* UIKit.framework */; };
@@ -56,6 +59,11 @@
 		254E436A167E74A2004191B6 /* STViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STViewController.xib; sourceTree = "<group>"; };
 		259D0B831680E7AF00D0D4AC /* STTweetLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STTweetLabel.h; sourceTree = "<group>"; };
 		259D0B841680E7AF00D0D4AC /* STTweetLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STTweetLabel.m; sourceTree = "<group>"; };
+		8A276ECE18F68A2900F05891 /* STTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = STTableViewController.h; path = ../STTableViewController.h; sourceTree = "<group>"; };
+		8A276ECF18F68A2900F05891 /* STTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = STTableViewController.m; path = ../STTableViewController.m; sourceTree = "<group>"; };
+		8A276ED018F68A2900F05891 /* STTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = STTableViewController.xib; path = ../STTableViewController.xib; sourceTree = "<group>"; };
+		8A3D3AF918F67712001E95A3 /* STCustomizeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = STCustomizeCell.h; path = ../STCustomizeCell.h; sourceTree = "<group>"; };
+		8A3D3AFA18F67712001E95A3 /* STCustomizeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = STCustomizeCell.m; path = ../STCustomizeCell.m; sourceTree = "<group>"; };
 		BE35E74218009143001F64D7 /* STTweetLabel Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "STTweetLabel Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE35E74318009143001F64D7 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		BE35E74918009143001F64D7 /* STTweetLabel Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "STTweetLabel Tests-Info.plist"; sourceTree = "<group>"; };
@@ -127,6 +135,11 @@
 				254E4368167E74A2004191B6 /* STViewController.h */,
 				254E4369167E74A2004191B6 /* STViewController.m */,
 				254E436A167E74A2004191B6 /* STViewController.xib */,
+				8A3D3AF918F67712001E95A3 /* STCustomizeCell.h */,
+				8A3D3AFA18F67712001E95A3 /* STCustomizeCell.m */,
+				8A276ECE18F68A2900F05891 /* STTableViewController.h */,
+				8A276ECF18F68A2900F05891 /* STTableViewController.m */,
+				8A276ED018F68A2900F05891 /* STTableViewController.xib */,
 				254E435A167E7475004191B6 /* STAppDelegate.h */,
 				254E435B167E7475004191B6 /* STAppDelegate.m */,
 				254E4352167E7475004191B6 /* Supporting Files */,
@@ -258,6 +271,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A276ED218F68A2900F05891 /* STTableViewController.xib in Resources */,
 				254E4356167E7475004191B6 /* InfoPlist.strings in Resources */,
 				254E435E167E7475004191B6 /* Default.png in Resources */,
 				254E4360167E7475004191B6 /* Default@2x.png in Resources */,
@@ -281,11 +295,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A276ED118F68A2900F05891 /* STTableViewController.m in Sources */,
 				254E4358167E7475004191B6 /* main.m in Sources */,
 				254E435C167E7475004191B6 /* STAppDelegate.m in Sources */,
 				BE35E7571800B73C001F64D7 /* STTweetTextStorage.m in Sources */,
 				254E436B167E74A2004191B6 /* STViewController.m in Sources */,
 				259D0B851680E7AF00D0D4AC /* STTweetLabel.m in Sources */,
+				8A3D3AFB18F67712001E95A3 /* STCustomizeCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
