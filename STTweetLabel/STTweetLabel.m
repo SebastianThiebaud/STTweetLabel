@@ -9,10 +9,7 @@
 #import "STTweetLabel.h"
 #import "STTweetTextStorage.h"
 
-#define STURLRegex @"(?i)\\b((?:[a-z][\\w-]+:(?:/{1,3}|[a-z0-9%])|www\\d{0,3}[.]|[a-z0-9.\\-]+[.][a-z]{2,4}/)(?:[^\\s()<>]+|\\(([^\\s()<>]+|(\\([^\\s()<>]+\\)))*\\))+(?:\\(([^\\s()<>]+|(\\([^\\s()<>]+\\)))*\\)|[^\\s`!()\\[\\]{};:'\".,<>?«»“”‘’]))"
-
-#pragma mark -
-#pragma mark STTweetLabel
+#define STURLRegex @"(https?:\\/\\/)?([\\w\\-])+\\.{1}([a-zA-Z]{2,63})([\\/\\w-]*)*\\/?\\??([^#\\n\\r\\s]*)?#?([^\\n\\r\\s]*)"
 
 @interface STTweetLabel () <UITextViewDelegate>
 
@@ -41,12 +38,11 @@
 @implementation STTweetLabel {
     BOOL _isTouchesMoved;
     NSRange _selectableRange;
-    int _firstCharIndex;
+    NSInteger _firstCharIndex;
     CGPoint _firstTouchLocation;
 }
 
-#pragma mark -
-#pragma mark Lifecycle
+#pragma mark - Lifecycle
 
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
@@ -63,8 +59,7 @@
     [self setupLabel];
 }
 
-#pragma mark -
-#pragma mark Responder
+#pragma mark - Responder
 
 - (BOOL)canBecomeFirstResponder {
     return YES;
@@ -83,8 +78,7 @@
     }
 }
 
-#pragma mark -
-#pragma mark Setup
+#pragma mark - Setup
 
 - (void)setupLabel {
         // Set the basic properties
@@ -105,8 +99,7 @@
     self.validProtocols = @[@"http", @"https"];
 }
 
-#pragma mark -
-#pragma mark Printing and calculating text
+#pragma mark - Printing and calculating text
 
 - (void)determineHotWords {
     // Need a text
@@ -228,8 +221,7 @@
     [self addSubview:_textView];
 }
 
-#pragma mark -
-#pragma mark Public methods
+#pragma mark - Public methods
 
 - (CGSize)suggestedFrameSizeToFitEntireStringConstraintedToWidth:(CGFloat)width {
     if (_cleanText == nil)
@@ -238,15 +230,13 @@
     return [_textView sizeThatFits:CGSizeMake(width, CGFLOAT_MAX)];
 }
 
-#pragma mark -
-#pragma mark Private methods
+#pragma mark - Private methods
 
 - (NSArray *)hotWordsList {
     return _rangesOfHotWords;
 }
 
-#pragma mark -
-#pragma mark Setters
+#pragma mark - Setters
 
 - (void)setText:(NSString *)text {
     [super setText:@""];
@@ -335,8 +325,7 @@
     }
 }
 
-#pragma mark -
-#pragma mark Getters
+#pragma mark - Getters
 
 - (NSString *)text {
     return _cleanText;
@@ -366,8 +355,7 @@
     return _leftToRight;
 }
 
-#pragma mark -
-#pragma mark Retrieve word after touch event
+#pragma mark - Retrieve word after touch event
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     
@@ -388,7 +376,7 @@
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
     
-    if([self getTouchedHotword:touches] == nil) {
+    if ([self getTouchedHotword:touches] == nil) {
         [super touchesMoved:touches withEvent:event];
     }
     
@@ -401,7 +389,7 @@
     
     _isTouchesMoved = YES;
     
-    int charIndex = [self charIndexAtLocation:[[touches anyObject] locationInView:_textView]];
+    NSInteger charIndex = [self charIndexAtLocation:[[touches anyObject] locationInView:_textView]];
     
     @try {
         [_textStorage removeAttribute:NSBackgroundColorAttributeName range:_selectableRange];
