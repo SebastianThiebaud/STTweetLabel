@@ -230,6 +230,11 @@
     return [_textView sizeThatFits:CGSizeMake(width, CGFLOAT_MAX)];
 }
 
+- (CGSize) intrinsicContentSize {
+    CGSize size = [self suggestedFrameSizeToFitEntireStringConstraintedToWidth:CGRectGetWidth(self.frame)];
+    return CGSizeMake(size.width, size.height + 1);
+}
+
 #pragma mark - Private methods
 
 - (NSArray *)hotWordsList {
