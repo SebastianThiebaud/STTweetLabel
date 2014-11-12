@@ -18,6 +18,7 @@
 @property (strong) NSTextContainer *textContainer;
 
 @property (nonatomic, strong) NSString *cleanText;
+@property (nonatomic, copy) NSAttributedString *cleanAttributedText;
 
 @property (strong) NSMutableArray *rangesOfHotWords;
 
@@ -193,8 +194,14 @@
 
 - (void)updateText
 {
-    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:_cleanText];
-    [attributedString setAttributes:_attributesText range:NSMakeRange(0, _cleanText.length)];
+    NSMutableAttributedString *attributedString;
+    
+    if(_cleanAttributedText) {
+        attributedString = [_cleanAttributedText mutableCopy];
+    } else {
+        attributedString = [[NSMutableAttributedString alloc] initWithString:_cleanText];
+        [attributedString setAttributes:_attributesText range:NSMakeRange(0, _cleanText.length)];
+    }
     
     for (NSDictionary *dictionary in _rangesOfHotWords)  {
         NSRange range = [[dictionary objectForKey:@"range"] rangeValue];
@@ -324,10 +331,8 @@
 }
 
 - (void)setAttributedText:(NSAttributedString *)attributedText {
-    self.text = attributedText.string;
-    if (self.text.length > 0) {
-        [self setAttributes:[attributedText attributesAtIndex:0 effectiveRange:NULL]];
-    }
+    _cleanAttributedText = [attributedText copy];
+    self.text = _cleanAttributedText.string;
 }
 
 #pragma mark - Getters
