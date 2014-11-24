@@ -179,7 +179,7 @@
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:STURLRegex options:0 error:&regexError];
 
     [regex enumerateMatchesInString:tmpText options:0 range:NSMakeRange(0, tmpText.length) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
-        NSString *protocol = @"http";
+        NSString *protocol = @"";
         NSString *link = [tmpText substringWithRange:result.range];
         NSRange protocolRange = [link rangeOfString:@"://"];
         if (protocolRange.location != NSNotFound) {
