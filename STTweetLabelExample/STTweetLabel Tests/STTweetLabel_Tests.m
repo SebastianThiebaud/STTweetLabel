@@ -349,4 +349,18 @@
     [self initiateTestFromSample:string results:results];
 }
 
+- (void)test_setTextAndGetHotWords_setTextWithTwoLinksOneValidAndOneNonvalidProtocol_hotWords
+{
+    NSArray *originalValidProtocols = _tweetLabel.validProtocols;
+    _tweetLabel.validProtocols = @[@"mailto"];
+    
+    NSString *string = @"This is a sample test with fail:page mailto:good@email.com";
+    NSArray *results = @[
+                         @{@"hotWord": @(STTweetLink), @"range": [NSValue valueWithRange:NSMakeRange(37, 21)], @"protocol": @"mailto"}
+                         ];
+    [self initiateTestFromSample:string results:results];
+    
+    _tweetLabel.validProtocols = originalValidProtocols;
+}
+
 @end
