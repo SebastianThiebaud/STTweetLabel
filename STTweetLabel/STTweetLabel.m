@@ -436,7 +436,7 @@
         return;
 
     id touchedHotword = [self getTouchedHotword:touches];
-    if(touchedHotword != nil) {
+    if(touchedHotword != nil && _detectionBlock != NULL) {
         NSRange range = [[touchedHotword objectForKey:@"range"] rangeValue];
         
         _detectionBlock((STTweetHotWord)[[touchedHotword objectForKey:@"hotWord"] intValue], [_cleanText substringWithRange:range], [touchedHotword objectForKey:@"protocol"], range);
