@@ -54,9 +54,12 @@
     return self;
 }
 
-- (void)awakeFromNib {
-    [super awakeFromNib];
-    [self setupLabel];
+- (id)initWithCoder:(NSCoder *)aDecoder {
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        [self setupLabel];
+    }
+    return self;
 }
 
 #pragma mark - Responder
@@ -103,7 +106,8 @@
 
 - (void)determineHotWords {
     // Need a text
-    if (_cleanText == nil)
+    if (_cleanText == nil) {
+        [self invalidateIntrinsicContentSize];
         return;
     
     _textStorage = [[STTweetTextStorage alloc] init];
@@ -219,6 +223,8 @@
     _textView.textContainerInset = UIEdgeInsetsZero;
     _textView.userInteractionEnabled = NO;
     [self addSubview:_textView];
+
+    [self invalidateIntrinsicContentSize];
 }
 
 #pragma mark - Public methods
@@ -230,9 +236,16 @@
     return [_textView sizeThatFits:CGSizeMake(width, CGFLOAT_MAX)];
 }
 
-- (CGSize) intrinsicContentSize {
-    CGSize size = [self suggestedFrameSizeToFitEntireStringConstraintedToWidth:CGRectGetWidth(self.frame)];
+#pragma mark - Auto Layout
+
+- (CGSize)intrinsicContentSize {
+    CGSize size = [self suggestedFrameSizeToFitEntireStringConstraintedToWidth:self.preferredMaxLayoutWidth];
     return CGSizeMake(size.width, size.height + 1);
+}
+
+- (void)layoutSubviews {
+    self.preferredMaxLayoutWidth = self.bounds.size.width;
+    [super layoutSubviews];
 }
 
 #pragma mark - Private methods
@@ -311,6 +324,8 @@
 - (void)setTextAlignment:(NSTextAlignment)textAlignment {
     [super setTextAlignment:textAlignment];
     _textView.textAlignment = textAlignment;
+
+    [self invalidateIntrinsicContentSize];
 }
 
 - (void)setDetectionBlock:(void (^)(STTweetHotWord, NSString *, NSString *, NSRange))detectionBlock {
