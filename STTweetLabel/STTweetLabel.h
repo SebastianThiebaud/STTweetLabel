@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 Sebastien Thiebaud. All rights reserved.
 //
 
+#import <UIKit/UIKit.h>
+
 typedef enum {
     STTweetHandle = 0,
     STTweetHashtag,
