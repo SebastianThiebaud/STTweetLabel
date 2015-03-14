@@ -6,11 +6,11 @@
 //  Copyright (c) 2013 Sebastien Thiebaud. All rights reserved.
 //
 
-typedef enum {
+typedef NS_ENUM(NSInteger, STTweetHotWord) {
     STTweetHandle = 0,
     STTweetHashtag,
     STTweetLink
-} STTweetHotWord;
+};
 
 @interface STTweetLabel : UILabel
 
