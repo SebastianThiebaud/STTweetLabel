@@ -247,6 +247,7 @@
     [super setText:@""];
     _cleanText = text;
     [self determineHotWords];
+    [self invalidateIntrinsicContentSize];
 }
 
 - (void)setValidProtocols:(NSArray *)validProtocols {
