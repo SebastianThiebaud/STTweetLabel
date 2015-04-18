@@ -8,11 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-typedef enum {
+typedef NS_ENUM(NSInteger, STTweetHotWord) {
     STTweetHandle = 0,
     STTweetHashtag,
     STTweetLink
-} STTweetHotWord;
+};
 
 @interface STTweetLabel : UILabel
 

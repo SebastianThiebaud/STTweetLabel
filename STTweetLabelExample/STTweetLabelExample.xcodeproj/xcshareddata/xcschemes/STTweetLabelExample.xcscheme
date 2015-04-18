@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0500"
-   version = "1.7">
+   version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
       buildImplicitDependencies = "YES">
@@ -17,6 +16,20 @@
                BlueprintIdentifier = "254E4346167E7475004191B6"
                BuildableName = "STTweetLabelExample.app"
                BlueprintName = "STTweetLabelExample"
+               ReferencedContainer = "container:STTweetLabelExample.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "BE35E74118009143001F64D7"
+               BuildableName = "STTweetLabel Tests.xctest"
+               BlueprintName = "STTweetLabel Tests"
                ReferencedContainer = "container:STTweetLabelExample.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -37,10 +50,6 @@
                BlueprintName = "STTweetLabel Tests"
                ReferencedContainer = "container:STTweetLabelExample.xcodeproj">
             </BuildableReference>
-            <LocationScenarioReference
-               identifier = "San Francisco, CA, USA"
-               referenceType = "1">
-            </LocationScenarioReference>
          </TestableReference>
       </Testables>
       <MacroExpansion>
@@ -62,7 +71,8 @@
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "254E4346167E7475004191B6"
@@ -80,7 +90,7 @@
       useCustomWorkingDirectory = "NO"
       buildConfiguration = "Release"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable>
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "254E4346167E7475004191B6"
@@ -88,7 +98,7 @@
             BlueprintName = "STTweetLabelExample"
             ReferencedContainer = "container:STTweetLabelExample.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
