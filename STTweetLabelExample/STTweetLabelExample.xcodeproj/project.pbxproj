@@ -24,7 +24,6 @@
 		BE35E74618009143001F64D7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 254E434B167E7475004191B6 /* UIKit.framework */; };
 		BE35E74C18009143001F64D7 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = BE35E74A18009143001F64D7 /* InfoPlist.strings */; };
 		BE35E74E18009143001F64D7 /* STTweetLabel_Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = BE35E74D18009143001F64D7 /* STTweetLabel_Tests.m */; };
-		BE35E7571800B73C001F64D7 /* STTweetTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = BE35E7561800B73C001F64D7 /* STTweetTextStorage.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,8 +61,6 @@
 		BE35E74B18009143001F64D7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		BE35E74D18009143001F64D7 /* STTweetLabel_Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = STTweetLabel_Tests.m; sourceTree = "<group>"; };
 		BE35E74F18009143001F64D7 /* STTweetLabel Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "STTweetLabel Tests-Prefix.pch"; sourceTree = "<group>"; };
-		BE35E7551800B73C001F64D7 /* STTweetTextStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STTweetTextStorage.h; sourceTree = "<group>"; };
-		BE35E7561800B73C001F64D7 /* STTweetTextStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STTweetTextStorage.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -153,8 +150,6 @@
 			children = (
 				259D0B831680E7AF00D0D4AC /* STTweetLabel.h */,
 				259D0B841680E7AF00D0D4AC /* STTweetLabel.m */,
-				BE35E7551800B73C001F64D7 /* STTweetTextStorage.h */,
-				BE35E7561800B73C001F64D7 /* STTweetTextStorage.m */,
 			);
 			name = STTweetLabel;
 			path = ../../STTweetLabel;
@@ -283,7 +278,6 @@
 			files = (
 				254E4358167E7475004191B6 /* main.m in Sources */,
 				254E435C167E7475004191B6 /* STAppDelegate.m in Sources */,
-				BE35E7571800B73C001F64D7 /* STTweetTextStorage.m in Sources */,
 				254E436B167E74A2004191B6 /* STViewController.m in Sources */,
 				259D0B851680E7AF00D0D4AC /* STTweetLabel.m in Sources */,
 			);
