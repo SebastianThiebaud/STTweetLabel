@@ -28,6 +28,6 @@ typedef NS_ENUM(NSInteger, STTweetHotWord) {
 - (NSDictionary *)attributes;
 - (NSDictionary *)attributesForHotWord:(STTweetHotWord)hotWord;
 
-- (CGSize)suggestedFrameSizeToFitEntireStringConstraintedToWidth:(CGFloat)width;
+- (CGSize)suggestedFrameSizeToFitEntireStringConstrainedToWidth:(CGFloat)width;
 
 @end
