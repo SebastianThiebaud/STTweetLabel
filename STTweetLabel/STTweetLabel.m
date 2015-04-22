@@ -53,9 +53,22 @@
     return self;
 }
 
+- (id)initWithCoder:(NSCoder *)coder {
+
+    self = [super initWithCoder:coder];
+    if (self) {
+        [self setupLabel];
+        [self setupTextView];
+        [self setupURLRegularExpression];
+    }
+
+    return self;
+}
+
+
 - (void)setupTextView {
 
-    _textStorage   = [NSTextStorage new];//[STTweetTextStorage new];
+    _textStorage   = [NSTextStorage new];
     _layoutManager = [NSLayoutManager new];
     _textContainer = [[NSTextContainer alloc] initWithSize:CGSizeMake(self.frame.size.width, CGFLOAT_MAX)];
 
@@ -76,13 +89,6 @@
 
     NSError *regexError = nil;
     self.urlRegex = [NSRegularExpression regularExpressionWithPattern:STURLRegex options:0 error:&regexError];
-}
-
-- (void)awakeFromNib {
-    [super awakeFromNib];
-    [self setupLabel];
-    [self setupTextView];
-    [self setupURLRegularExpression];
 }
 
 #pragma mark - Responder
