@@ -444,6 +444,11 @@
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     
+    if (!self.textSelectable) {
+        [super touchesEnded:touches withEvent:event];
+        return;
+    }
+    
     CGPoint touchLocation = [[touches anyObject] locationInView:self];
 
     if (_isTouchesMoved) {
