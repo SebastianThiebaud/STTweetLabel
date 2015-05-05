@@ -450,14 +450,9 @@
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     
-    if (!self.textSelectable) {
-        [super touchesEnded:touches withEvent:event];
-        return;
-    }
-    
     CGPoint touchLocation = [[touches anyObject] locationInView:self];
 
-    if (_isTouchesMoved) {
+    if (self.textSelectable && _isTouchesMoved) {
         UIMenuController *menuController = [UIMenuController sharedMenuController];
         [menuController setTargetRect:CGRectMake(_firstTouchLocation.x, _firstTouchLocation.y, 1.0, 1.0) inView:self];
         [menuController setMenuVisible:YES animated:YES];
