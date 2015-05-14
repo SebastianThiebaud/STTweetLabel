@@ -106,6 +106,15 @@
     XCTAssertEqualObjects(attributes, [_tweetLabel attributesForHotWord:STTweetLink], @"Link attributes should be %@ but %@ was returned instead.", attributes, [_tweetLabel attributesForHotWord:STTweetLink]);
 }
 
+- (void)test_setAndGetAttributesForRange_setAttributes_attributes
+{
+    NSDictionary *attributes = @{NSForegroundColorAttributeName: [UIColor redColor], NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue" size:14.0]};
+    
+    [_tweetLabel setAttributes:attributes hotWord:STTweetRange];
+    
+    XCTAssertEqualObjects(attributes, [_tweetLabel attributesForHotWord:STTweetRange], @"Range attributes should be %@ but %@ was returned instead.", attributes, [_tweetLabel attributesForHotWord:STTweetRange]);
+}
+
 - (void)test_setAndGetAttributesForText_setValidAttributes_exceptionNotThrown
 {
     NSDictionary *attributes = @{NSForegroundColorAttributeName: [UIColor redColor], NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue" size:14.0]};
@@ -361,6 +370,18 @@
     [self initiateTestFromSample:string results:results];
     
     _tweetLabel.validProtocols = originalValidProtocols;
+}
+
+- (void)test_setTextAndGetHotWords_setTextWithCustomRange_hotWords
+{
+    NSValue *rangeValue = [NSValue valueWithRange:NSMakeRange(0, 3)];
+    _tweetLabel.customHotWordRanges = @[rangeValue];
+    
+    NSString *string = @"The first word in this sentance should be a hot word.";
+    NSArray *results = @[
+                         @{@"hotWord": @(STTweetRange), @"range": rangeValue}
+                         ];
+    [self initiateTestFromSample:string results:results];
 }
 
 @end

@@ -27,6 +27,7 @@
 @property (nonatomic, strong) NSDictionary *attributesHandle;
 @property (nonatomic, strong) NSDictionary *attributesHashtag;
 @property (nonatomic, strong) NSDictionary *attributesLink;
+@property (nonatomic, strong) NSDictionary *attributesRange;
 
 @property (strong) UITextView *textView;
 
@@ -129,8 +130,10 @@
     _attributesHandle = @{NSForegroundColorAttributeName: [UIColor redColor], NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue" size:14.0]};
     _attributesHashtag = @{NSForegroundColorAttributeName: [[UIColor alloc] initWithWhite:170.0/255.0 alpha:1.0], NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue" size:14.0]};
     _attributesLink = @{NSForegroundColorAttributeName: [[UIColor alloc] initWithRed:129.0/255.0 green:171.0/255.0 blue:193.0/255.0 alpha:1.0], NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue" size:14.0]};
+    _attributesRange = @{NSForegroundColorAttributeName: [[UIColor alloc] initWithRed:0.0/255.0 green:255.0/255.0 blue:0.0/255.0 alpha:1.0], NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue" size:14.0]};
     
     self.validProtocols = @[@"http", @"https"];
+    self.customHotWordRanges = @[];
 }
 
 #pragma mark - Printing and calculating text
@@ -196,6 +199,11 @@
         // Register the hot word and its range
         if (length > 1)
             [_rangesOfHotWords addObject:@{@"hotWord": @(hotWord), @"range": [NSValue valueWithRange:NSMakeRange(range.location, length)]}];
+    }
+    
+    // Add custom hot word ranges
+    for (NSValue *range in self.customHotWordRanges) {
+        [_rangesOfHotWords addObject:@{@"hotWord": @(STTweetRange), @"range": range}];
     }
 
     [self determineLinks];
@@ -273,6 +281,11 @@
     [self determineHotWords];
 }
 
+- (void)setCustomHotWordRanges:(NSArray *)customHotWordRanges {
+    _customHotWordRanges = customHotWordRanges;
+    [self determineHotWords];
+}
+
 - (void)setAttributes:(NSDictionary *)attributes {
     if (!attributes[NSFontAttributeName]) {
         NSMutableDictionary *copy = [attributes mutableCopy];
@@ -313,6 +326,9 @@
             break;
         case STTweetLink:
             _attributesLink = attributes;
+            break;
+        case STTweetRange:
+            _attributesRange = attributes;
             break;
         default:
             break;
@@ -367,7 +383,10 @@
 
         case STTweetLink:
             return _attributesLink;
-
+        
+        case STTweetRange:
+            return _attributesRange;
+            
         default:
             break;
     }
