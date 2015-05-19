@@ -133,7 +133,6 @@
     _attributesRange = @{NSForegroundColorAttributeName: [[UIColor alloc] initWithRed:0.0/255.0 green:255.0/255.0 blue:0.0/255.0 alpha:1.0], NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue" size:14.0]};
     
     self.validProtocols = @[@"http", @"https"];
-    self.customHotWordRanges = @[];
 }
 
 #pragma mark - Printing and calculating text
@@ -203,7 +202,10 @@
     
     // Add custom hot word ranges
     for (NSValue *range in self.customHotWordRanges) {
-        [_rangesOfHotWords addObject:@{@"hotWord": @(STTweetRange), @"range": range}];
+        NSRange textRange = NSMakeRange(0, tmpText.length);
+        if (NSLocationInRange([range rangeValue].location, textRange) && NSLocationInRange(NSMaxRange([range rangeValue]), textRange)) {
+            [_rangesOfHotWords addObject:@{@"hotWord": @(STTweetRange), @"range": range}];
+        }
     }
 
     [self determineLinks];
@@ -283,7 +285,6 @@
 
 - (void)setCustomHotWordRanges:(NSArray *)customHotWordRanges {
     _customHotWordRanges = customHotWordRanges;
-    [self determineHotWords];
 }
 
 - (void)setAttributes:(NSDictionary *)attributes {
