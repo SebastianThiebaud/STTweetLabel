@@ -24,7 +24,7 @@ typedef NS_ENUM(NSInteger, STTweetHotWord) {
 
 - (void)setAttributes:(NSDictionary *)attributes;
 - (void)setAttributes:(NSDictionary *)attributes hotWord:(STTweetHotWord)hotWord;
-- (void)setScrollEnabled:(BOOL *)enabled;
+- (void)setScrollEnabled:(BOOL)enabled;
 
 - (NSDictionary *)attributes;
 - (NSDictionary *)attributesForHotWord:(STTweetHotWord)hotWord;
