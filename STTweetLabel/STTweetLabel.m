@@ -91,6 +91,10 @@
     self.urlRegex = [NSRegularExpression regularExpressionWithPattern:STURLRegex options:0 error:&regexError];
 }
 
+- (void)setScrollEnabled:(BOOL*) enabled {
+    self.textView.scrollEnabled = enabled;
+}
+
 #pragma mark - Responder
 
 - (BOOL)canBecomeFirstResponder {
