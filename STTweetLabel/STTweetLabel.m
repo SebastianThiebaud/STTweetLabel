@@ -248,7 +248,7 @@
 }
 
 - (CGSize) intrinsicContentSize {
-    CGSize size = [self suggestedFrameSizeToFitEntireStringConstrainedToWidth:CGRectGetWidth(self.frame)];
+    CGSize size = [self suggestedFrameSizeToFitEntireStringConstrainedToWidth:self.preferredMaxLayoutWidth];
     return CGSizeMake(size.width, size.height + 1);
 }
 
