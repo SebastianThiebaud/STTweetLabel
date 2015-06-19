@@ -244,6 +244,7 @@
     if (_cleanText == nil)
         return CGSizeZero;
 
+    [_textView layoutIfNeeded];
     return [_textView sizeThatFits:CGSizeMake(width, CGFLOAT_MAX)];
 }
 
