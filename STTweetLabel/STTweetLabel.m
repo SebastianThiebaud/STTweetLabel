@@ -158,8 +158,6 @@
     NSString *hotCharacters = @"@#";
     NSCharacterSet *hotCharactersSet = [NSCharacterSet characterSetWithCharactersInString:hotCharacters];
 
-
-    
     _rangesOfHotWords = [[NSMutableArray alloc] init];
 
     while ([tmpText rangeOfCharacterFromSet:hotCharactersSet].location < tmpText.length) {
@@ -352,6 +350,11 @@
 - (void)setAttributedText:(NSAttributedString *)attributedText {
     _cleanAttributedText = [attributedText copy];
     self.text = _cleanAttributedText.string;
+}
+
+- (void)setWordCharacterSet:(NSCharacterSet *)characterSet {
+    _wordCharacterSet = characterSet;
+    [self determineHotWords];
 }
 
 #pragma mark - Getters
