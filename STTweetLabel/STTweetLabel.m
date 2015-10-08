@@ -82,6 +82,7 @@
     _textView.textContainer.lineFragmentPadding = 0;
     _textView.textContainerInset                = UIEdgeInsetsZero;
     _textView.userInteractionEnabled            = NO;
+    _textView.textAlignment                     = self.textAlignment;
     [self addSubview:_textView];
 }
 
@@ -236,6 +237,8 @@
     }
 
     [_textStorage endEditing];
+
+    _textView.textAlignment = self.textAlignment;
 }
 
 #pragma mark - Public methods
