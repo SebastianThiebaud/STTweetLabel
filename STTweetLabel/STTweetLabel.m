@@ -114,6 +114,11 @@
 #pragma mark - Setup
 
 - (void)setupLabel {
+    // Define a character set for the complete world (determine the end of the hot word)
+    NSMutableCharacterSet *wordCharactersSet = [NSMutableCharacterSet alphanumericCharacterSet];
+    [wordCharactersSet removeCharactersInString:@"!@#$%^&*()-={[]}|;:',<>.?/"];
+    [wordCharactersSet addCharactersInString:@"_"];
+    _wordCharacterSet = wordCharactersSet;
 
     // Set the basic properties
     [self setBackgroundColor:[UIColor clearColor]];
@@ -153,11 +158,8 @@
     NSString *hotCharacters = @"@#";
     NSCharacterSet *hotCharactersSet = [NSCharacterSet characterSetWithCharactersInString:hotCharacters];
 
-    // Define a character set for the complete world (determine the end of the hot word)
-    NSMutableCharacterSet *validCharactersSet = [NSMutableCharacterSet alphanumericCharacterSet];
-    [validCharactersSet removeCharactersInString:@"!@#$%^&*()-={[]}|;:',<>.?/"];
-    [validCharactersSet addCharactersInString:@"_"];
 
+    
     _rangesOfHotWords = [[NSMutableArray alloc] init];
 
     while ([tmpText rangeOfCharacterFromSet:hotCharactersSet].location < tmpText.length) {
@@ -178,14 +180,14 @@
 
         [tmpText replaceCharactersInRange:range withString:@"%"];
         // If the hot character is not preceded by a alphanumeric characater, ie email (sebastien@world.com)
-        if (range.location > 0 && [validCharactersSet characterIsMember:[tmpText characterAtIndex:range.location - 1]])
+        if (range.location > 0 && [self.wordCharacterSet characterIsMember:[tmpText characterAtIndex:range.location - 1]])
             continue;
 
         // Determine the length of the hot word
         int length = (int)range.length;
 
         while (range.location + length < tmpText.length) {
-            BOOL charIsMember = [validCharactersSet characterIsMember:[tmpText characterAtIndex:range.location + length]];
+            BOOL charIsMember = [self.wordCharacterSet characterIsMember:[tmpText characterAtIndex:range.location + length]];
 
             if (charIsMember)
                 length++;
