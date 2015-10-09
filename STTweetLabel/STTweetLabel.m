@@ -228,7 +228,7 @@
 - (void)updateText {
     [_textStorage beginEditing];
 
-    if(_cleanAttributedText) {
+    if (_cleanAttributedText) {
         // first apply _attributesText attributes then all other attributes from _cleanAttributedText
         NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:_cleanAttributedText.string attributes:_attributesText];
         [_textStorage setAttributedString:attributedString];
@@ -244,7 +244,7 @@
     for (NSDictionary *dictionary in _rangesOfHotWords)  {
         NSRange range = [dictionary[@"range"] rangeValue];
         STTweetHotWord hotWord = (STTweetHotWord)[dictionary[@"hotWord"] intValue];
-        [_textStorage setAttributes:[self attributesForHotWord:hotWord] range:range];
+        [_textStorage addAttributes:[self attributesForHotWord:hotWord] range:range];
     }
 
     [_textStorage endEditing];
@@ -347,6 +347,14 @@
 - (void)setTextAlignment:(NSTextAlignment)textAlignment {
     [super setTextAlignment:textAlignment];
     _textView.textAlignment = textAlignment;
+
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.alignment = textAlignment;
+
+    NSMutableDictionary *attributesText = [_attributesText mutableCopy];
+    attributesText[NSParagraphStyleAttributeName] = paragraphStyle;
+    _attributesText = attributesText;
+    [self updateText];
 }
 
 - (void)setDetectionBlock:(void (^)(STTweetHotWord, NSString *, NSString *, NSRange))detectionBlock {
