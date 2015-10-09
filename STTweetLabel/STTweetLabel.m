@@ -238,7 +238,10 @@
 
     [_textStorage endEditing];
 
-    _textView.textAlignment = self.textAlignment;
+    // optimization
+    if(_textView.textAlignment != self.textAlignment) {
+        _textView.textAlignment = self.textAlignment;
+    }
 }
 
 #pragma mark - Public methods
