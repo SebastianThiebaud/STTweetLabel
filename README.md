@@ -3,7 +3,7 @@
 [![CI](http://img.shields.io/travis/SebastienThiebaud/STTweetLabel.svg?style=flat)](https://travis-ci.org/SebastienThiebaud/STTweetLabel)
 [![License](https://img.shields.io/cocoapods/l/STTweetLabel.svg?style=flat)](http://cocoadocs.org/docsets/STTweetLabel)
 
-# STTweetLabel
+# STTweetLabel (not supported anymore)
 
 A custom UILabel for iOS with certain words tappable like Twitter (#Hashtag, @Handle and links).
 
