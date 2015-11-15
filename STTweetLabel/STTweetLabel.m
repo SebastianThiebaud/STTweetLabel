@@ -244,11 +244,12 @@
     if (_cleanText == nil)
         return CGSizeZero;
 
+    [_textView layoutIfNeeded];
     return [_textView sizeThatFits:CGSizeMake(width, CGFLOAT_MAX)];
 }
 
 - (CGSize) intrinsicContentSize {
-    CGSize size = [self suggestedFrameSizeToFitEntireStringConstrainedToWidth:CGRectGetWidth(self.frame)];
+    CGSize size = [self suggestedFrameSizeToFitEntireStringConstrainedToWidth:self.preferredMaxLayoutWidth];
     return CGSizeMake(size.width, size.height + 1);
 }
 
