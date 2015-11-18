@@ -21,6 +21,7 @@ typedef NS_ENUM(NSInteger, STTweetHotWord) {
 @property (nonatomic, assign) BOOL textSelectable;
 @property (nonatomic, strong) UIColor *selectionColor;
 @property (nonatomic, copy) void (^detectionBlock)(STTweetHotWord hotWord, NSString *string, NSString *protocol, NSRange range);
+@property (nonatomic, copy) NSCharacterSet *wordCharacterSet;
 
 - (void)setAttributes:(NSDictionary *)attributes;
 - (void)setAttributes:(NSDictionary *)attributes hotWord:(STTweetHotWord)hotWord;
