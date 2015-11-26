@@ -9,10 +9,12 @@
 #import "STTweetLabel.h"
 
 #define STURLRegex @"(?i)\\b((?:[a-z][\\w-]+:(?:/{1,3}|[a-z0-9%])|www\\d{0,3}[.]|[a-z0-9.\\-]+[.][a-z]{2,4}/)(?:[^\\s()<>]+|\\(([^\\s()<>]+|(\\([^\\s()<>]+\\)))*\\))+(?:\\(([^\\s()<>]+|(\\([^\\s()<>]+\\)))*\\)|[^\\s`!()\\[\\]{};:'\".,<>?«»“”‘’]))"
+#define STEmailRegex @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}"
 
 @interface STTweetLabel () <UITextViewDelegate>
 
 @property (nonatomic, strong) NSRegularExpression *urlRegex;
+@property (nonatomic, strong) NSRegularExpression *emailRegex;
 
 @property (strong) NSTextStorage *textStorage;
 @property (strong) NSLayoutManager *layoutManager;
@@ -27,6 +29,7 @@
 @property (nonatomic, strong) NSDictionary *attributesHandle;
 @property (nonatomic, strong) NSDictionary *attributesHashtag;
 @property (nonatomic, strong) NSDictionary *attributesLink;
+@property (nonatomic, strong) NSDictionary *attributesEmail;
 
 @property (strong) UITextView *textView;
 
@@ -48,6 +51,7 @@
         [self setupLabel];
         [self setupTextView];
         [self setupURLRegularExpression];
+        [self setupEmailRegularExpression];
     }
     
     return self;
@@ -60,6 +64,7 @@
         [self setupLabel];
         [self setupTextView];
         [self setupURLRegularExpression];
+        [self setupEmailRegularExpression];
     }
 
     return self;
@@ -86,9 +91,13 @@
 }
 
 - (void)setupURLRegularExpression {
-
     NSError *regexError = nil;
     self.urlRegex = [NSRegularExpression regularExpressionWithPattern:STURLRegex options:0 error:&regexError];
+}
+
+- (void)setupEmailRegularExpression {
+    NSError *regexError = nil;
+    self.emailRegex = [NSRegularExpression regularExpressionWithPattern:STEmailRegex options:0 error:&regexError];
 }
 
 #pragma mark - Responder
@@ -129,6 +138,7 @@
     _attributesHandle = @{NSForegroundColorAttributeName: [UIColor redColor], NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue" size:14.0]};
     _attributesHashtag = @{NSForegroundColorAttributeName: [[UIColor alloc] initWithWhite:170.0/255.0 alpha:1.0], NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue" size:14.0]};
     _attributesLink = @{NSForegroundColorAttributeName: [[UIColor alloc] initWithRed:129.0/255.0 green:171.0/255.0 blue:193.0/255.0 alpha:1.0], NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue" size:14.0]};
+    _attributesEmail = @{NSForegroundColorAttributeName: [[UIColor alloc] initWithRed:129.0/255.0 green:171.0/255.0 blue:193.0/255.0 alpha:1.0], NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue" size:14.0]};
     
     self.validProtocols = @[@"http", @"https"];
 }
@@ -203,11 +213,9 @@
 }
 
 - (void)determineLinks {
-    NSMutableString *tmpText = [[NSMutableString alloc] initWithString:_cleanText];
-
-    [self.urlRegex enumerateMatchesInString:tmpText options:0 range:NSMakeRange(0, tmpText.length) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+    [self.urlRegex enumerateMatchesInString:_cleanText options:0 range:NSMakeRange(0, _cleanText.length) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
         NSString *protocol     = @"http";
-        NSString *link         = [tmpText substringWithRange:result.range];
+        NSString *link         = [_cleanText substringWithRange:result.range];
         NSRange  protocolRange = [link rangeOfString:@":"];
         if (protocolRange.location != NSNotFound) {
             protocol = [link substringToIndex:protocolRange.location];
@@ -219,6 +227,10 @@
                                             @"range"    : [NSValue valueWithRange:result.range]
             }];
         }
+    }];
+
+    [self.emailRegex enumerateMatchesInString:_cleanText options:0 range:NSMakeRange(0, _cleanText.length) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+        [_rangesOfHotWords addObject:@{@"hotWord": @(STTweetEmail), @"range": [NSValue valueWithRange:result.range]}];
     }];
 }
 
@@ -319,6 +331,9 @@
         case STTweetLink:
             _attributesLink = attributes;
             break;
+        case STTweetEmail:
+            _attributesEmail = attributes;
+            break;
         default:
             break;
     }
@@ -372,6 +387,9 @@
 
         case STTweetLink:
             return _attributesLink;
+
+        case STTweetEmail:
+            return _attributesEmail;
 
         default:
             break;
