@@ -124,12 +124,15 @@
     _leftToRight = YES;
     _textSelectable = YES;
     _selectionColor = [UIColor colorWithWhite:0.9 alpha:1.0];
-    
-    _attributesText = @{NSForegroundColorAttributeName: self.textColor, NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue" size:14.0]};
-    _attributesHandle = @{NSForegroundColorAttributeName: [UIColor redColor], NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue" size:14.0]};
-    _attributesHashtag = @{NSForegroundColorAttributeName: [[UIColor alloc] initWithWhite:170.0/255.0 alpha:1.0], NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue" size:14.0]};
-    _attributesLink = @{NSForegroundColorAttributeName: [[UIColor alloc] initWithRed:129.0/255.0 green:171.0/255.0 blue:193.0/255.0 alpha:1.0], NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue" size:14.0]};
-    
+
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.alignment = self.textAlignment;
+
+    _attributesText = @{NSForegroundColorAttributeName: self.textColor, NSFontAttributeName: self.font, NSParagraphStyleAttributeName: paragraphStyle};
+    _attributesHandle = @{NSForegroundColorAttributeName: [UIColor redColor], NSFontAttributeName: self.font};
+    _attributesHashtag = @{NSForegroundColorAttributeName: [[UIColor alloc] initWithWhite:170.0/255.0 alpha:1.0], NSFontAttributeName: self.font};
+    _attributesLink = @{NSForegroundColorAttributeName: [[UIColor alloc] initWithRed:129.0/255.0 green:171.0/255.0 blue:193.0/255.0 alpha:1.0], NSFontAttributeName: self.font};
+
     self.validProtocols = @[@"http", @"https"];
 }
 
@@ -225,14 +228,23 @@
 - (void)updateText {
     [_textStorage beginEditing];
 
-    NSAttributedString *attributedString = _cleanAttributedText ?: [[NSMutableAttributedString alloc] initWithString:_cleanText];
-    [_textStorage setAttributedString:attributedString];
-    [_textStorage setAttributes:_attributesText range:NSMakeRange(0, attributedString.length)];
+    if (_cleanAttributedText) {
+        // first apply _attributesText attributes then all other attributes from _cleanAttributedText
+        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:_cleanAttributedText.string attributes:_attributesText];
+        [_textStorage setAttributedString:attributedString];
+        [_cleanAttributedText enumerateAttributesInRange:NSMakeRange(0, _cleanAttributedText.length) options:NSAttributedStringEnumerationReverse usingBlock:^(NSDictionary *attributes, NSRange range, BOOL *stop) {
+            [_textStorage addAttributes:attributes range:range];
+        }];
+    } else {
+        NSAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:_cleanText];
+        [_textStorage setAttributedString:attributedString];
+        [_textStorage setAttributes:_attributesText range:NSMakeRange(0, attributedString.length)];
+    }
 
     for (NSDictionary *dictionary in _rangesOfHotWords)  {
         NSRange range = [dictionary[@"range"] rangeValue];
         STTweetHotWord hotWord = (STTweetHotWord)[dictionary[@"hotWord"] intValue];
-        [_textStorage setAttributes:[self attributesForHotWord:hotWord] range:range];
+        [_textStorage addAttributes:[self attributesForHotWord:hotWord] range:range];
     }
 
     [_textStorage endEditing];
@@ -335,6 +347,14 @@
 - (void)setTextAlignment:(NSTextAlignment)textAlignment {
     [super setTextAlignment:textAlignment];
     _textView.textAlignment = textAlignment;
+
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.alignment = textAlignment;
+
+    NSMutableDictionary *attributesText = [_attributesText mutableCopy];
+    attributesText[NSParagraphStyleAttributeName] = paragraphStyle;
+    _attributesText = attributesText;
+    [self updateText];
 }
 
 - (void)setDetectionBlock:(void (^)(STTweetHotWord, NSString *, NSString *, NSRange))detectionBlock {
