@@ -8,8 +8,6 @@
 
 #import "STTweetLabel.h"
 
-#define STURLRegex @"(?i)\\b((?:[a-z][\\w-]+:(?:/{1,3}|[a-z0-9%])|www\\d{0,3}[.]|[a-z0-9.\\-]+[.][a-z]{2,4}/)(?:[^\\s()<>]+|\\(([^\\s()<>]+|(\\([^\\s()<>]+\\)))*\\))+(?:\\(([^\\s()<>]+|(\\([^\\s()<>]+\\)))*\\)|[^\\s`!()\\[\\]{};:'\".,<>?«»“”‘’]))"
-
 @interface STTweetLabel () <UITextViewDelegate>
 
 @property (nonatomic, strong) NSRegularExpression *urlRegex;
@@ -47,7 +45,6 @@
     if (self) {
         [self setupLabel];
         [self setupTextView];
-        [self setupURLRegularExpression];
     }
     
     return self;
@@ -59,7 +56,6 @@
     if (self) {
         [self setupLabel];
         [self setupTextView];
-        [self setupURLRegularExpression];
     }
 
     return self;
@@ -83,12 +79,6 @@
     _textView.textContainerInset                = UIEdgeInsetsZero;
     _textView.userInteractionEnabled            = NO;
     [self addSubview:_textView];
-}
-
-- (void)setupURLRegularExpression {
-
-    NSError *regexError = nil;
-    self.urlRegex = [NSRegularExpression regularExpressionWithPattern:STURLRegex options:0 error:&regexError];
 }
 
 #pragma mark - Responder
@@ -204,22 +194,22 @@
 
 - (void)determineLinks {
     NSMutableString *tmpText = [[NSMutableString alloc] initWithString:_cleanText];
+    
+    NSError *error = nil;
+    NSDataDetector *detector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink
+                                                               error:&error];
+    
+    [detector enumerateMatchesInString:tmpText
+                               options:kNilOptions
+                                 range:NSMakeRange(0, [tmpText length])
+                            usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+                            NSString *protocol = @"http";
+                            [_rangesOfHotWords addObject:@{ @"hotWord"  : @(STTweetLink),
+                                                            @"protocol" : protocol,
+                                                            @"range"    : [NSValue valueWithRange:result.range]
+                                                            }];
 
-    [self.urlRegex enumerateMatchesInString:tmpText options:0 range:NSMakeRange(0, tmpText.length) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
-        NSString *protocol     = @"http";
-        NSString *link         = [tmpText substringWithRange:result.range];
-        NSRange  protocolRange = [link rangeOfString:@":"];
-        if (protocolRange.location != NSNotFound) {
-            protocol = [link substringToIndex:protocolRange.location];
-        }
-
-        if ([_validProtocols containsObject:protocol.lowercaseString]) {
-            [_rangesOfHotWords addObject:@{ @"hotWord"  : @(STTweetLink),
-                                            @"protocol" : protocol,
-                                            @"range"    : [NSValue valueWithRange:result.range]
-            }];
-        }
-    }];
+     }];
 }
 
 - (void)updateText {
