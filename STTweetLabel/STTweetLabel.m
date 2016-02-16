@@ -21,8 +21,6 @@
 @property (nonatomic, strong) NSString *cleanText;
 @property (nonatomic, copy) NSAttributedString *cleanAttributedText;
 
-@property (strong) NSMutableArray *rangesOfHotWords;
-
 @property (nonatomic, strong) NSDictionary *attributesText;
 @property (nonatomic, strong) NSDictionary *attributesHandle;
 @property (nonatomic, strong) NSDictionary *attributesHashtag;
