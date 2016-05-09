@@ -82,6 +82,7 @@
     _textView.textContainer.lineFragmentPadding = 0;
     _textView.textContainerInset                = UIEdgeInsetsZero;
     _textView.userInteractionEnabled            = NO;
+    _textView.editable                          = NO;
     [self addSubview:_textView];
 }
 
