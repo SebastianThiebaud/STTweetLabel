@@ -11,12 +11,14 @@
 typedef NS_ENUM(NSInteger, STTweetHotWord) {
     STTweetHandle = 0,
     STTweetHashtag,
-    STTweetLink
+    STTweetLink,
+    STTweetRange
 };
 
 @interface STTweetLabel : UILabel
 
 @property (nonatomic, strong) NSArray *validProtocols;
+@property (nonatomic, strong) NSArray *customHotWordRanges;
 @property (nonatomic, assign) BOOL leftToRight;
 @property (nonatomic, assign) BOOL textSelectable;
 @property (nonatomic, strong) UIColor *selectionColor;
